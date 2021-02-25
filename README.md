@@ -1,4 +1,4 @@
-# AdofaiTweaks
+﻿# AdofaiTweaks
 
 General tweaks for the rhythm game
 [A Dance of Fire and Ice](https://store.steampowered.com/app/977950/A_Dance_of_Fire_and_Ice/).
@@ -17,6 +17,12 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 *   **Miscellaneous**
     *   Disable screen flip in "Glitch" filter
     *   Disable editor zoom in/out when in gameplay
+
+## Supported Languages
+
+*   English
+*   한국어
+*   Español
 
 ## Images
 
