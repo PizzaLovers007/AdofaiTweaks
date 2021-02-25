@@ -15,10 +15,8 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 *   **Planet Opacity** - Sets the opacity of the planets individually.
 *   **Restrict Judgments** - Kills the player on certain judgments.
 *   **Miscellaneous**
-    *   No fail mode
     *   Disable screen flip in "Glitch" filter
-    *   Prevent Otto from failing
-    *   Editor difficulty
+    *   Disable editor zoom in/out when in gameplay
 
 ## Images
 
