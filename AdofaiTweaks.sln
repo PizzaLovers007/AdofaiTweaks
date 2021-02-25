@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks", "AdofaiTweaks\AdofaiTweaks.csproj", "{285D8437-6A8E-4ABE-AB99-9936852430F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B3BDA86E-6C46-4C94-95CA-B7C3679990A8}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		CODEOWNERS = CODEOWNERS
+		Info.json = Info.json
+		LICENSE.md = LICENSE.md
+		make_release.bat = make_release.bat
+		README.md = README.md
+		Repository.json = Repository.json
+		StyleCop.ruleset = StyleCop.ruleset
+		VERSION.txt = VERSION.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Translation", "AdofaiTweaks.Translation\AdofaiTweaks.Translation.csproj", "{0B6F2259-90FE-495F-AA89-C2406AE1450D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Generator", "AdofaiTweaks.Generator\AdofaiTweaks.Generator.csproj", "{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Game|Any CPU = Game|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Game|Any CPU.ActiveCfg = Game|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Game|Any CPU.Build.0 = Game|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Game|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Game|Any CPU.Build.0 = Debug|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Game|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Game|Any CPU.Build.0 = Debug|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D632439F-72FB-49A0-A1A4-9928EC613F27}
+	EndGlobalSection
+EndGlobal

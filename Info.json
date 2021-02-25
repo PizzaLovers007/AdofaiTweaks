@@ -1,0 +1,11 @@
+{
+  "Id": "AdofaiTweaks",
+  "DisplayName": "ADOFAI Tweaks",
+  "Author": "PizzaLovers007",
+  "Version": "1.6.2",
+  "ManagerVersion": "0.22.14.0",
+  "AssemblyName": "AdofaiTweaks.dll",
+  "EntryMethod": "AdofaiTweaks.Startup.Load",
+  "HomePage": "https://github.com/PizzaLovers007/AdofaiTweaks",
+  "Repository": "https://raw.githubusercontent.com/PizzaLovers007/AdofaiTweaks/master/Repository.json"
+}
