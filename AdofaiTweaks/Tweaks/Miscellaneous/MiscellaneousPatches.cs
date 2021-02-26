@@ -44,23 +44,17 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             private static bool scrollEventInside;
 
             public static void Prefix(scnEditor __instance) {
+                scrollEventInside = ScrollEvent.inside;
                 if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableEditorZoom) {
                     return;
                 }
                 if (!__instance.isLevelEditor || __instance.controller.paused) {
                     return;
                 }
-                scrollEventInside = ScrollEvent.inside;
                 ScrollEvent.inside = true;
             }
 
-            public static void Postfix(scnEditor __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableEditorZoom) {
-                    return;
-                }
-                if (!__instance.isLevelEditor || __instance.controller.paused) {
-                    return;
-                }
+            public static void Postfix() {
                 ScrollEvent.inside = scrollEventInside;
             }
         }
