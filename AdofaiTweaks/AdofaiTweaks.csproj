@@ -152,6 +152,10 @@
     <Compile Include="Core\TweakStringsDb.cs" />
     <Compile Include="Core\TweakStrings.cs" />
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="Tweaks\JudgmentVisuals\HitErrorMeter.cs" />
+    <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
+    <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsSettings.cs" />
+    <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsTweak.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousPatches.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousSettings.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousTweak.cs" />
@@ -195,6 +199,12 @@
   <ItemGroup>
     <Content Include="AdofaiTweaks.Strings.dll" />
     <Content Include="AdofaiTweaks.Translation.dll" />
+    <Content Include="Hand.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Meter.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
