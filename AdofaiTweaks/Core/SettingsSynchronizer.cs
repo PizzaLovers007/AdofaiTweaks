@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using AdofaiTweaks.Core.Attributes;
-using AdofaiTweaks.Tweaks.KeyLimiter;
-using AdofaiTweaks.Tweaks.PlanetOpacity;
 using HarmonyLib;
-using UnityEngine;
 using UnityModManagerNet;
 
 namespace AdofaiTweaks.Core
@@ -49,8 +45,6 @@ namespace AdofaiTweaks.Core
                     }
                 }
             }
-
-            MigrateOldSettings();
         }
 
         public void Save(UnityModManager.ModEntry modEntry) {
@@ -140,48 +134,6 @@ namespace AdofaiTweaks.Core
                 patchType.FullName);
             sb.AppendFormat("Exception: {0}", e);
             return sb.ToString();
-        }
-
-        // REMOVE BELOW CODE AFTER A FEW VERSIONS Attempt to load old data from PlayerPrefs
-        private void MigrateOldSettings() {
-            KeyLimiterSettings keyLimiterSettings =
-                (KeyLimiterSettings)tweakSettingsDictionary[typeof(KeyLimiterSettings)];
-            if (PlayerPrefs.HasKey("adofai_tweaks.key_limiter.enabled")) {
-                keyLimiterSettings.IsEnabled =
-                    PlayerPrefs.GetInt("adofai_tweaks.key_limiter.enabled") != 0;
-                PlayerPrefs.DeleteKey("adofai_tweaks.key_limiter.enabled");
-            }
-            if (PlayerPrefs.HasKey("adofai_tweaks.key_limiter.active_keys")) {
-                try {
-                    string serializedKeys =
-                        PlayerPrefs.GetString("adofai_tweaks.key_limiter.active_keys");
-                    List<KeyCode> keys =
-                        new List<KeyCode>(
-                            serializedKeys.Split(',').Select(s => (KeyCode)int.Parse(s)));
-                    keyLimiterSettings.ActiveKeys = keys;
-                } catch (Exception e) {
-                    AdofaiTweaks.Logger.Error("Error loading KeyLimitTweak configs: " + e.Message);
-                }
-                PlayerPrefs.DeleteKey("adofai_tweaks.key_limiter.active_keys");
-            }
-
-            PlanetOpacitySettings planetOpacitySettings =
-                (PlanetOpacitySettings)tweakSettingsDictionary[typeof(PlanetOpacitySettings)];
-            if (PlayerPrefs.HasKey("adofai_tweaks.planet_opacity.enabled")) {
-                planetOpacitySettings.IsEnabled =
-                    PlayerPrefs.GetInt("adofai_tweaks.planet_opacity.enabled") != 0;
-                PlayerPrefs.DeleteKey("adofai_tweaks.planet_opacity.enabled");
-            }
-            if (PlayerPrefs.HasKey("adofai_tweaks.planet_opacity.opacity1")) {
-                planetOpacitySettings.SettingsOpacity1 =
-                    PlayerPrefs.GetFloat("adofai_tweaks.planet_opacity.opacity1");
-                PlayerPrefs.DeleteKey("adofai_tweaks.planet_opacity.opacity1");
-            }
-            if (PlayerPrefs.HasKey("adofai_tweaks.planet_opacity.opacity2")) {
-                planetOpacitySettings.SettingsOpacity2 =
-                    PlayerPrefs.GetFloat("adofai_tweaks.planet_opacity.opacity2");
-                PlayerPrefs.DeleteKey("adofai_tweaks.planet_opacity.opacity2");
-            }
         }
     }
 }
