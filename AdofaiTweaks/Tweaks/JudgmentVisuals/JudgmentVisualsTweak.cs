@@ -32,22 +32,21 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         }
 
         private void UpdateErrorMeter() {
-            if (!Settings.ShowHitErrorMeter || !scrConductor.instance || !scrController.instance) {
+            if (!scrConductor.instance || !scrController.instance) {
                 return;
             }
             bool playing = !scrController.instance.paused && scrConductor.instance.isGameWorld;
-            if (playing != errorMeterObj.activeSelf) {
-                errorMeterObj.SetActive(playing);
-            }
-            if (Input.GetKeyDown(KeyCode.Backspace)) {
-                Settings.ErrorMeter.Reset();
+            bool shouldShowMeter = Settings.ShowHitErrorMeter && playing;
+            if (shouldShowMeter != errorMeterObj.activeSelf) {
+                errorMeterObj.SetActive(shouldShowMeter);
             }
         }
 
         public override void OnEnable() {
             errorMeterObj = new GameObject();
             GameObject.DontDestroyOnLoad(errorMeterObj);
-            Settings.ErrorMeter = errorMeterObj.AddComponent<HitErrorMeter>();
+            HitErrorMeter errorMeter = errorMeterObj.AddComponent<HitErrorMeter>();
+            errorMeter.Settings = Settings;
         }
 
         public override void OnDisable() {

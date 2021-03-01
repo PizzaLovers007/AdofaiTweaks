@@ -19,7 +19,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 if (!__instance.controller.isCW) {
                     angleDiff *= -1;
                 }
-                Settings.ErrorMeter.AddHit(angleDiff);
+                HitErrorMeter.Instance?.AddHit(angleDiff);
             }
         }
 
@@ -30,7 +30,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
                     return;
                 }
-                Settings.ErrorMeter.Reset();
+                HitErrorMeter.Instance?.Reset();
             }
         }
     }
