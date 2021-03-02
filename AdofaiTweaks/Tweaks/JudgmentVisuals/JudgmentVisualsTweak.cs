@@ -99,6 +99,11 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 GUILayout.EndVertical();
                 GUILayout.EndHorizontal();
             }
+
+            Settings.HidePerfects =
+                GUILayout.Toggle(
+                    Settings.HidePerfects,
+                    TweakStrings.Get(TranslationKeys.JudgmentVisuals.HIDE_PERFECTS));
         }
 
         public override void OnUpdate(float deltaTime) {

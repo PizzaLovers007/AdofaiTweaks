@@ -1,5 +1,6 @@
 ﻿using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
+using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 {
@@ -31,6 +32,20 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                     return;
                 }
                 HitErrorMeter.Instance?.Reset();
+            }
+        }
+
+        [HarmonyPatch(typeof(scrController), "ShowHitText")]
+        private static class ControllerShowHitTextPatch
+        {
+            public static bool Prefix(HitMargin hitMargin) {
+                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
+                    return true;
+                }
+                if (!Settings.HidePerfects) {
+                    return true;
+                }
+                return hitMargin != HitMargin.Perfect;
             }
         }
     }
