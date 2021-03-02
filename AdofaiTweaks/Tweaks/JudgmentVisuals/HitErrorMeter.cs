@@ -47,6 +47,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 10000;
             scalar = gameObject.AddComponent<CanvasScaler>();
+            Scale = Settings.ErrorMeterScale;
 
             GenerateMeterPng();
             gameObject.SetActive(false);
@@ -102,7 +103,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 
             // Update average
             if (angleDiff >= -60 && angleDiff <= 60) {
-                averageAngle = Mathf.Lerp(averageAngle, angleDiff, 0.2f);
+                averageAngle = Mathf.Lerp(averageAngle, angleDiff, Settings.ErrorMeterSensitivity);
             }
 
             // Move hand
@@ -163,12 +164,12 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             tickImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
             tickImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
             tickImage.rectTransform.pivot = new Vector2(0.5f, 0f);
-            tickImage.rectTransform.sizeDelta = new Vector2(8, 182);
+            tickImage.rectTransform.sizeDelta = new Vector2(8, 182) * Scale;
             tickImage.rectTransform.anchoredPosition = new Vector2(0, -10);
             tickImage.rectTransform.rotation = Quaternion.Euler(0, 0, angle);
             tickImage.color = color;
             tickImage
-                .DOColor(color.WithAlpha(0), 4f)
+                .DOColor(color.WithAlpha(0), Settings.ErrorMeterTickLife)
                 .SetEase(Ease.InQuad)
                 .SetId(TWEEN_ID)
                 .OnKill(() => Destroy(tickObj));

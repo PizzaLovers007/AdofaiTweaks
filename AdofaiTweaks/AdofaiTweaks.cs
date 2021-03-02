@@ -110,6 +110,10 @@ namespace AdofaiTweaks
         }
 
         private static void OnGUI(UnityModManager.ModEntry modEntry) {
+            GUI.skin.toggle = new GUIStyle(GUI.skin.toggle) {
+                margin = new RectOffset(0, 4, 6, 6),
+            };
+
             GUILayout.Space(4);
 
             // Language chooser
