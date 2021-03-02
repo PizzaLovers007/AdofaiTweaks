@@ -15,6 +15,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private readonly Color NEAR_COLOR = new Color32(0xfc, 0xff, 0x4d, 0xff);
         private readonly Color PERFECT_COLOR = new Color32(0x5f, 0xff, 0x4e, 0xff);
         private readonly string TWEEN_ID = "adofai_tweaks.hit_error_meter";
+        private const int TICK_CACHE_SIZE = 30;
 
         private CanvasScaler scalar;
 
@@ -22,6 +23,10 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private Sprite tickSprite;
 
         private float averageAngle;
+
+        private GameObject[] cachedTicks;
+        private string[] cachedTweenIds;
+        private int tickIndex;
 
         public float Scale {
             get {
@@ -50,6 +55,23 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             Scale = Settings.ErrorMeterScale;
 
             GenerateMeterPng();
+
+            cachedTicks = new GameObject[TICK_CACHE_SIZE];
+            cachedTweenIds = new string[TICK_CACHE_SIZE];
+            for (int i = 0; i < TICK_CACHE_SIZE; i++) {
+                cachedTicks[i] = new GameObject();
+                cachedTicks[i].transform.SetParent(transform);
+                Image tickImage = cachedTicks[i].AddComponent<Image>();
+                tickImage.sprite = tickSprite;
+                tickImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
+                tickImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
+                tickImage.rectTransform.pivot = new Vector2(0.5f, 0f);
+                tickImage.rectTransform.sizeDelta = new Vector2(8, 182) * Scale;
+                tickImage.rectTransform.anchoredPosition = new Vector2(0, -10);
+                tickImage.color = Color.clear;
+                cachedTweenIds[i] = TWEEN_ID + "_tick_" + i;
+            }
+
             gameObject.SetActive(false);
         }
 
@@ -118,6 +140,9 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 
         public void Reset() {
             DOTween.Kill(TWEEN_ID);
+            foreach (string id in cachedTweenIds) {
+                DOTween.Kill(id);
+            }
             averageAngle = 0;
             handImage.rectTransform.rotation = Quaternion.identity;
         }
@@ -157,22 +182,18 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             }
 
             // Draw the tick, fade after 4 seconds
-            GameObject tickObj = new GameObject();
-            tickObj.transform.SetParent(transform);
-            Image tickImage = tickObj.AddComponent<Image>();
-            tickImage.sprite = tickSprite;
-            tickImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
-            tickImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
-            tickImage.rectTransform.pivot = new Vector2(0.5f, 0f);
-            tickImage.rectTransform.sizeDelta = new Vector2(8, 182) * Scale;
-            tickImage.rectTransform.anchoredPosition = new Vector2(0, -10);
+            GameObject tickObj = cachedTicks[tickIndex];
+            string id = cachedTweenIds[tickIndex];
+            tickIndex = (tickIndex + 1) % TICK_CACHE_SIZE;
+            Image tickImage = tickObj.GetComponent<Image>();
             tickImage.rectTransform.rotation = Quaternion.Euler(0, 0, angle);
+            DOTween.Kill(id);
             tickImage.color = color;
             tickImage
                 .DOColor(color.WithAlpha(0), Settings.ErrorMeterTickLife)
                 .SetEase(Ease.InQuad)
-                .SetId(TWEEN_ID)
-                .OnKill(() => Destroy(tickObj));
+                .SetId(id)
+                .OnKill(() => tickImage.color = Color.clear);
         }
     }
 }
