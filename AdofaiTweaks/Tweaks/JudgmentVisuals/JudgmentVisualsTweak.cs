@@ -106,7 +106,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         }
 
         private void UpdateErrorMeter() {
-            if (!scrConductor.instance || !scrController.instance) {
+            if (!scrConductor.instance || !scrController.instance || !errorMeterObj) {
                 return;
             }
             bool playing = !scrController.instance.paused && scrConductor.instance.isGameWorld;
