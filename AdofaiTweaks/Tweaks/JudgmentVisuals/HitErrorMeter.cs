@@ -28,31 +28,23 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private string[] cachedTweenIds;
         private int tickIndex;
 
-        public float Scale {
-            get {
-                return scalar.scaleFactor;
-            }
+        private JudgmentVisualsSettings _settings = new JudgmentVisualsSettings();
+        public JudgmentVisualsSettings Settings {
+            get => _settings;
             set {
-                scalar.scaleFactor = value;
+                _settings = value;
+                scalar.scaleFactor = _settings.ErrorMeterScale;
             }
         }
-
-        public JudgmentVisualsSettings Settings { get; set; }
 
         protected void Awake() {
             _instance = this;
-        }
 
-        protected void OnDestroy() {
-            _instance = null;
-        }
-
-        protected void Start() {
+            AdofaiTweaks.Logger.Log("Start called");
             Canvas canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 10000;
             scalar = gameObject.AddComponent<CanvasScaler>();
-            Scale = Settings.ErrorMeterScale;
 
             GenerateMeterPng();
 
@@ -66,13 +58,18 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 tickImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.pivot = new Vector2(0.5f, 0f);
-                tickImage.rectTransform.sizeDelta = new Vector2(8, 182) * Scale;
+                tickImage.rectTransform.sizeDelta = new Vector2(8, 182) * Settings.ErrorMeterScale;
                 tickImage.rectTransform.anchoredPosition = new Vector2(0, -10);
                 tickImage.color = Color.clear;
                 cachedTweenIds[i] = TWEEN_ID + "_tick_" + i;
+                AdofaiTweaks.Logger.Log(cachedTweenIds[i]);
             }
 
             gameObject.SetActive(false);
+        }
+
+        protected void OnDestroy() {
+            _instance = null;
         }
 
         private void GenerateMeterPng() {
@@ -139,12 +136,18 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         }
 
         public void Reset() {
+            AdofaiTweaks.Logger.Log("Reset start");
             DOTween.Kill(TWEEN_ID);
+            AdofaiTweaks.Logger.Log("Killed meter tween");
             foreach (string id in cachedTweenIds) {
                 DOTween.Kill(id);
             }
+            AdofaiTweaks.Logger.Log("Killed tick tweens");
             averageAngle = 0;
-            handImage.rectTransform.rotation = Quaternion.identity;
+            if (handImage) {
+                handImage.rectTransform.rotation = Quaternion.identity;
+            }
+            AdofaiTweaks.Logger.Log("Reset end");
         }
 
         private void DrawTick(float angle) {

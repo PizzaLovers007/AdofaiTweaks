@@ -46,7 +46,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 newScale /= 4;
                 if (Settings.ErrorMeterScale != newScale) {
                     Settings.ErrorMeterScale = newScale;
-                    HitErrorMeter.Instance.Scale = newScale;
                 }
                 GUILayout.Space(8f);
                 GUILayout.Label(Settings.ErrorMeterScale + "x");
