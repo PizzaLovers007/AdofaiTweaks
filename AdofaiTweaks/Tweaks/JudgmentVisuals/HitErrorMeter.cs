@@ -15,7 +15,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private readonly Color NEAR_COLOR = new Color32(0xfc, 0xff, 0x4d, 0xff);
         private readonly Color PERFECT_COLOR = new Color32(0x5f, 0xff, 0x4e, 0xff);
         private readonly string TWEEN_ID = "adofai_tweaks.hit_error_meter";
-        private const int TICK_CACHE_SIZE = 30;
+        private const int TICK_CACHE_SIZE = 60;
 
         private CanvasScaler scalar;
 
@@ -40,7 +40,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         protected void Awake() {
             _instance = this;
 
-            AdofaiTweaks.Logger.Log("Start called");
             Canvas canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 10000;
@@ -62,7 +61,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 tickImage.rectTransform.anchoredPosition = new Vector2(0, -10);
                 tickImage.color = Color.clear;
                 cachedTweenIds[i] = TWEEN_ID + "_tick_" + i;
-                AdofaiTweaks.Logger.Log(cachedTweenIds[i]);
             }
 
             gameObject.SetActive(false);
@@ -136,18 +134,14 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         }
 
         public void Reset() {
-            AdofaiTweaks.Logger.Log("Reset start");
             DOTween.Kill(TWEEN_ID);
-            AdofaiTweaks.Logger.Log("Killed meter tween");
             foreach (string id in cachedTweenIds) {
                 DOTween.Kill(id);
             }
-            AdofaiTweaks.Logger.Log("Killed tick tweens");
             averageAngle = 0;
             if (handImage) {
                 handImage.rectTransform.rotation = Quaternion.identity;
             }
-            AdofaiTweaks.Logger.Log("Reset end");
         }
 
         private void DrawTick(float angle) {
