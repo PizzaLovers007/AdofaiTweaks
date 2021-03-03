@@ -28,12 +28,17 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private string[] cachedTweenIds;
         private int tickIndex;
 
+        public float Scale {
+            get => scalar.scaleFactor;
+            set => scalar.scaleFactor = value;
+        }
+
         private JudgmentVisualsSettings _settings = new JudgmentVisualsSettings();
         public JudgmentVisualsSettings Settings {
             get => _settings;
             set {
                 _settings = value;
-                scalar.scaleFactor = _settings.ErrorMeterScale;
+                Scale = _settings.ErrorMeterScale;
             }
         }
 
@@ -44,6 +49,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 10000;
             scalar = gameObject.AddComponent<CanvasScaler>();
+            Scale = Settings.ErrorMeterScale;
 
             GenerateMeterPng();
 
@@ -57,8 +63,8 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 tickImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.pivot = new Vector2(0.5f, 0f);
-                tickImage.rectTransform.sizeDelta = new Vector2(8, 182) * Settings.ErrorMeterScale;
                 tickImage.rectTransform.anchoredPosition = new Vector2(0, -10);
+                tickImage.rectTransform.sizeDelta = new Vector2(8, 182);
                 tickImage.color = Color.clear;
                 cachedTweenIds[i] = TWEEN_ID + "_tick_" + i;
             }
