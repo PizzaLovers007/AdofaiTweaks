@@ -46,5 +46,28 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 return false;
             }
         }
+
+        [HarmonyPatch(typeof(scrController), "CheckForSpecialInputKeysOrPause")]
+        private static class ControllerCheckForSpecialInputKeysOrPausePatch
+        {
+            public static void Postfix(ref bool __result) {
+                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
+                    return;
+                }
+
+                // Stop player inputs while we're editing the keys
+                if (Settings.IsListening) {
+                    return;
+                }
+
+                // Force active keys to not be special
+                foreach (KeyCode code in Settings.ActiveKeys) {
+                    if (Input.GetKeyDown(code)) {
+                        __result = false;
+                        return;
+                    }
+                }
+            }
+        }
     }
 }
