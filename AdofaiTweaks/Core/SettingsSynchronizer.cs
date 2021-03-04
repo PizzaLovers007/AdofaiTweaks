@@ -25,30 +25,23 @@ namespace AdofaiTweaks.Core
                     null,
                     new Type[] { typeof(UnityModManager.ModEntry) },
                     null);
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
+                if (!type.IsSubclassOf(typeof(TweakSettings))) {
+                    continue;
+                }
+                modEntry.Logger.Log(string.Format("Loading: {0}", type.FullName));
+                MethodInfo genericLoadMethod = loadMethod.MakeGenericMethod(type);
                 try {
-                    foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
-                        if (type.IsSubclassOf(typeof(TweakSettings))) {
-                            modEntry.Logger.Log("Loading: " + type.FullName);
-                            MethodInfo genericLoadMethod = loadMethod.MakeGenericMethod(type);
-                            try {
-                                tweakSettingsDictionary[type] =
-                                    (TweakSettings)genericLoadMethod.Invoke(
-                                        null, new object[] { modEntry });
-                            } catch (Exception e) {
-                                AdofaiTweaks.Logger.Error(
-                                    string.Format(
-                                        "Failed to read settings for {0}: {1}.", type.FullName, e));
-                                ConstructorInfo constructor = type.GetConstructor(null);
-                                tweakSettingsDictionary[type] =
-                                    (TweakSettings)constructor.Invoke(null);
-                            }
-                        }
-                    }
-                } catch (ReflectionTypeLoadException e) {
-                    AdofaiTweaks.Logger.Log(
-                        "Error loading type from assembly: " + assembly.FullName);
-                    AdofaiTweaks.Logger.Log(e.Message);
+                    tweakSettingsDictionary[type] =
+                        (TweakSettings)genericLoadMethod.Invoke(
+                            null, new object[] { modEntry });
+                } catch (Exception e) {
+                    AdofaiTweaks.Logger.Error(
+                        string.Format(
+                            "Failed to read settings for {0}: {1}.", type.FullName, e));
+                    ConstructorInfo constructor = type.GetConstructor(null);
+                    tweakSettingsDictionary[type] =
+                        (TweakSettings)constructor.Invoke(null);
                 }
             }
         }
