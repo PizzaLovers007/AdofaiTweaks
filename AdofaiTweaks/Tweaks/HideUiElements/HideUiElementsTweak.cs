@@ -103,13 +103,10 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             RDC.noHud = hideEverything;
 
             scnEditor editor = Object.FindObjectOfType<scnEditor>();
-            if (!GCS.standaloneLevelMode) {
+            if (scrController.instance.isEditingLevel) {
                 if (editor?.ottoCanvas.gameObject.activeSelf == hideOtto) {
                     editor.ottoCanvas.gameObject.SetActive(!hideOtto);
                 }
-                uiController.difficultyContainer.gameObject.SetActive(false);
-                uiController.difficultyFadeContainer.gameObject.SetActive(false);
-                uiController.difficultyImage.enabled = false;
             } else {
                 uiController.difficultyImage.enabled = !hideOtto;
                 if (uiController.difficultyContainer.gameObject.activeSelf == hideOtto) {
@@ -120,19 +117,16 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                 }
             }
 
-            if (SteamAPI.Init())
-            {
+            if (SteamAPI.Init()) {
                 bool isBeta = SteamApps.GetCurrentBetaName(out _, 20);
                 scrEnableIfBeta enableIfBeta =
                     Resources.FindObjectsOfTypeAll<scrEnableIfBeta>().FirstOrDefault();
-                if (isBeta && enableIfBeta && enableIfBeta.gameObject.activeSelf == hideBeta)
-                {
+                if (isBeta && enableIfBeta && enableIfBeta.gameObject.activeSelf == hideBeta) {
                     enableIfBeta.gameObject.SetActive(!hideBeta);
                 }
             }
 
-            if (uiController.txtLevelName.gameObject.activeSelf == hideTitle)
-            {
+            if (uiController.txtLevelName.gameObject.activeSelf == hideTitle) {
                 uiController.txtLevelName.gameObject.SetActive(!hideTitle);
             }
         }
