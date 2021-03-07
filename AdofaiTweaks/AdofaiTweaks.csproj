@@ -188,9 +188,6 @@
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="adofai_tweaks.assets">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -211,15 +208,6 @@
   <ItemGroup>
     <Content Include="AdofaiTweaks.Strings.dll" />
     <Content Include="AdofaiTweaks.Translation.dll" />
-    <Content Include="Hand.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Meter.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Tick.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

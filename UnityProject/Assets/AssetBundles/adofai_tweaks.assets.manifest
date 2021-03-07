@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 765869993
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 86b47dab4988208b196cbb46a8e9adf6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c8cc15a8bb12c00d83ed6c28f94d694b
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/NanumGothic-Regular.ttf
+- Assets/Tick.png
+- Assets/Meter.png
+- Assets/Hand.png
+- Assets/NanumGothic-Bold.ttf
+Dependencies: []
