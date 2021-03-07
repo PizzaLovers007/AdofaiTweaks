@@ -101,7 +101,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
             GUILayout.Space(8f);
 
-            GUILayout.Label("Planet 2:");
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.PlanetColor.PLANET_TWO));
             GUILayout.BeginHorizontal();
             GUILayout.Space(20f);
             GUILayout.BeginVertical();
