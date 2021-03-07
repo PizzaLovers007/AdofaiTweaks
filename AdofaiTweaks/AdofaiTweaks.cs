@@ -118,15 +118,16 @@ namespace AdofaiTweaks
                 GUI.skin.textArea.font = TweakAssets.KoreanNormalFont;
                 GUI.skin.textField.font = TweakAssets.KoreanNormalFont;
                 GUI.skin.toggle.font = TweakAssets.KoreanNormalFont;
-                GUI.skin.button.fontSize = 15;
-                GUI.skin.label.fontSize = 15;
-                GUI.skin.textArea.fontSize = 15;
-                GUI.skin.textField.fontSize = 15;
-                GUI.skin.toggle.fontSize = 15;
+                GUI.skin.button.fontSize = 14;
+                GUI.skin.label.fontSize = 14;
+                GUI.skin.textArea.fontSize = 14;
+                GUI.skin.textField.fontSize = 14;
+                GUI.skin.toggle.fontSize = 14;
             }
             GUI.skin.toggle = new GUIStyle(GUI.skin.toggle) {
                 margin = new RectOffset(0, 4, 6, 6),
             };
+            GUI.skin.label.wordWrap = false;
 
             GUILayout.Space(4);
 
@@ -152,7 +153,7 @@ namespace AdofaiTweaks
                         font = language == LanguageEnum.KOREAN
                             ? TweakAssets.KoreanNormalFont
                             : null,
-                        fontSize = language == LanguageEnum.KOREAN ? 15 : 0,
+                        fontSize = language == LanguageEnum.KOREAN ? 14 : 0,
                     });
                 if (click) {
                     GlobalSettings.Language = language;
