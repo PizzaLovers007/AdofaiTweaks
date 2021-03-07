@@ -7,6 +7,7 @@ mkdir tmp
 cd tmp
 mkdir AdofaiTweaks
 cp ../Info.json AdofaiTweaks
+cp ../AdofaiTweaks/bin/Release/adofai_tweaks.assets AdofaiTweaks
 cp ../AdofaiTweaks/bin/Release/AdofaiTweaks.dll AdofaiTweaks
 cp ../AdofaiTweaks/bin/Release/LiteDB.dll AdofaiTweaks
 cp ../AdofaiTweaks/bin/Release/Meter.png AdofaiTweaks

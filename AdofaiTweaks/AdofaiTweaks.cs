@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core;
@@ -15,6 +16,9 @@ namespace AdofaiTweaks
     {
         public static UnityModManager.ModEntry.ModLogger Logger { get; private set; }
         public static bool IsEnabled { get; private set; }
+        public static AssetBundle Assets { get; private set; }
+        public static Font KoreanNormalFont { get; private set; }
+        public static Font KoreanBoldFont { get; private set; }
 
         private static List<Type> allTweakTypes;
         private static readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
@@ -33,6 +37,10 @@ namespace AdofaiTweaks
                     .OrderBy(t => t.GetCustomAttribute<RegisterTweakAttribute>().Priority)
                     .ToList();
 
+            Assets = AssetBundle.LoadFromFile(Path.Combine(modEntry.Path, "adofai_tweaks.assets"));
+            KoreanNormalFont = Assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
+            KoreanBoldFont = Assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
+
             Logger = modEntry.Logger;
             synchronizer = new SettingsSynchronizer();
 
@@ -41,6 +49,7 @@ namespace AdofaiTweaks
             // Register global settings
             synchronizer.Register(typeof(TweakStrings));
             synchronizer.Register(typeof(AdofaiTweaks));
+            synchronizer.Register(typeof(TweakRunner));
 
             modEntry.OnToggle = OnToggle;
             modEntry.OnGUI = OnGUI;
@@ -110,6 +119,18 @@ namespace AdofaiTweaks
         }
 
         private static void OnGUI(UnityModManager.ModEntry modEntry) {
+            if (GlobalSettings.Language == LanguageEnum.KOREAN) {
+                GUI.skin.button.font = KoreanNormalFont;
+                GUI.skin.label.font = KoreanNormalFont;
+                GUI.skin.textArea.font = KoreanNormalFont;
+                GUI.skin.textField.font = KoreanNormalFont;
+                GUI.skin.toggle.font = KoreanNormalFont;
+                GUI.skin.button.fontSize = 15;
+                GUI.skin.label.fontSize = 15;
+                GUI.skin.textArea.fontSize = 15;
+                GUI.skin.textField.fontSize = 15;
+                GUI.skin.toggle.fontSize = 15;
+            }
             GUI.skin.toggle = new GUIStyle(GUI.skin.toggle) {
                 margin = new RectOffset(0, 4, 6, 6),
             };
@@ -121,7 +142,14 @@ namespace AdofaiTweaks
             GUILayout.Space(4);
             GUILayout.Label(
                 TweakStrings.Get(TranslationKeys.Global.GLOBAL_LANGUAGE),
-                new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+                new GUIStyle(GUI.skin.label) {
+                    fontStyle = GlobalSettings.Language == LanguageEnum.KOREAN
+                        ? FontStyle.Normal
+                        : FontStyle.Bold,
+                    font = GlobalSettings.Language == LanguageEnum.KOREAN
+                        ? KoreanBoldFont
+                        : null,
+                });
             foreach (LanguageEnum language in Enum.GetValues(typeof(LanguageEnum))) {
                 string langString =
                     TweakStrings.GetForLanguage(TranslationKeys.Global.LANGUAGE_NAME, language);
@@ -139,6 +167,17 @@ namespace AdofaiTweaks
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnGUI();
             }
+
+            GUI.skin.button.font = null;
+            GUI.skin.label.font = null;
+            GUI.skin.textArea.font = null;
+            GUI.skin.textField.font = null;
+            GUI.skin.toggle.font = null;
+            GUI.skin.button.fontSize = 0;
+            GUI.skin.label.fontSize = 0;
+            GUI.skin.textArea.fontSize = 0;
+            GUI.skin.textField.fontSize = 0;
+            GUI.skin.toggle.fontSize = 0;
         }
 
         private static void OnHideGUI(UnityModManager.ModEntry modEntry) {

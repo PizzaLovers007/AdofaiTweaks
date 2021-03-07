@@ -1,5 +1,6 @@
 ﻿using System;
 using AdofaiTweaks.Core.Attributes;
+using AdofaiTweaks.Translation;
 using HarmonyLib;
 using UnityEngine;
 
@@ -12,6 +13,9 @@ namespace AdofaiTweaks.Core
         public RegisterTweakAttribute TweakMetadata { get; private set; }
 
         private readonly Harmony harmony;
+
+        [SyncTweakSettings]
+        private static GlobalSettings GlobalSettings { get; set; }
 
         public TweakRunner(Tweak tweak, TweakSettings settings) {
             Tweak = tweak;
@@ -54,10 +58,15 @@ namespace AdofaiTweaks.Core
                 Settings.IsEnabled,
                 Tweak.Name,
                 new GUIStyle(GUI.skin.toggle) {
-                    fontStyle = FontStyle.Bold,
+                    fontStyle = GlobalSettings.Language == LanguageEnum.KOREAN
+                        ? FontStyle.Normal
+                        : FontStyle.Bold,
+                    font = GlobalSettings.Language == LanguageEnum.KOREAN
+                        ? AdofaiTweaks.KoreanBoldFont
+                        : null,
                     margin = new RectOffset(0, 4, 4, 4),
                 });
-            GUILayout.Label("-");
+            GUILayout.Label("-", new GUIStyle(GUI.skin.label) { font = null });
             GUILayout.Label(
                 Tweak.Description,
                 new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic });
