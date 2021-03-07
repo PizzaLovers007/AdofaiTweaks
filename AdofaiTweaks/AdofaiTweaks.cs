@@ -146,7 +146,15 @@ namespace AdofaiTweaks
             foreach (LanguageEnum language in Enum.GetValues(typeof(LanguageEnum))) {
                 string langString =
                     TweakStrings.GetForLanguage(TranslationKeys.Global.LANGUAGE_NAME, language);
-                if (GUILayout.Button(langString)) {
+                bool click = GUILayout.Button(
+                    langString,
+                    new GUIStyle(GUI.skin.button) {
+                        font = language == LanguageEnum.KOREAN
+                            ? TweakAssets.KoreanNormalFont
+                            : null,
+                        fontSize = language == LanguageEnum.KOREAN ? 15 : 0,
+                    });
+                if (click) {
                     GlobalSettings.Language = language;
                     foreach (TweakRunner runner in tweakRunners) {
                         runner.OnLanguageChange();
