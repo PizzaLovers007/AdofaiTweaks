@@ -62,7 +62,7 @@ namespace AdofaiTweaks.Core
                         ? FontStyle.Normal
                         : FontStyle.Bold,
                     font = GlobalSettings.Language == LanguageEnum.KOREAN
-                        ? AdofaiTweaks.KoreanBoldFont
+                        ? TweakAssets.KoreanBoldFont
                         : null,
                     margin = new RectOffset(0, 4, 4, 4),
                 });

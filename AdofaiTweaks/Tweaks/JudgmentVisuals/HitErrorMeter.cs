@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using AdofaiTweaks.Core;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private CanvasScaler scalar;
 
         private Image handImage;
-        private Sprite tickSprite;
 
         private float averageAngle;
 
@@ -59,7 +59,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 cachedTicks[i] = new GameObject();
                 cachedTicks[i].transform.SetParent(transform);
                 Image tickImage = cachedTicks[i].AddComponent<Image>();
-                tickImage.sprite = tickSprite;
+                tickImage.sprite = TweakAssets.TickSprite;
                 tickImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.pivot = new Vector2(0.5f, 0f);
@@ -77,17 +77,10 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         }
 
         private void GenerateMeterPng() {
-            Sprite meterSprite =
-                scrExtImgHolder.LoadNewSprite(Path.Combine("Mods", "AdofaiTweaks", "Meter.png"));
-            Sprite handSprite =
-                scrExtImgHolder.LoadNewSprite(Path.Combine("Mods", "AdofaiTweaks", "Hand.png"));
-            tickSprite =
-                scrExtImgHolder.LoadNewSprite(Path.Combine("Mods", "AdofaiTweaks", "Tick.png"));
-
             GameObject meterObj = new GameObject();
             meterObj.transform.SetParent(transform);
             Image image = meterObj.AddComponent<Image>();
-            image.sprite = meterSprite;
+            image.sprite = TweakAssets.MeterSprite;
             image.rectTransform.anchorMin = new Vector2(0.5f, 0f);
             image.rectTransform.anchorMax = new Vector2(0.5f, 0f);
             image.rectTransform.pivot = new Vector2(0.5f, 0f);
@@ -97,7 +90,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             GameObject handObj = new GameObject();
             handObj.transform.SetParent(transform);
             handImage = handObj.AddComponent<Image>();
-            handImage.sprite = handSprite;
+            handImage.sprite = TweakAssets.HandSprite;
             handImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
             handImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
             handImage.rectTransform.pivot = new Vector2(0.5f, 0f);

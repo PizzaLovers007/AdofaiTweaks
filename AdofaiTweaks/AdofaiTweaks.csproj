@@ -154,6 +154,7 @@
     <Compile Include="Core\Attributes\SyncTweakSettingsAttribute.cs" />
     <Compile Include="Core\Attributes\RegisterTweakAttribute.cs" />
     <Compile Include="Core\ShadowedText.cs" />
+    <Compile Include="Core\TweakAssets.cs" />
     <Compile Include="Core\TweakRunner.cs" />
     <Compile Include="Core\TweakSettings.cs" />
     <Compile Include="Core\SettingsSynchronizer.cs" />

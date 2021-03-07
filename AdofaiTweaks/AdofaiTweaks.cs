@@ -16,9 +16,6 @@ namespace AdofaiTweaks
     {
         public static UnityModManager.ModEntry.ModLogger Logger { get; private set; }
         public static bool IsEnabled { get; private set; }
-        public static AssetBundle Assets { get; private set; }
-        public static Font KoreanNormalFont { get; private set; }
-        public static Font KoreanBoldFont { get; private set; }
 
         private static List<Type> allTweakTypes;
         private static readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
@@ -36,10 +33,6 @@ namespace AdofaiTweaks
                     .OrderBy(t => t.Name)
                     .OrderBy(t => t.GetCustomAttribute<RegisterTweakAttribute>().Priority)
                     .ToList();
-
-            Assets = AssetBundle.LoadFromFile(Path.Combine(modEntry.Path, "adofai_tweaks.assets"));
-            KoreanNormalFont = Assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
-            KoreanBoldFont = Assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
 
             Logger = modEntry.Logger;
             synchronizer = new SettingsSynchronizer();
@@ -120,11 +113,11 @@ namespace AdofaiTweaks
 
         private static void OnGUI(UnityModManager.ModEntry modEntry) {
             if (GlobalSettings.Language == LanguageEnum.KOREAN) {
-                GUI.skin.button.font = KoreanNormalFont;
-                GUI.skin.label.font = KoreanNormalFont;
-                GUI.skin.textArea.font = KoreanNormalFont;
-                GUI.skin.textField.font = KoreanNormalFont;
-                GUI.skin.toggle.font = KoreanNormalFont;
+                GUI.skin.button.font = TweakAssets.KoreanNormalFont;
+                GUI.skin.label.font = TweakAssets.KoreanNormalFont;
+                GUI.skin.textArea.font = TweakAssets.KoreanNormalFont;
+                GUI.skin.textField.font = TweakAssets.KoreanNormalFont;
+                GUI.skin.toggle.font = TweakAssets.KoreanNormalFont;
                 GUI.skin.button.fontSize = 15;
                 GUI.skin.label.fontSize = 15;
                 GUI.skin.textArea.fontSize = 15;
@@ -147,7 +140,7 @@ namespace AdofaiTweaks
                         ? FontStyle.Normal
                         : FontStyle.Bold,
                     font = GlobalSettings.Language == LanguageEnum.KOREAN
-                        ? KoreanBoldFont
+                        ? TweakAssets.KoreanBoldFont
                         : null,
                 });
             foreach (LanguageEnum language in Enum.GetValues(typeof(LanguageEnum))) {
