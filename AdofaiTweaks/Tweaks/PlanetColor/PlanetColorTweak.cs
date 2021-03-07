@@ -77,12 +77,14 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             GUILayout.BeginHorizontal();
             GUILayout.Label(
                 TweakStrings.Get(TranslationKeys.PlanetColor.BODY_HEX), GUILayout.Width(90f));
-            newHex = GUILayout.TextField(oldHex, GUILayout.Width(100f));
             GUILayout.FlexibleSpace();
+            newHex = GUILayout.TextField(oldHex, GUILayout.Width(100f));
+            GUILayout.Space(50f);
             GUILayout.Label(
                 TweakStrings.Get(TranslationKeys.PlanetColor.TAIL_HEX), GUILayout.Width(90f));
-            newTailHex = GUILayout.TextField(oldTailHex, GUILayout.Width(100f));
             GUILayout.FlexibleSpace();
+            newTailHex = GUILayout.TextField(oldTailHex, GUILayout.Width(100f));
+            GUILayout.Space(50f);
             GUILayout.EndHorizontal();
             if (oldHex != newHex && ColorUtility.TryParseHtmlString(newHex, out Color newColor)) {
                 Settings.Color1 = newColor;
@@ -144,12 +146,14 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             GUILayout.BeginHorizontal();
             GUILayout.Label(
                 TweakStrings.Get(TranslationKeys.PlanetColor.BODY_HEX), GUILayout.Width(90f));
-            newHex = GUILayout.TextField(oldHex, GUILayout.Width(100f));
             GUILayout.FlexibleSpace();
+            newHex = GUILayout.TextField(oldHex, GUILayout.Width(100f));
+            GUILayout.Space(50f);
             GUILayout.Label(
                 TweakStrings.Get(TranslationKeys.PlanetColor.TAIL_HEX), GUILayout.Width(90f));
-            newTailHex = GUILayout.TextField(oldTailHex, GUILayout.Width(100f));
             GUILayout.FlexibleSpace();
+            newTailHex = GUILayout.TextField(oldTailHex, GUILayout.Width(100f));
+            GUILayout.Space(50f);
             GUILayout.EndHorizontal();
             if (oldHex != newHex && ColorUtility.TryParseHtmlString(newHex, out newColor)) {
                 Settings.Color2 = newColor;
