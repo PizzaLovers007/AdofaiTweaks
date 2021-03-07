@@ -93,6 +93,8 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 GUILayout.Space(8f);
                 GUILayout.Label(
                     TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_LESS_STABLE));
+                GUILayout.Space(8f);
+                GUILayout.Label($"({Settings.ErrorMeterSensitivity})");
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
