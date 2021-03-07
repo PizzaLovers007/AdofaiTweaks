@@ -66,7 +66,7 @@ namespace AdofaiTweaks.Core
                         : null,
                     margin = new RectOffset(0, 4, 4, 4),
                 });
-            GUILayout.Label("-", new GUIStyle(GUI.skin.label) { font = null });
+            GUILayout.Label("-");
             GUILayout.Label(
                 Tweak.Description,
                 new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Italic });

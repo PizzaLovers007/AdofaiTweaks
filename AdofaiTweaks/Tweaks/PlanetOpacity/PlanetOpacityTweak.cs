@@ -27,8 +27,8 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             float newOpacity;
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(
-                TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_ONE), GUILayout.Width(110f));
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_ONE));
+            GUILayout.Space(8f);
             newOpacity =
                 GUILayout.HorizontalSlider(
                     Settings.SettingsOpacity1, 0, 100, GUILayout.Width(200f));
@@ -42,8 +42,8 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(
-                TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_TWO), GUILayout.Width(110f));
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_TWO));
+            GUILayout.Space(8f);
             newOpacity =
                 GUILayout.HorizontalSlider(
                     Settings.SettingsOpacity2, 0, 100, GUILayout.Width(200f));
