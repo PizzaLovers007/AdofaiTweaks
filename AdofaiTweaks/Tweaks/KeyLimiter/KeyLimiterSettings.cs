@@ -9,6 +9,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
     {
         public List<KeyCode> ActiveKeys { get; set; } = new List<KeyCode>();
         public bool ShowKeyViewer { get; set; }
+        public bool AnimateKeys { get; set; } = true;
         public float KeyViewerSize { get; set; } = 100f;
         public float KeyViewerXPos { get; set; } = 0.89f;
         public float KeyViewerYPos { get; set; } = 0.03f;

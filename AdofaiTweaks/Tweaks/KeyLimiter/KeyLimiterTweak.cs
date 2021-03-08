@@ -137,6 +137,11 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
             MoreGUILayout.BeginIndent();
 
+            Settings.AnimateKeys =
+                GUILayout.Toggle(
+                    Settings.AnimateKeys,
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.ANIMATE_KEYS));
+
             // Size slider
             float newSize =
                 MoreGUILayout.NamedSlider(
@@ -200,9 +205,17 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             MoreGUILayout.BeginIndent();
 
             // Outline color RGBA sliders
-            (Settings.PressedOutlineColor, Settings.ReleasedOutlineColor) =
+            (newPressed, newReleased) =
                 MoreGUILayout.ColorRgbaSlidersPair(
                     Settings.PressedOutlineColor, Settings.ReleasedOutlineColor);
+            if (newPressed != Settings.PressedOutlineColor) {
+                Settings.PressedOutlineColor = newPressed;
+                keyViewer.UpdateLayout();
+            }
+            if (newReleased != Settings.ReleasedOutlineColor) {
+                Settings.ReleasedOutlineColor = newReleased;
+                keyViewer.UpdateLayout();
+            }
 
             // Outline color hex
             (newPressedHex, newReleasedHex) =
@@ -244,9 +257,17 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             MoreGUILayout.BeginIndent();
 
             // Background color RGBA sliders
-            (Settings.PressedBackgroundColor, Settings.ReleasedBackgroundColor) =
+            (newPressed, newReleased) =
                 MoreGUILayout.ColorRgbaSlidersPair(
                     Settings.PressedBackgroundColor, Settings.ReleasedBackgroundColor);
+            if (newPressed != Settings.PressedBackgroundColor) {
+                Settings.PressedBackgroundColor = newPressed;
+                keyViewer.UpdateLayout();
+            }
+            if (newReleased != Settings.ReleasedBackgroundColor) {
+                Settings.ReleasedBackgroundColor = newReleased;
+                keyViewer.UpdateLayout();
+            }
 
             // Background color hex
             (newPressedHex, newReleasedHex) =
@@ -288,9 +309,17 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             MoreGUILayout.BeginIndent();
 
             // Text color RGBA sliders
-            (Settings.PressedTextColor, Settings.ReleasedTextColor) =
+            (newPressed, newReleased) =
                 MoreGUILayout.ColorRgbaSlidersPair(
                     Settings.PressedTextColor, Settings.ReleasedTextColor);
+            if (newPressed != Settings.PressedTextColor) {
+                Settings.PressedTextColor = newPressed;
+                keyViewer.UpdateLayout();
+            }
+            if (newReleased != Settings.ReleasedTextColor) {
+                Settings.ReleasedTextColor = newReleased;
+                keyViewer.UpdateLayout();
+            }
 
             // Text color hex
             (newPressedHex, newReleasedHex) =
