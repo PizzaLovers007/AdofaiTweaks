@@ -51,7 +51,7 @@ namespace AdofaiTweaks.Core
                 new GUIStyle() {
                     fixedWidth = 10,
                     normal = new GUIStyleState() { textColor = Color.white },
-                    fontSize = 16,
+                    fontSize = 15,
                     margin = new RectOffset(4, 2, 6, 6),
                 });
             bool newIsEnabled = GUILayout.Toggle(
