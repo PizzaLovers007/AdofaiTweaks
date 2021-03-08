@@ -18,7 +18,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private readonly string TWEEN_ID = "adofai_tweaks.hit_error_meter";
         private const int TICK_CACHE_SIZE = 60;
 
-        private CanvasScaler scalar;
+        private CanvasScaler scaler;
 
         private Image handImage;
 
@@ -29,8 +29,8 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private int tickIndex;
 
         public float Scale {
-            get => scalar.scaleFactor;
-            set => scalar.scaleFactor = value;
+            get => scaler.scaleFactor;
+            set => scaler.scaleFactor = value;
         }
 
         private JudgmentVisualsSettings _settings = new JudgmentVisualsSettings();
@@ -48,7 +48,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             Canvas canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = 10000;
-            scalar = gameObject.AddComponent<CanvasScaler>();
+            scaler = gameObject.AddComponent<CanvasScaler>();
             Scale = Settings.ErrorMeterScale;
 
             GenerateMeterPng();

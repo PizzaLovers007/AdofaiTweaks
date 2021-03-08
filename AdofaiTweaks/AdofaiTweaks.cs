@@ -26,6 +26,8 @@ namespace AdofaiTweaks
         private static GlobalSettings GlobalSettings { get; set; }
 
         internal static void Setup(UnityModManager.ModEntry modEntry) {
+            RDString.Setup();
+
             allTweakTypes =
                 AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(a => a.GetTypes())

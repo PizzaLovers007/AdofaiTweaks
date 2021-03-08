@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1316683023
+CRC: 663732641
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f4a2a9107b6811ce6df2bf1707f5ae25
+    Hash: c3f4cf6fd76fbd3488d99982b1322f36
   TypeTreeHash:
     serializedVersion: 2
     Hash: c8cc15a8bb12c00d83ed6c28f94d694b
@@ -21,8 +21,10 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/NanumGothic-Regular.ttf
+- Assets/KeyOutline.png
 - Assets/Tick.png
 - Assets/Meter.png
 - Assets/Hand.png
+- Assets/KeyBackground.png
 - Assets/NanumGothic-Bold.ttf
 Dependencies: []

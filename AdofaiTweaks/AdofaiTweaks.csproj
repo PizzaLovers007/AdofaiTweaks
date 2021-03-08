@@ -165,6 +165,7 @@
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsSettings.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsTweak.cs" />
+    <Compile Include="Tweaks\KeyLimiter\KeyViewer.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousPatches.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousSettings.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousTweak.cs" />
