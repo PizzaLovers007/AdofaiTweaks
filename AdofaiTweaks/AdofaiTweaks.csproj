@@ -153,6 +153,7 @@
     <Compile Include="AdofaiTweaks.cs" />
     <Compile Include="Core\Attributes\SyncTweakSettingsAttribute.cs" />
     <Compile Include="Core\Attributes\RegisterTweakAttribute.cs" />
+    <Compile Include="Core\MoreGUILayout.cs" />
     <Compile Include="Core\ShadowedText.cs" />
     <Compile Include="Core\TweakAssets.cs" />
     <Compile Include="Core\TweakRunner.cs" />

@@ -26,35 +26,33 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         public override void OnSettingsGUI() {
             float newOpacity;
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_ONE));
-            GUILayout.Space(8f);
             newOpacity =
-                GUILayout.HorizontalSlider(
-                    Settings.SettingsOpacity1, 0, 100, GUILayout.Width(200f));
-            newOpacity = Mathf.Round(newOpacity);
+                MoreGUILayout.NamedSlider(
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_ONE),
+                    Settings.SettingsOpacity1,
+                    0f,
+                    100f,
+                    200f,
+                    roundNearest: 1,
+                    valueFormat: "{0}%");
             if (newOpacity != Settings.SettingsOpacity1) {
                 Settings.SettingsOpacity1 = newOpacity;
                 UpdatePlanetColors();
             }
-            GUILayout.Label(Mathf.RoundToInt(Settings.SettingsOpacity1) + "%");
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_TWO));
-            GUILayout.Space(8f);
             newOpacity =
-                GUILayout.HorizontalSlider(
-                    Settings.SettingsOpacity2, 0, 100, GUILayout.Width(200f));
-            newOpacity = Mathf.Round(newOpacity);
+                MoreGUILayout.NamedSlider(
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_TWO),
+                    Settings.SettingsOpacity2,
+                    0f,
+                    100f,
+                    200f,
+                    roundNearest: 1,
+                    valueFormat: "{0}%");
             if (newOpacity != Settings.SettingsOpacity2) {
                 Settings.SettingsOpacity2 = newOpacity;
                 UpdatePlanetColors();
             }
-            GUILayout.Label(Mathf.RoundToInt(Settings.SettingsOpacity2) + "%");
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
         }
 
         public override void OnEnable() {

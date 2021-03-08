@@ -94,59 +94,51 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
             // Key viewer settings
             if (Settings.ShowKeyViewer) {
-                GUILayout.BeginHorizontal();
-                GUILayout.Space(20f);
-                GUILayout.BeginVertical();
+                MoreGUILayout.BeginIndent();
 
                 // Size slider
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_SIZE));
-                GUILayout.Space(4f);
                 float newSize =
-                    GUILayout.HorizontalSlider(
-                        Settings.KeyViewerSize, 10f, 200f, GUILayout.Width(300f));
-                GUILayout.Space(4f);
-                GUILayout.Label(Settings.KeyViewerSize + "", GUILayout.Width(50f));
-                newSize = Mathf.Round(newSize);
+                    MoreGUILayout.NamedSlider(
+                        TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_SIZE),
+                        Settings.KeyViewerSize,
+                        10f,
+                        200f,
+                        300f,
+                        roundNearest: 1f);
                 if (newSize != Settings.KeyViewerSize) {
                     Settings.KeyViewerSize = newSize;
                     keyViewer.UpdateLayout();
                 }
-                GUILayout.EndHorizontal();
 
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_X_POS));
-                GUILayout.Space(4f);
+                // X position slider
                 float newX =
-                    GUILayout.HorizontalSlider(
-                        Settings.KeyViewerXPos, 0f, 1f, GUILayout.Width(300f));
-                GUILayout.Space(4f);
-                GUILayout.Label(Settings.KeyViewerXPos + "", GUILayout.Width(50f));
-                newX = Mathf.Round(newX * 100) / 100;
+                    MoreGUILayout.NamedSlider(
+                        TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_X_POS),
+                        Settings.KeyViewerXPos,
+                        0f,
+                        1f,
+                        300f,
+                        roundNearest: 0.01f);
                 if (newX != Settings.KeyViewerXPos) {
                     Settings.KeyViewerXPos = newX;
                     keyViewer.UpdateLayout();
                 }
-                GUILayout.EndHorizontal();
 
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_Y_POS));
-                GUILayout.Space(4f);
+                // Y position slider
                 float newY =
-                    GUILayout.HorizontalSlider(
-                        Settings.KeyViewerYPos, 0f, 1f, GUILayout.Width(300f));
-                GUILayout.Space(4f);
-                GUILayout.Label(Settings.KeyViewerYPos + "", GUILayout.Width(50f));
-                newY = Mathf.Round(newY * 100) / 100;
+                    MoreGUILayout.NamedSlider(
+                        TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_Y_POS),
+                        Settings.KeyViewerYPos,
+                        0f,
+                        1f,
+                        300f,
+                        roundNearest: 0.01f);
                 if (newY != Settings.KeyViewerYPos) {
                     Settings.KeyViewerYPos = newY;
                     keyViewer.UpdateLayout();
                 }
-                GUILayout.EndHorizontal();
 
-                GUILayout.EndVertical();
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
+                MoreGUILayout.EndIndent();
             }
 
             // List of registered keys
