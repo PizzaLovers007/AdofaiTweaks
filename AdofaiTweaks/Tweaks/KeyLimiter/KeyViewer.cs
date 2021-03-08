@@ -178,13 +178,18 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         public void UpdateState(Dictionary<KeyCode, bool> state) {
             foreach (KeyCode code in keyOutlineImages.Keys) {
                 Image bgImage = keyBgImages[code];
-                bgImage.color = state[code] ? Color.white : Color.black.WithAlpha(0.4f);
-
                 Image outlineImage = keyOutlineImages[code];
-                outlineImage.color = Color.white;
-
                 Text text = keyTexts[code];
-                text.color = state[code] ? Color.black : Color.white;
+
+                if (state[code]) {
+                    bgImage.color = Settings.PressedBackgroundColor;
+                    outlineImage.color = Settings.PressedOutlineColor;
+                    text.color = Settings.PressedTextColor;
+                } else {
+                    bgImage.color = Settings.ReleasedBackgroundColor;
+                    outlineImage.color = Settings.ReleasedOutlineColor;
+                    text.color = Settings.ReleasedTextColor;
+                }
             }
         }
     }

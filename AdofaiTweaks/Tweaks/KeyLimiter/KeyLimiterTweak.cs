@@ -82,65 +82,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         }
 
         public override void OnSettingsGUI() {
-            // Key viewer toggle
-            bool newShow =
-                GUILayout.Toggle(
-                    Settings.ShowKeyViewer,
-                    TweakStrings.Get(TranslationKeys.KeyLimiter.SHOW_KEY_VIEWER));
-            if (newShow != Settings.ShowKeyViewer) {
-                Settings.ShowKeyViewer = newShow;
-                keyViewer.gameObject.SetActive(Settings.ShowKeyViewer);
-            }
+            DrawKeyRegisterSettingsGUI();
+            GUILayout.Space(8f);
+            DrawKeyViewerSettingsGUI();
+        }
 
-            // Key viewer settings
-            if (Settings.ShowKeyViewer) {
-                MoreGUILayout.BeginIndent();
-
-                // Size slider
-                float newSize =
-                    MoreGUILayout.NamedSlider(
-                        TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_SIZE),
-                        Settings.KeyViewerSize,
-                        10f,
-                        200f,
-                        300f,
-                        roundNearest: 1f);
-                if (newSize != Settings.KeyViewerSize) {
-                    Settings.KeyViewerSize = newSize;
-                    keyViewer.UpdateLayout();
-                }
-
-                // X position slider
-                float newX =
-                    MoreGUILayout.NamedSlider(
-                        TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_X_POS),
-                        Settings.KeyViewerXPos,
-                        0f,
-                        1f,
-                        300f,
-                        roundNearest: 0.01f);
-                if (newX != Settings.KeyViewerXPos) {
-                    Settings.KeyViewerXPos = newX;
-                    keyViewer.UpdateLayout();
-                }
-
-                // Y position slider
-                float newY =
-                    MoreGUILayout.NamedSlider(
-                        TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_Y_POS),
-                        Settings.KeyViewerYPos,
-                        0f,
-                        1f,
-                        300f,
-                        roundNearest: 0.01f);
-                if (newY != Settings.KeyViewerYPos) {
-                    Settings.KeyViewerYPos = newY;
-                    keyViewer.UpdateLayout();
-                }
-
-                MoreGUILayout.EndIndent();
-            }
-
+        private void DrawKeyRegisterSettingsGUI() {
             // List of registered keys
             GUILayout.Label(TweakStrings.Get(TranslationKeys.KeyLimiter.REGISTERED_KEYS));
             GUILayout.BeginHorizontal();
@@ -170,6 +117,204 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+        }
+
+        private void DrawKeyViewerSettingsGUI() {
+            // Key viewer toggle
+            bool newShow =
+                GUILayout.Toggle(
+                    Settings.ShowKeyViewer,
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.SHOW_KEY_VIEWER));
+            if (newShow != Settings.ShowKeyViewer) {
+                Settings.ShowKeyViewer = newShow;
+                keyViewer.gameObject.SetActive(Settings.ShowKeyViewer);
+            }
+
+            // Don't draw settings if key viewer is hidden
+            if (!Settings.ShowKeyViewer) {
+                return;
+            }
+
+            MoreGUILayout.BeginIndent();
+
+            // Size slider
+            float newSize =
+                MoreGUILayout.NamedSlider(
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_SIZE),
+                    Settings.KeyViewerSize,
+                    10f,
+                    200f,
+                    300f,
+                    roundNearest: 1f);
+            if (newSize != Settings.KeyViewerSize) {
+                Settings.KeyViewerSize = newSize;
+                keyViewer.UpdateLayout();
+            }
+
+            // X position slider
+            float newX =
+                MoreGUILayout.NamedSlider(
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_X_POS),
+                    Settings.KeyViewerXPos,
+                    0f,
+                    1f,
+                    300f,
+                    roundNearest: 0.01f);
+            if (newX != Settings.KeyViewerXPos) {
+                Settings.KeyViewerXPos = newX;
+                keyViewer.UpdateLayout();
+            }
+
+            // Y position slider
+            float newY =
+                MoreGUILayout.NamedSlider(
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.KEY_VIEWER_Y_POS),
+                    Settings.KeyViewerYPos,
+                    0f,
+                    1f,
+                    300f,
+                    roundNearest: 0.01f);
+            if (newY != Settings.KeyViewerYPos) {
+                Settings.KeyViewerYPos = newY;
+                keyViewer.UpdateLayout();
+            }
+
+            GUILayout.Space(8f);
+
+            Color newPressed, newReleased;
+            string newPressedHex, newReleasedHex;
+
+            // Outline color header
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(
+                TweakStrings.Get(TranslationKeys.KeyLimiter.PRESSED_OUTLINE_COLOR),
+                GUILayout.Width(200f));
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(8f);
+            GUILayout.Label(
+                TweakStrings.Get(TranslationKeys.KeyLimiter.RELEASED_OUTLINE_COLOR),
+                GUILayout.Width(200f));
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(20f);
+            GUILayout.EndHorizontal();
+            MoreGUILayout.BeginIndent();
+
+            // Outline color RGBA sliders
+            (Settings.PressedOutlineColor, Settings.ReleasedOutlineColor) =
+                MoreGUILayout.ColorRgbaSlidersPair(
+                    Settings.PressedOutlineColor, Settings.ReleasedOutlineColor);
+
+            // Outline color hex
+            (newPressedHex, newReleasedHex) =
+                MoreGUILayout.NamedTextFieldPair(
+                    "Hex:",
+                    "Hex:",
+                    Settings.PressedOutlineColorHex,
+                    Settings.ReleasedOutlineColorHex,
+                    100f,
+                    40f);
+            if (newPressedHex != Settings.PressedOutlineColorHex
+                && ColorUtility.TryParseHtmlString(newPressedHex, out newPressed)) {
+                Settings.PressedOutlineColor = newPressed;
+            }
+            if (newReleasedHex != Settings.ReleasedOutlineColorHex
+                && ColorUtility.TryParseHtmlString(newReleasedHex, out newReleased)) {
+                Settings.ReleasedOutlineColor = newReleased;
+            }
+            Settings.PressedOutlineColorHex = newPressedHex;
+            Settings.ReleasedOutlineColorHex = newReleasedHex;
+
+            MoreGUILayout.EndIndent();
+
+            GUILayout.Space(8f);
+
+            // Background color header
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(
+                TweakStrings.Get(TranslationKeys.KeyLimiter.PRESSED_BACKGROUND_COLOR),
+                GUILayout.Width(200f));
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(8f);
+            GUILayout.Label(
+                TweakStrings.Get(TranslationKeys.KeyLimiter.RELEASED_BACKGROUND_COLOR),
+                GUILayout.Width(200f));
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(20f);
+            GUILayout.EndHorizontal();
+            MoreGUILayout.BeginIndent();
+
+            // Background color RGBA sliders
+            (Settings.PressedBackgroundColor, Settings.ReleasedBackgroundColor) =
+                MoreGUILayout.ColorRgbaSlidersPair(
+                    Settings.PressedBackgroundColor, Settings.ReleasedBackgroundColor);
+
+            // Background color hex
+            (newPressedHex, newReleasedHex) =
+                MoreGUILayout.NamedTextFieldPair(
+                    "Hex:",
+                    "Hex:",
+                    Settings.PressedBackgroundColorHex,
+                    Settings.ReleasedBackgroundColorHex,
+                    100f,
+                    40f);
+            if (newPressedHex != Settings.PressedBackgroundColorHex
+                && ColorUtility.TryParseHtmlString(newPressedHex, out newPressed)) {
+                Settings.PressedBackgroundColor = newPressed;
+            }
+            if (newReleasedHex != Settings.ReleasedBackgroundColorHex
+                && ColorUtility.TryParseHtmlString(newReleasedHex, out newReleased)) {
+                Settings.ReleasedBackgroundColor = newReleased;
+            }
+            Settings.PressedBackgroundColorHex = newPressedHex;
+            Settings.ReleasedBackgroundColorHex = newReleasedHex;
+
+            MoreGUILayout.EndIndent();
+
+            GUILayout.Space(8f);
+
+            // Text color header
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(
+                TweakStrings.Get(TranslationKeys.KeyLimiter.PRESSED_TEXT_COLOR),
+                GUILayout.Width(200f));
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(8f);
+            GUILayout.Label(
+                TweakStrings.Get(TranslationKeys.KeyLimiter.RELEASED_TEXT_COLOR),
+                GUILayout.Width(200f));
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(20f);
+            GUILayout.EndHorizontal();
+            MoreGUILayout.BeginIndent();
+
+            // Text color RGBA sliders
+            (Settings.PressedTextColor, Settings.ReleasedTextColor) =
+                MoreGUILayout.ColorRgbaSlidersPair(
+                    Settings.PressedTextColor, Settings.ReleasedTextColor);
+
+            // Text color hex
+            (newPressedHex, newReleasedHex) =
+                MoreGUILayout.NamedTextFieldPair(
+                    "Hex:",
+                    "Hex:",
+                    Settings.PressedTextColorHex,
+                    Settings.ReleasedTextColorHex,
+                    100f,
+                    40f);
+            if (newPressedHex != Settings.PressedTextColorHex
+                && ColorUtility.TryParseHtmlString(newPressedHex, out newPressed)) {
+                Settings.PressedTextColor = newPressed;
+            }
+            if (newReleasedHex != Settings.ReleasedTextColorHex
+                && ColorUtility.TryParseHtmlString(newReleasedHex, out newReleased)) {
+                Settings.ReleasedTextColor = newReleased;
+            }
+            Settings.PressedTextColorHex = newPressedHex;
+            Settings.ReleasedTextColorHex = newReleasedHex;
+
+            MoreGUILayout.EndIndent();
+
+            MoreGUILayout.EndIndent();
         }
 
         public override void OnEnable() {

@@ -20,7 +20,7 @@ namespace AdofaiTweaks.Core
             GUILayout.EndHorizontal();
         }
 
-        public static Color ColorRGBSliders(Color color) {
+        public static Color ColorRgbSliders(Color color) {
             float oldR = Mathf.Round(color.r * 255);
             float oldG = Mathf.Round(color.g * 255);
             float oldB = Mathf.Round(color.b * 255);
@@ -33,9 +33,22 @@ namespace AdofaiTweaks.Core
             return color;
         }
 
-        public static (Color, Color) ColorRgbSlidersPair(
-            Color color1,
-            Color color2) {
+        public static Color ColorRgbaSliders(Color color) {
+            float oldR = Mathf.Round(color.r * 255);
+            float oldG = Mathf.Round(color.g * 255);
+            float oldB = Mathf.Round(color.b * 255);
+            float oldA = Mathf.Round(color.a * 255);
+            float newR = NamedSlider("R:", oldR, 0, 255, 300f, 1, 40f);
+            float newG = NamedSlider("G:", oldG, 0, 255, 300f, 1, 40f);
+            float newB = NamedSlider("B:", oldB, 0, 255, 300f, 1, 40f);
+            float newA = NamedSlider("A:", oldA, 0, 255, 300f, 1, 40f);
+            if (oldR != newR || oldG != newG || oldB != newB || oldA != newA) {
+                return new Color(newR / 255, newR / 255, newR / 255, newA / 255);
+            }
+            return color;
+        }
+
+        public static (Color, Color) ColorRgbSlidersPair(Color color1, Color color2) {
             float newR1, newR2, newG1, newG2, newB1, newB2;
             float oldR1 = Mathf.Round(color1.r * 255);
             float oldG1 = Mathf.Round(color1.g * 255);
@@ -51,6 +64,29 @@ namespace AdofaiTweaks.Core
             }
             if (oldR2 != newR2 || oldG2 != newG2 || oldB2 != newB2) {
                 color2 = new Color(newR2 / 255, newG2 / 255, newB2 / 255);
+            }
+            return (color1, color2);
+        }
+
+        public static (Color, Color) ColorRgbaSlidersPair(Color color1, Color color2) {
+            float newR1, newR2, newG1, newG2, newB1, newB2, newA1, newA2;
+            float oldR1 = Mathf.Round(color1.r * 255);
+            float oldG1 = Mathf.Round(color1.g * 255);
+            float oldB1 = Mathf.Round(color1.b * 255);
+            float oldA1 = Mathf.Round(color1.a * 255);
+            float oldR2 = Mathf.Round(color2.r * 255);
+            float oldG2 = Mathf.Round(color2.g * 255);
+            float oldB2 = Mathf.Round(color2.b * 255);
+            float oldA2 = Mathf.Round(color2.a * 255);
+            (newR1, newR2) = NamedSliderPair("R:", "R:", oldR1, oldR2, 0, 255, 300f, 1, 40f);
+            (newG1, newG2) = NamedSliderPair("G:", "G:", oldG1, oldG2, 0, 255, 300f, 1, 40f);
+            (newB1, newB2) = NamedSliderPair("B:", "B:", oldB1, oldB2, 0, 255, 300f, 1, 40f);
+            (newA1, newA2) = NamedSliderPair("A:", "A:", oldA1, oldA2, 0, 255, 300f, 1, 40f);
+            if (oldR1 != newR1 || oldG1 != newG1 || oldB1 != newB1 || oldA1 != newA1) {
+                color1 = new Color(newR1 / 255, newG1 / 255, newB1 / 255, newA1 / 255);
+            }
+            if (oldR2 != newR2 || oldG2 != newG2 || oldB2 != newB2 || oldA2 != newA2) {
+                color2 = new Color(newR2 / 255, newG2 / 255, newB2 / 255, newA2 / 255);
             }
             return (color1, color2);
         }
