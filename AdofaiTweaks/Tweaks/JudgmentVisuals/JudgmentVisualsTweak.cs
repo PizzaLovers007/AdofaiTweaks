@@ -53,8 +53,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                         roundNearest: 1f,
                         valueFormat: TweakStrings.Get(
                             TranslationKeys.JudgmentVisuals.ERROR_METER_TICK_SECONDS));
-                AdofaiTweaks.Logger.Log(
-                    TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_TICK_SECONDS));
 
                 // Sensitivity slider
                 GUILayout.BeginHorizontal();

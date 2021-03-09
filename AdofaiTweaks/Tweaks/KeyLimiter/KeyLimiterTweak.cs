@@ -71,6 +71,14 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         }
 
         private void UpdateKeyState() {
+            bool showViewer = Settings.ShowKeyViewer;
+            if (Settings.ViewerOnlyGameplay && scrController.instance && scrConductor.instance) {
+                bool playing = !scrController.instance.paused && scrConductor.instance.isGameWorld;
+                showViewer &= playing;
+            }
+            if (showViewer != keyViewer.gameObject.activeSelf) {
+                keyViewer.gameObject.SetActive(showViewer);
+            }
             foreach (KeyCode code in Settings.ActiveKeys) {
                 keyState[code] = Input.GetKey(code);
             }
@@ -137,6 +145,13 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
             MoreGUILayout.BeginIndent();
 
+            // Show only in gameplay toggle
+            Settings.ViewerOnlyGameplay =
+                GUILayout.Toggle(
+                    Settings.ViewerOnlyGameplay,
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.VIEWER_ONLY_GAMEPLAY));
+
+            // Animate keys toggle
             Settings.AnimateKeys =
                 GUILayout.Toggle(
                     Settings.AnimateKeys,
@@ -164,7 +179,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     0f,
                     1f,
                     300f,
-                    roundNearest: 0.01f);
+                    roundNearest: 0.01f,
+                    valueFormat: "{0:0.##}");
             if (newX != Settings.KeyViewerXPos) {
                 Settings.KeyViewerXPos = newX;
                 keyViewer.UpdateLayout();
@@ -178,7 +194,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     0f,
                     1f,
                     300f,
-                    roundNearest: 0.01f);
+                    roundNearest: 0.01f,
+                    valueFormat: "{0:0.##}");
             if (newY != Settings.KeyViewerYPos) {
                 Settings.KeyViewerYPos = newY;
                 keyViewer.UpdateLayout();

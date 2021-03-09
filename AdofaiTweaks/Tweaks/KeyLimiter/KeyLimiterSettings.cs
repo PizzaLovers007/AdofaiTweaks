@@ -9,6 +9,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
     {
         public List<KeyCode> ActiveKeys { get; set; } = new List<KeyCode>();
         public bool ShowKeyViewer { get; set; }
+        public bool ViewerOnlyGameplay { get; set; }
         public bool AnimateKeys { get; set; } = true;
         public float KeyViewerSize { get; set; } = 100f;
         public float KeyViewerXPos { get; set; } = 0.89f;
@@ -19,7 +20,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             get => _pressedOutlineColor;
             set {
                 _pressedOutlineColor = value;
-                PressedOutlineColorHex = ColorUtility.ToHtmlStringRGBA(value);
+                PressedOutlineColorHex = $"#{ColorUtility.ToHtmlStringRGBA(value)}";
             }
         }
 
@@ -28,7 +29,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             get => _releasedOutlineColor;
             set {
                 _releasedOutlineColor = value;
-                ReleasedOutlineColorHex = ColorUtility.ToHtmlStringRGBA(value);
+                ReleasedOutlineColorHex = $"#{ColorUtility.ToHtmlStringRGBA(value)}";
             }
         }
 
@@ -37,7 +38,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             get => _pressedBackgroundColor;
             set {
                 _pressedBackgroundColor = value;
-                PressedBackgroundColorHex = ColorUtility.ToHtmlStringRGBA(value);
+                PressedBackgroundColorHex = $"#{ColorUtility.ToHtmlStringRGBA(value)}";
             }
         }
 
@@ -46,7 +47,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             get => _releasedBackgroundColor;
             set {
                 _releasedBackgroundColor = value;
-                ReleasedBackgroundColorHex = ColorUtility.ToHtmlStringRGBA(value);
+                ReleasedBackgroundColorHex = $"#{ColorUtility.ToHtmlStringRGBA(value)}";
             }
         }
 
@@ -55,7 +56,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             get => _pressedTextColor;
             set {
                 _pressedTextColor = value;
-                PressedTextColorHex = ColorUtility.ToHtmlStringRGBA(value);
+                PressedTextColorHex = $"#{ColorUtility.ToHtmlStringRGBA(value)}";
             }
         }
 
@@ -64,7 +65,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             get => _releasedTextColor;
             set {
                 _releasedTextColor = value;
-                ReleasedTextColorHex = ColorUtility.ToHtmlStringRGBA(value);
+                ReleasedTextColorHex = $"#{ColorUtility.ToHtmlStringRGBA(value)}";
             }
         }
 

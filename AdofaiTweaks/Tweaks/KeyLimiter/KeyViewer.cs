@@ -185,18 +185,20 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     new Vector2(x + keySize / 2, keySize / 2 + keySize / 20);
                 text.fontSize = Mathf.RoundToInt(keySize * 3 / 4);
 
+                Vector3 scale = new Vector3(1, 1, 1);
                 if (keyPrevStates[code]) {
                     bgImage.color = Settings.PressedBackgroundColor;
                     outlineImage.color = Settings.PressedOutlineColor;
                     text.color = Settings.PressedTextColor;
-                    bgImage.rectTransform.sizeDelta *= SHRINK_FACTOR;
-                    outlineImage.rectTransform.sizeDelta *= SHRINK_FACTOR;
-                    text.rectTransform.sizeDelta *= SHRINK_FACTOR;
+                    scale *= SHRINK_FACTOR;
                 } else {
                     bgImage.color = Settings.ReleasedBackgroundColor;
                     outlineImage.color = Settings.ReleasedOutlineColor;
                     text.color = Settings.ReleasedTextColor;
                 }
+                bgImage.rectTransform.localScale = scale;
+                outlineImage.rectTransform.localScale = scale;
+                text.rectTransform.localScale = scale;
 
                 x += keySize + spacing;
             }
@@ -210,7 +212,10 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 }
                 keyPrevStates[code] = state[code];
 
-                DOTween.Kill(TweenIdForKeyCode(code));
+                string id = TweenIdForKeyCode(code);
+                if (DOTween.IsTweening(id)) {
+                    DOTween.Kill(id);
+                }
 
                 Image bgImage = keyBgImages[code];
                 Image outlineImage = keyOutlineImages[code];
@@ -218,13 +223,13 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 // Calculate the new color/size
                 Color bgColor, outlineColor, textColor;
-                Vector2 delta = new Vector2(Settings.KeyViewerSize, Settings.KeyViewerSize);
+                Vector3 scale = new Vector3(1, 1, 1);
                 if (state[code]) {
                     bgColor = Settings.PressedBackgroundColor;
                     outlineColor = Settings.PressedOutlineColor;
                     textColor = Settings.PressedTextColor;
                     if (Settings.AnimateKeys) {
-                        delta *= SHRINK_FACTOR;
+                        scale *= SHRINK_FACTOR;
                     }
                 } else {
                     bgColor = Settings.ReleasedBackgroundColor;
@@ -233,32 +238,29 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 }
 
                 // Apply the new color/size
+                bgImage.color = bgColor;
+                outlineImage.color = outlineColor;
+                text.color = textColor;
                 if (Settings.AnimateKeys) {
-                    bgImage.DOColor(bgColor, EASE_DURATION)
+                    bgImage.rectTransform.DOScale(scale, EASE_DURATION)
+                        .SetId(id)
                         .SetEase(Ease.OutExpo)
-                        .OnComplete(() => bgImage.color = bgColor);
-                    outlineImage.DOColor(outlineColor, EASE_DURATION)
+                        .SetUpdate(true)
+                        .OnKill(() => bgImage.rectTransform.localScale = scale);
+                    outlineImage.rectTransform.DOScale(scale, EASE_DURATION)
+                        .SetId(id)
                         .SetEase(Ease.OutExpo)
-                        .OnComplete(() => outlineImage.color = outlineColor);
-                    text.DOColor(textColor, EASE_DURATION)
+                        .SetUpdate(true)
+                        .OnKill(() => outlineImage.rectTransform.localScale = scale);
+                    text.rectTransform.DOScale(scale, EASE_DURATION)
+                        .SetId(id)
                         .SetEase(Ease.OutExpo)
-                        .OnComplete(() => text.color = textColor);
-                    bgImage.rectTransform.DOSizeDelta(delta, EASE_DURATION)
-                        .SetEase(Ease.OutExpo)
-                        .OnComplete(() => bgImage.rectTransform.sizeDelta = delta);
-                    outlineImage.rectTransform.DOSizeDelta(delta, EASE_DURATION)
-                        .SetEase(Ease.OutExpo)
-                        .OnComplete(() => outlineImage.rectTransform.sizeDelta = delta);
-                    text.rectTransform.DOSizeDelta(delta, EASE_DURATION)
-                        .SetEase(Ease.OutExpo)
-                        .OnComplete(() => text.rectTransform.sizeDelta = delta);
+                        .SetUpdate(true)
+                        .OnKill(() => text.rectTransform.localScale = scale);
                 } else {
-                    bgImage.color = bgColor;
-                    outlineImage.color = outlineColor;
-                    text.color = textColor;
-                    bgImage.rectTransform.sizeDelta = delta;
-                    outlineImage.rectTransform.sizeDelta = delta;
-                    text.rectTransform.sizeDelta = delta;
+                    bgImage.rectTransform.localScale = scale;
+                    outlineImage.rectTransform.localScale = scale;
+                    text.rectTransform.localScale = scale;
                 }
             }
         }
