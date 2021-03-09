@@ -32,15 +32,19 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 MoreGUILayout.BeginIndent();
 
                 // Scale slider
-                Settings.ErrorMeterScale =
+                float newScale =
                     MoreGUILayout.NamedSlider(
                         TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_SCALE),
                         Settings.ErrorMeterScale,
                         0.25f,
                         4f,
                         200f,
-                        roundNearest: 0.25f,
+                        roundNearest: 0.125f,
                         valueFormat: "{0}x");
+                if (newScale != Settings.ErrorMeterScale) {
+                    Settings.ErrorMeterScale = newScale;
+                    HitErrorMeter.Instance.Scale = newScale;
+                }
 
                 // Tick life slider
                 Settings.ErrorMeterTickLife =
