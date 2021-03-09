@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using UnityEngine;
 
 namespace AdofaiTweaks.Core
@@ -15,6 +10,8 @@ namespace AdofaiTweaks.Core
         public static Sprite HandSprite { get; private set; }
         public static Sprite MeterSprite { get; private set; }
         public static Sprite TickSprite { get; private set; }
+        public static Sprite KeyOutlineSprite { get; private set; }
+        public static Sprite KeyBackgroundSprite { get; private set; }
 
         private static readonly AssetBundle assets;
 
@@ -27,6 +24,8 @@ namespace AdofaiTweaks.Core
             HandSprite = assets.LoadAsset<Sprite>("Assets/Hand.png");
             MeterSprite = assets.LoadAsset<Sprite>("Assets/Meter.png");
             TickSprite = assets.LoadAsset<Sprite>("Assets/Tick.png");
+            KeyOutlineSprite = assets.LoadAsset<Sprite>("Assets/KeyOutline.png");
+            KeyBackgroundSprite = assets.LoadAsset<Sprite>("Assets/KeyBackground.png");
         }
     }
 }

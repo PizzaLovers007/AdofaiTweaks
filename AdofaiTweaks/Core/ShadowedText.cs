@@ -77,9 +77,9 @@ namespace AdofaiTweaks.Core
         public void Awake() {
             Canvas canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            CanvasScaler scalar = gameObject.AddComponent<CanvasScaler>();
-            scalar.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scalar.referenceResolution = new Vector2(1920, 1080);
+            CanvasScaler scaler = gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920, 1080);
 
             ContentSizeFitter fitter;
 

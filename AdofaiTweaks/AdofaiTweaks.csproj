@@ -153,6 +153,7 @@
     <Compile Include="AdofaiTweaks.cs" />
     <Compile Include="Core\Attributes\SyncTweakSettingsAttribute.cs" />
     <Compile Include="Core\Attributes\RegisterTweakAttribute.cs" />
+    <Compile Include="Core\MoreGUILayout.cs" />
     <Compile Include="Core\ShadowedText.cs" />
     <Compile Include="Core\TweakAssets.cs" />
     <Compile Include="Core\TweakRunner.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsSettings.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsTweak.cs" />
+    <Compile Include="Tweaks\KeyLimiter\KeyViewer.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousPatches.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousSettings.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousTweak.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
