@@ -24,8 +24,9 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 ## Supported Languages
 
 *   English
-*   한국어
-*   Español
+*   한국어 (Provided by [CrackThrough](https://github.com/CrackThrough))
+*   Español (Provided by
+    [Econ](https://www.youtube.com/channel/UCE7Kv2xKmB_pLnBV0VBrNYA))
 
 ## Images
 
