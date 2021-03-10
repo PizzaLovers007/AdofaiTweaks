@@ -12,7 +12,7 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 *   **Judgment Visuals** - Improves the visuals of judgments.
     *   Includes a hit error meter
 *   **Key Limiter** - Limits which keys count as inputs.
-    *   Includes a key viewer
+*   **Key Viewer** - Shows a key viewer for registered keys.
 *   **Planet Color** - Sets the color of the planets and their tail
     individually.
 *   **Planet Opacity** - Sets the opacity of the planets individually.
