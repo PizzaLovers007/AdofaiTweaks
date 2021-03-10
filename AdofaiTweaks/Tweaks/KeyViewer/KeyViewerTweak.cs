@@ -35,6 +35,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         [SyncTweakSettings]
         private KeyViewerSettings Settings { get; set; }
+        private KeyViewerProfile CurrentProfile { get => Settings.CurrentProfile; }
 
         private Dictionary<KeyCode, bool> keyState;
         private KeyViewer keyViewer;
@@ -57,11 +58,11 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 }
 
                 // Register/unregister the key
-                if (Settings.ActiveKeys.Contains(code)) {
-                    Settings.ActiveKeys.Remove(code);
+                if (CurrentProfile.ActiveKeys.Contains(code)) {
+                    CurrentProfile.ActiveKeys.Remove(code);
                     changed = true;
                 } else {
-                    Settings.ActiveKeys.Add(code);
+                    CurrentProfile.ActiveKeys.Add(code);
                     changed = true;
                 }
             }
@@ -71,15 +72,8 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         }
 
         private void UpdateKeyState() {
-            bool showViewer = true;
-            if (Settings.ViewerOnlyGameplay && scrController.instance && scrConductor.instance) {
-                bool playing = !scrController.instance.paused && scrConductor.instance.isGameWorld;
-                showViewer &= playing;
-            }
-            if (showViewer != keyViewer.gameObject.activeSelf) {
-                keyViewer.gameObject.SetActive(showViewer);
-            }
-            foreach (KeyCode code in Settings.ActiveKeys) {
+            UpdateViewerVisibility();
+            foreach (KeyCode code in CurrentProfile.ActiveKeys) {
                 keyState[code] = Input.GetKey(code);
             }
             keyViewer.UpdateState(keyState);
@@ -90,9 +84,59 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         }
 
         public override void OnSettingsGUI() {
+            DrawProfileSettingsGUI();
+            GUILayout.Space(12f);
             DrawKeyRegisterSettingsGUI();
             GUILayout.Space(8f);
             DrawKeyViewerSettingsGUI();
+        }
+
+        private void DrawProfileSettingsGUI() {
+            GUILayout.Space(4f);
+
+            // New, Duplicate, Delete buttons
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button(
+                TweakStrings.Get(TranslationKeys.KeyViewer.NEW))) {
+                Settings.Profiles.Add(new KeyViewerProfile());
+                Settings.ProfileIndex = Settings.Profiles.Count - 1;
+                Settings.CurrentProfile.Name += "Profile " + Settings.Profiles.Count;
+                keyViewer.Profile = Settings.CurrentProfile;
+            }
+            if (GUILayout.Button(
+                TweakStrings.Get(TranslationKeys.KeyViewer.DUPLICATE))) {
+                Settings.Profiles.Add(Settings.CurrentProfile.Copy());
+                Settings.ProfileIndex = Settings.Profiles.Count - 1;
+                Settings.CurrentProfile.Name += " Copy";
+                keyViewer.Profile = Settings.CurrentProfile;
+            }
+            if (Settings.Profiles.Count > 1
+                && GUILayout.Button(
+                    TweakStrings.Get(TranslationKeys.KeyViewer.DELETE))) {
+                Settings.Profiles.RemoveAt(Settings.ProfileIndex);
+                Settings.ProfileIndex =
+                    Math.Min(Settings.ProfileIndex, Settings.Profiles.Count - 1);
+                keyViewer.Profile = Settings.CurrentProfile;
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(4f);
+
+            // Profile name
+            Settings.CurrentProfile.Name =
+                MoreGUILayout.NamedTextField(
+                    TweakStrings.Get(TranslationKeys.KeyViewer.PROFILE_NAME),
+                    Settings.CurrentProfile.Name,
+                    400f);
+
+            // Profile list
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.KeyViewer.PROFILES));
+            int selected = Settings.ProfileIndex;
+            if (MoreGUILayout.ToggleList(Settings.Profiles, ref selected, p => p.Name)) {
+                Settings.ProfileIndex = selected;
+                keyViewer.Profile = Settings.CurrentProfile;
+            }
         }
 
         private void DrawKeyRegisterSettingsGUI() {
@@ -103,7 +147,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             GUILayout.BeginVertical();
             GUILayout.Space(8f);
             GUILayout.EndVertical();
-            foreach (KeyCode code in Settings.ActiveKeys) {
+            foreach (KeyCode code in CurrentProfile.ActiveKeys) {
                 GUILayout.Label(code.ToString());
                 GUILayout.Space(8f);
             }
@@ -131,28 +175,28 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             MoreGUILayout.BeginIndent();
 
             // Show only in gameplay toggle
-            Settings.ViewerOnlyGameplay =
+            CurrentProfile.ViewerOnlyGameplay =
                 GUILayout.Toggle(
-                    Settings.ViewerOnlyGameplay,
+                    CurrentProfile.ViewerOnlyGameplay,
                     TweakStrings.Get(TranslationKeys.KeyViewer.VIEWER_ONLY_GAMEPLAY));
 
             // Animate keys toggle
-            Settings.AnimateKeys =
+            CurrentProfile.AnimateKeys =
                 GUILayout.Toggle(
-                    Settings.AnimateKeys,
+                    CurrentProfile.AnimateKeys,
                     TweakStrings.Get(TranslationKeys.KeyViewer.ANIMATE_KEYS));
 
             // Size slider
             float newSize =
                 MoreGUILayout.NamedSlider(
                     TweakStrings.Get(TranslationKeys.KeyViewer.KEY_VIEWER_SIZE),
-                    Settings.KeyViewerSize,
+                    CurrentProfile.KeyViewerSize,
                     10f,
                     200f,
                     300f,
                     roundNearest: 1f);
-            if (newSize != Settings.KeyViewerSize) {
-                Settings.KeyViewerSize = newSize;
+            if (newSize != CurrentProfile.KeyViewerSize) {
+                CurrentProfile.KeyViewerSize = newSize;
                 keyViewer.UpdateLayout();
             }
 
@@ -160,14 +204,14 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             float newX =
                 MoreGUILayout.NamedSlider(
                     TweakStrings.Get(TranslationKeys.KeyViewer.KEY_VIEWER_X_POS),
-                    Settings.KeyViewerXPos,
+                    CurrentProfile.KeyViewerXPos,
                     0f,
                     1f,
                     300f,
                     roundNearest: 0.01f,
                     valueFormat: "{0:0.##}");
-            if (newX != Settings.KeyViewerXPos) {
-                Settings.KeyViewerXPos = newX;
+            if (newX != CurrentProfile.KeyViewerXPos) {
+                CurrentProfile.KeyViewerXPos = newX;
                 keyViewer.UpdateLayout();
             }
 
@@ -175,14 +219,14 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             float newY =
                 MoreGUILayout.NamedSlider(
                     TweakStrings.Get(TranslationKeys.KeyViewer.KEY_VIEWER_Y_POS),
-                    Settings.KeyViewerYPos,
+                    CurrentProfile.KeyViewerYPos,
                     0f,
                     1f,
                     300f,
                     roundNearest: 0.01f,
                     valueFormat: "{0:0.##}");
-            if (newY != Settings.KeyViewerYPos) {
-                Settings.KeyViewerYPos = newY;
+            if (newY != CurrentProfile.KeyViewerYPos) {
+                CurrentProfile.KeyViewerYPos = newY;
                 keyViewer.UpdateLayout();
             }
 
@@ -209,13 +253,13 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             // Outline color RGBA sliders
             (newPressed, newReleased) =
                 MoreGUILayout.ColorRgbaSlidersPair(
-                    Settings.PressedOutlineColor, Settings.ReleasedOutlineColor);
-            if (newPressed != Settings.PressedOutlineColor) {
-                Settings.PressedOutlineColor = newPressed;
+                    CurrentProfile.PressedOutlineColor, CurrentProfile.ReleasedOutlineColor);
+            if (newPressed != CurrentProfile.PressedOutlineColor) {
+                CurrentProfile.PressedOutlineColor = newPressed;
                 keyViewer.UpdateLayout();
             }
-            if (newReleased != Settings.ReleasedOutlineColor) {
-                Settings.ReleasedOutlineColor = newReleased;
+            if (newReleased != CurrentProfile.ReleasedOutlineColor) {
+                CurrentProfile.ReleasedOutlineColor = newReleased;
                 keyViewer.UpdateLayout();
             }
 
@@ -224,20 +268,22 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 MoreGUILayout.NamedTextFieldPair(
                     "Hex:",
                     "Hex:",
-                    Settings.PressedOutlineColorHex,
-                    Settings.ReleasedOutlineColorHex,
+                    CurrentProfile.PressedOutlineColorHex,
+                    CurrentProfile.ReleasedOutlineColorHex,
                     100f,
                     40f);
-            if (newPressedHex != Settings.PressedOutlineColorHex
-                && ColorUtility.TryParseHtmlString(newPressedHex, out newPressed)) {
-                Settings.PressedOutlineColor = newPressed;
+            if (newPressedHex != CurrentProfile.PressedOutlineColorHex
+                && ColorUtility.TryParseHtmlString($"#{newPressedHex}", out newPressed)) {
+                CurrentProfile.PressedOutlineColor = newPressed;
+                keyViewer.UpdateLayout();
             }
-            if (newReleasedHex != Settings.ReleasedOutlineColorHex
-                && ColorUtility.TryParseHtmlString(newReleasedHex, out newReleased)) {
-                Settings.ReleasedOutlineColor = newReleased;
+            if (newReleasedHex != CurrentProfile.ReleasedOutlineColorHex
+                && ColorUtility.TryParseHtmlString($"#{newReleasedHex}", out newReleased)) {
+                CurrentProfile.ReleasedOutlineColor = newReleased;
+                keyViewer.UpdateLayout();
             }
-            Settings.PressedOutlineColorHex = newPressedHex;
-            Settings.ReleasedOutlineColorHex = newReleasedHex;
+            CurrentProfile.PressedOutlineColorHex = newPressedHex;
+            CurrentProfile.ReleasedOutlineColorHex = newReleasedHex;
 
             MoreGUILayout.EndIndent();
 
@@ -261,13 +307,13 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             // Background color RGBA sliders
             (newPressed, newReleased) =
                 MoreGUILayout.ColorRgbaSlidersPair(
-                    Settings.PressedBackgroundColor, Settings.ReleasedBackgroundColor);
-            if (newPressed != Settings.PressedBackgroundColor) {
-                Settings.PressedBackgroundColor = newPressed;
+                    CurrentProfile.PressedBackgroundColor, CurrentProfile.ReleasedBackgroundColor);
+            if (newPressed != CurrentProfile.PressedBackgroundColor) {
+                CurrentProfile.PressedBackgroundColor = newPressed;
                 keyViewer.UpdateLayout();
             }
-            if (newReleased != Settings.ReleasedBackgroundColor) {
-                Settings.ReleasedBackgroundColor = newReleased;
+            if (newReleased != CurrentProfile.ReleasedBackgroundColor) {
+                CurrentProfile.ReleasedBackgroundColor = newReleased;
                 keyViewer.UpdateLayout();
             }
 
@@ -276,20 +322,22 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 MoreGUILayout.NamedTextFieldPair(
                     "Hex:",
                     "Hex:",
-                    Settings.PressedBackgroundColorHex,
-                    Settings.ReleasedBackgroundColorHex,
+                    CurrentProfile.PressedBackgroundColorHex,
+                    CurrentProfile.ReleasedBackgroundColorHex,
                     100f,
                     40f);
-            if (newPressedHex != Settings.PressedBackgroundColorHex
-                && ColorUtility.TryParseHtmlString(newPressedHex, out newPressed)) {
-                Settings.PressedBackgroundColor = newPressed;
+            if (newPressedHex != CurrentProfile.PressedBackgroundColorHex
+                && ColorUtility.TryParseHtmlString($"#{newPressedHex}", out newPressed)) {
+                CurrentProfile.PressedBackgroundColor = newPressed;
+                keyViewer.UpdateLayout();
             }
-            if (newReleasedHex != Settings.ReleasedBackgroundColorHex
-                && ColorUtility.TryParseHtmlString(newReleasedHex, out newReleased)) {
-                Settings.ReleasedBackgroundColor = newReleased;
+            if (newReleasedHex != CurrentProfile.ReleasedBackgroundColorHex
+                && ColorUtility.TryParseHtmlString($"#{newReleasedHex}", out newReleased)) {
+                CurrentProfile.ReleasedBackgroundColor = newReleased;
+                keyViewer.UpdateLayout();
             }
-            Settings.PressedBackgroundColorHex = newPressedHex;
-            Settings.ReleasedBackgroundColorHex = newReleasedHex;
+            CurrentProfile.PressedBackgroundColorHex = newPressedHex;
+            CurrentProfile.ReleasedBackgroundColorHex = newReleasedHex;
 
             MoreGUILayout.EndIndent();
 
@@ -313,13 +361,13 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             // Text color RGBA sliders
             (newPressed, newReleased) =
                 MoreGUILayout.ColorRgbaSlidersPair(
-                    Settings.PressedTextColor, Settings.ReleasedTextColor);
-            if (newPressed != Settings.PressedTextColor) {
-                Settings.PressedTextColor = newPressed;
+                    CurrentProfile.PressedTextColor, CurrentProfile.ReleasedTextColor);
+            if (newPressed != CurrentProfile.PressedTextColor) {
+                CurrentProfile.PressedTextColor = newPressed;
                 keyViewer.UpdateLayout();
             }
-            if (newReleased != Settings.ReleasedTextColor) {
-                Settings.ReleasedTextColor = newReleased;
+            if (newReleased != CurrentProfile.ReleasedTextColor) {
+                CurrentProfile.ReleasedTextColor = newReleased;
                 keyViewer.UpdateLayout();
             }
 
@@ -328,20 +376,22 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 MoreGUILayout.NamedTextFieldPair(
                     "Hex:",
                     "Hex:",
-                    Settings.PressedTextColorHex,
-                    Settings.ReleasedTextColorHex,
+                    CurrentProfile.PressedTextColorHex,
+                    CurrentProfile.ReleasedTextColorHex,
                     100f,
                     40f);
-            if (newPressedHex != Settings.PressedTextColorHex
-                && ColorUtility.TryParseHtmlString(newPressedHex, out newPressed)) {
-                Settings.PressedTextColor = newPressed;
+            if (newPressedHex != CurrentProfile.PressedTextColorHex
+                && ColorUtility.TryParseHtmlString($"#{newPressedHex}", out newPressed)) {
+                CurrentProfile.PressedTextColor = newPressed;
+                keyViewer.UpdateLayout();
             }
-            if (newReleasedHex != Settings.ReleasedTextColorHex
-                && ColorUtility.TryParseHtmlString(newReleasedHex, out newReleased)) {
-                Settings.ReleasedTextColor = newReleased;
+            if (newReleasedHex != CurrentProfile.ReleasedTextColorHex
+                && ColorUtility.TryParseHtmlString($"#{newReleasedHex}", out newReleased)) {
+                CurrentProfile.ReleasedTextColor = newReleased;
+                keyViewer.UpdateLayout();
             }
-            Settings.PressedTextColorHex = newPressedHex;
-            Settings.ReleasedTextColorHex = newReleasedHex;
+            CurrentProfile.PressedTextColorHex = newPressedHex;
+            CurrentProfile.ReleasedTextColorHex = newReleasedHex;
 
             MoreGUILayout.EndIndent();
 
@@ -349,27 +399,38 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         }
 
         public override void OnEnable() {
+            if (Settings.Profiles.Count == 0) {
+                Settings.Profiles.Add(new KeyViewerProfile() { Name = "Default Profile" });
+            }
+            if (Settings.ProfileIndex < 0 || Settings.ProfileIndex >= Settings.Profiles.Count) {
+                Settings.ProfileIndex = 0;
+            }
+
             GameObject keyViewerObj = new GameObject();
             GameObject.DontDestroyOnLoad(keyViewerObj);
             keyViewer = keyViewerObj.AddComponent<KeyViewer>();
-            keyViewer.Settings = Settings;
+            keyViewer.Profile = CurrentProfile;
 
+            UpdateViewerVisibility();
+
+            keyState = new Dictionary<KeyCode, bool>();
+        }
+
+        public override void OnDisable() {
+            GameObject.Destroy(keyViewer.gameObject);
+        }
+
+        private void UpdateViewerVisibility() {
             bool showViewer = true;
-            if (Settings.ViewerOnlyGameplay && scrController.instance && scrConductor.instance) {
+            if (CurrentProfile.ViewerOnlyGameplay
+                && scrController.instance
+                && scrConductor.instance) {
                 bool playing = !scrController.instance.paused && scrConductor.instance.isGameWorld;
                 showViewer &= playing;
             }
             if (showViewer != keyViewer.gameObject.activeSelf) {
                 keyViewer.gameObject.SetActive(showViewer);
             }
-
-            keyState = new Dictionary<KeyCode, bool>();
-
-            AdofaiTweaks.Logger.Log(keyViewer ? keyViewer.ToString() : "null");
-        }
-
-        public override void OnDisable() {
-            GameObject.Destroy(keyViewer.gameObject);
         }
     }
 }

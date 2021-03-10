@@ -77,11 +77,11 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         private Dictionary<KeyCode, bool> keyPrevStates;
         private RectTransform keysRectTransform;
 
-        private KeyViewerSettings _settings = new KeyViewerSettings();
-        public KeyViewerSettings Settings {
-            get => _settings;
+        private KeyViewerProfile _profile = new KeyViewerProfile();
+        public KeyViewerProfile Profile {
+            get => _profile;
             set {
-                _settings = value;
+                _profile = value;
                 UpdateKeys();
             }
         }
@@ -110,26 +110,26 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             keyOutlineImages = new Dictionary<KeyCode, Image>();
             keyTexts = new Dictionary<KeyCode, Text>();
             keyPrevStates = new Dictionary<KeyCode, bool>();
-            foreach (KeyCode code in Settings.ActiveKeys) {
+            foreach (KeyCode code in Profile.ActiveKeys) {
                 GameObject keyBgObj = new GameObject();
                 keyBgObj.transform.SetParent(keysObject.transform);
                 Image bgImage = keyBgObj.AddComponent<Image>();
                 bgImage.sprite = TweakAssets.KeyBackgroundSprite;
-                bgImage.color = Settings.ReleasedBackgroundColor;
+                bgImage.color = Profile.ReleasedBackgroundColor;
                 keyBgImages[code] = bgImage;
 
                 GameObject keyOutlineObj = new GameObject();
                 keyOutlineObj.transform.SetParent(keysObject.transform);
                 Image outlineImage = keyOutlineObj.AddComponent<Image>();
                 outlineImage.sprite = TweakAssets.KeyOutlineSprite;
-                outlineImage.color = Settings.ReleasedOutlineColor;
+                outlineImage.color = Profile.ReleasedOutlineColor;
                 keyOutlineImages[code] = outlineImage;
 
                 GameObject keyTextObj = new GameObject();
                 keyTextObj.transform.SetParent(keysObject.transform);
                 Text text = keyTextObj.AddComponent<Text>();
                 text.font = RDString.GetFontDataForLanguage(SystemLanguage.English).font;
-                text.color = Settings.ReleasedTextColor;
+                text.color = Profile.ReleasedTextColor;
                 text.alignment = TextAnchor.MiddleCenter;
                 if (!KEY_TO_STRING.TryGetValue(code, out string codeString)) {
                     codeString = code.ToString();
@@ -145,10 +145,10 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         public void UpdateLayout() {
             int count = keyOutlineImages.Keys.Count;
-            float keySize = Settings.KeyViewerSize;
-            float spacing = Settings.KeyViewerSize / 10;
+            float keySize = Profile.KeyViewerSize;
+            float spacing = Profile.KeyViewerSize / 10;
             float width = count * keySize + (count - 1) * spacing;
-            Vector2 pos = new Vector2(Settings.KeyViewerXPos, Settings.KeyViewerYPos);
+            Vector2 pos = new Vector2(Profile.KeyViewerXPos, Profile.KeyViewerYPos);
 
             keysRectTransform.anchorMin = pos;
             keysRectTransform.anchorMax = pos;
@@ -187,14 +187,14 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
                 Vector3 scale = new Vector3(1, 1, 1);
                 if (keyPrevStates[code]) {
-                    bgImage.color = Settings.PressedBackgroundColor;
-                    outlineImage.color = Settings.PressedOutlineColor;
-                    text.color = Settings.PressedTextColor;
+                    bgImage.color = Profile.PressedBackgroundColor;
+                    outlineImage.color = Profile.PressedOutlineColor;
+                    text.color = Profile.PressedTextColor;
                     scale *= SHRINK_FACTOR;
                 } else {
-                    bgImage.color = Settings.ReleasedBackgroundColor;
-                    outlineImage.color = Settings.ReleasedOutlineColor;
-                    text.color = Settings.ReleasedTextColor;
+                    bgImage.color = Profile.ReleasedBackgroundColor;
+                    outlineImage.color = Profile.ReleasedOutlineColor;
+                    text.color = Profile.ReleasedTextColor;
                 }
                 bgImage.rectTransform.localScale = scale;
                 outlineImage.rectTransform.localScale = scale;
@@ -225,23 +225,23 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 Color bgColor, outlineColor, textColor;
                 Vector3 scale = new Vector3(1, 1, 1);
                 if (state[code]) {
-                    bgColor = Settings.PressedBackgroundColor;
-                    outlineColor = Settings.PressedOutlineColor;
-                    textColor = Settings.PressedTextColor;
-                    if (Settings.AnimateKeys) {
+                    bgColor = Profile.PressedBackgroundColor;
+                    outlineColor = Profile.PressedOutlineColor;
+                    textColor = Profile.PressedTextColor;
+                    if (Profile.AnimateKeys) {
                         scale *= SHRINK_FACTOR;
                     }
                 } else {
-                    bgColor = Settings.ReleasedBackgroundColor;
-                    outlineColor = Settings.ReleasedOutlineColor;
-                    textColor = Settings.ReleasedTextColor;
+                    bgColor = Profile.ReleasedBackgroundColor;
+                    outlineColor = Profile.ReleasedOutlineColor;
+                    textColor = Profile.ReleasedTextColor;
                 }
 
                 // Apply the new color/size
                 bgImage.color = bgColor;
                 outlineImage.color = outlineColor;
                 text.color = textColor;
-                if (Settings.AnimateKeys) {
+                if (Profile.AnimateKeys) {
                     bgImage.rectTransform.DOScale(scale, EASE_DURATION)
                         .SetId(id)
                         .SetEase(Ease.OutExpo)

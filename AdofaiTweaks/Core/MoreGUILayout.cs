@@ -218,5 +218,58 @@ namespace AdofaiTweaks.Core
             GUILayout.FlexibleSpace();
             return newValue;
         }
+
+        public static bool ToggleList<T>(List<T> list, ref int selectedIndex, Func<T, string> nameFunc) {
+            bool changed = false;
+            int moveUp = -1, moveDown = -1;
+            for (int i = 0; i < list.Count; i++) {
+                T curr = list[i];
+                string name = nameFunc.Invoke(curr);
+                GUILayout.BeginHorizontal();
+
+                // Move up/down
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("▲") && i > 0) {
+                    moveUp = i;
+                }
+                if (GUILayout.Button("▼") && i < list.Count - 1) {
+                    moveDown = i;
+                }
+                GUILayout.EndHorizontal();
+
+                GUILayout.Space(8f);
+
+                if (GUILayout.Toggle(selectedIndex == i, name) && selectedIndex != i) {
+                    selectedIndex = i;
+                    changed = true;
+                }
+                GUILayout.FlexibleSpace();
+
+                GUILayout.EndHorizontal();
+            }
+            if (moveUp != -1) {
+                changed = true;
+                T temp = list[moveUp];
+                list[moveUp] = list[moveUp - 1];
+                list[moveUp - 1] = temp;
+                if (moveUp - 1 == selectedIndex) {
+                    selectedIndex++;
+                } else if (moveUp == selectedIndex) {
+                    selectedIndex--;
+                }
+            } else if (moveDown != -1) {
+                changed = true;
+                T temp = list[moveDown];
+                list[moveDown] = list[moveDown + 1];
+                list[moveDown + 1] = temp;
+                if (moveDown + 1 == selectedIndex) {
+                    selectedIndex--;
+                } else if (moveDown == selectedIndex) {
+                    selectedIndex++;
+                }
+            }
+
+            return changed;
+        }
     }
 }

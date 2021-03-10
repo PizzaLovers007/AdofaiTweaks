@@ -78,7 +78,7 @@ namespace AdofaiTweaks.Core
                 Settings.IsEnabled = newIsEnabled;
                 if (newIsEnabled) {
                     Tweak.OnEnable();
-                    Settings.IsExpanded = true;
+                    newIsExpanded = true;
                 } else {
                     Tweak.OnDisable();
                 }
@@ -105,15 +105,21 @@ namespace AdofaiTweaks.Core
         }
 
         public void OnHideGUI() {
-            Tweak.OnHideGUI();
+            if (Settings.IsEnabled) {
+                Tweak.OnHideGUI();
+            }
         }
 
         public void OnUpdate(float deltaTime) {
-            Tweak.OnUpdate(deltaTime);
+            if (Settings.IsEnabled) {
+                Tweak.OnUpdate(deltaTime);
+            }
         }
 
         public void OnLanguageChange() {
-            Tweak.OnLanguageChange();
+            if (Settings.IsEnabled) {
+                Tweak.OnLanguageChange();
+            }
         }
     }
 }
