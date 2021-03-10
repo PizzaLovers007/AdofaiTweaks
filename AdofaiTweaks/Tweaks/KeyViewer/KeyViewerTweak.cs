@@ -86,6 +86,8 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         public override void OnSettingsGUI() {
             DrawProfileSettingsGUI();
             GUILayout.Space(12f);
+            MoreGUILayout.HorizontalLine(1f, 400f);
+            GUILayout.Space(8f);
             DrawKeyRegisterSettingsGUI();
             GUILayout.Space(8f);
             DrawKeyViewerSettingsGUI();

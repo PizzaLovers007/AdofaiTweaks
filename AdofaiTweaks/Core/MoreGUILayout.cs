@@ -271,5 +271,17 @@ namespace AdofaiTweaks.Core
 
             return changed;
         }
+
+        public static void HorizontalLine(float thickness, float length = 0f) {
+            GUILayout.Box(GUIContent.none, new GUIStyle() {
+                margin = new RectOffset(8, 8, 4, 4),
+                padding = new RectOffset(),
+                fixedHeight = thickness,
+                fixedWidth = length,
+                normal = {
+                    background = Texture2D.whiteTexture,
+                },
+            });
+        }
     }
 }
