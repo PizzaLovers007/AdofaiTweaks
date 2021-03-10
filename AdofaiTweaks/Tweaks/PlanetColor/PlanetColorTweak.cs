@@ -64,12 +64,12 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
                 MoreGUILayout.NamedTextFieldPair(
                     "Hex:", "Hex:", Settings.Color1Hex, Settings.TailColor1Hex, 100f, 40f);
             if (newHex != Settings.Color1Hex
-                && ColorUtility.TryParseHtmlString(newHex, out newBody)) {
+                && ColorUtility.TryParseHtmlString($"#{newHex}", out newBody)) {
                 Settings.Color1 = newBody;
                 UpdatePlanetColors();
             }
             if (newTailHex != Settings.TailColor1Hex
-                && ColorUtility.TryParseHtmlString(newTailHex, out newTail)) {
+                && ColorUtility.TryParseHtmlString($"#{newTailHex}", out newTail)) {
                 Settings.TailColor1 = newTail;
                 UpdatePlanetColors();
             }
@@ -114,12 +114,12 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
                 MoreGUILayout.NamedTextFieldPair(
                     "Hex:", "Hex:", Settings.Color2Hex, Settings.TailColor2Hex, 100f, 40f);
             if (newHex != Settings.Color2Hex
-                && ColorUtility.TryParseHtmlString(newHex, out newBody)) {
+                && ColorUtility.TryParseHtmlString($"#{newHex}", out newBody)) {
                 Settings.Color2 = newBody;
                 UpdatePlanetColors();
             }
             if (newTailHex != Settings.TailColor2Hex
-                && ColorUtility.TryParseHtmlString(newTailHex, out newTail)) {
+                && ColorUtility.TryParseHtmlString($"#{newTailHex}", out newTail)) {
                 Settings.TailColor2 = newTail;
                 UpdatePlanetColors();
             }

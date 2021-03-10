@@ -12,7 +12,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             get => _color1;
             set {
                 _color1 = value;
-                Color1Hex = _color1.ToHex();
+                Color1Hex = ColorUtility.ToHtmlStringRGB(value);
             }
         }
 
@@ -22,7 +22,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             get => _color2;
             set {
                 _color2 = value;
-                Color2Hex = _color2.ToHex();
+                Color2Hex = ColorUtility.ToHtmlStringRGB(value);
             }
         }
 
@@ -32,7 +32,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             get => _tailColor1;
             set {
                 _tailColor1 = value;
-                TailColor1Hex = _tailColor1.ToHex();
+                TailColor1Hex = ColorUtility.ToHtmlStringRGB(value);
             }
         }
 
@@ -42,7 +42,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             get => _tailColor2;
             set {
                 _tailColor2 = value;
-                TailColor2Hex = _tailColor2.ToHex();
+                TailColor2Hex = ColorUtility.ToHtmlStringRGB(value);
             }
         }
 
