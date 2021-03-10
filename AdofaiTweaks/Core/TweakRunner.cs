@@ -45,7 +45,7 @@ namespace AdofaiTweaks.Core
         public void OnGUI() {
             // Draw header
             GUILayout.BeginHorizontal();
-            Settings.IsExpanded = GUILayout.Toggle(
+            bool newIsExpanded = GUILayout.Toggle(
                 Settings.IsExpanded,
                 Settings.IsEnabled ? (Settings.IsExpanded ? "◢" : "▶") : "",
                 new GUIStyle() {
@@ -81,6 +81,14 @@ namespace AdofaiTweaks.Core
                     Settings.IsExpanded = true;
                 } else {
                     Tweak.OnDisable();
+                }
+            }
+
+            // Handle expand/collapse change
+            if (newIsExpanded != Settings.IsExpanded) {
+                Settings.IsExpanded = newIsExpanded;
+                if (!newIsExpanded) {
+                    Tweak.OnHideGUI();
                 }
             }
 

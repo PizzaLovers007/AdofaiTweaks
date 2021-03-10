@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AdofaiTweaks.Tweaks.KeyLimiter
+namespace AdofaiTweaks.Tweaks.KeyViewer
 {
     internal class KeyViewer : MonoBehaviour
     {
@@ -77,8 +77,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private Dictionary<KeyCode, bool> keyPrevStates;
         private RectTransform keysRectTransform;
 
-        private KeyLimiterSettings _settings = new KeyLimiterSettings();
-        public KeyLimiterSettings Settings {
+        private KeyViewerSettings _settings = new KeyViewerSettings();
+        public KeyViewerSettings Settings {
             get => _settings;
             set {
                 _settings = value;
@@ -128,7 +128,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 GameObject keyTextObj = new GameObject();
                 keyTextObj.transform.SetParent(keysObject.transform);
                 Text text = keyTextObj.AddComponent<Text>();
-                text.font = RDString.GetFontDataForLanguage(RDString.language).font;
+                text.font = RDString.GetFontDataForLanguage(SystemLanguage.English).font;
                 text.color = Settings.ReleasedTextColor;
                 text.alignment = TextAnchor.MiddleCenter;
                 if (!KEY_TO_STRING.TryGetValue(code, out string codeString)) {
