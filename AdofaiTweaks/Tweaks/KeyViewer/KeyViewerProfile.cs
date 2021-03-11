@@ -12,6 +12,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         public List<KeyCode> ActiveKeys { get; set; } = new List<KeyCode>();
         public bool ViewerOnlyGameplay { get; set; }
         public bool AnimateKeys { get; set; } = true;
+        public bool ShowKeyPressTotal { get; set; } = true;
         public float KeyViewerSize { get; set; } = 100f;
         public float KeyViewerXPos { get; set; } = 0.89f;
         public float KeyViewerYPos { get; set; } = 0.03f;

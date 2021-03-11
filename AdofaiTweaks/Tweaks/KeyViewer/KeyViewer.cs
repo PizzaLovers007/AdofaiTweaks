@@ -70,10 +70,13 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         private const float EASE_DURATION = 0.1f;
         private const float SHRINK_FACTOR = 0.9f;
 
+        private static readonly Dictionary<KeyCode, int> keyCounts = new Dictionary<KeyCode, int>();
+
         private GameObject keysObject;
         private Dictionary<KeyCode, Image> keyBgImages;
         private Dictionary<KeyCode, Image> keyOutlineImages;
         private Dictionary<KeyCode, Text> keyTexts;
+        private Dictionary<KeyCode, Text> keyCountTexts;
         private Dictionary<KeyCode, bool> keyPrevStates;
         private RectTransform keysRectTransform;
 
@@ -109,14 +112,20 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             keyBgImages = new Dictionary<KeyCode, Image>();
             keyOutlineImages = new Dictionary<KeyCode, Image>();
             keyTexts = new Dictionary<KeyCode, Text>();
+            keyCountTexts = new Dictionary<KeyCode, Text>();
             keyPrevStates = new Dictionary<KeyCode, bool>();
             foreach (KeyCode code in Profile.ActiveKeys) {
+                if (!keyCounts.ContainsKey(code)) {
+                    keyCounts[code] = 0;
+                }
+
                 GameObject keyBgObj = new GameObject();
                 keyBgObj.transform.SetParent(keysObject.transform);
                 Image bgImage = keyBgObj.AddComponent<Image>();
                 bgImage.sprite = TweakAssets.KeyBackgroundSprite;
                 bgImage.color = Profile.ReleasedBackgroundColor;
                 keyBgImages[code] = bgImage;
+                bgImage.type = Image.Type.Sliced;
 
                 GameObject keyOutlineObj = new GameObject();
                 keyOutlineObj.transform.SetParent(keysObject.transform);
@@ -124,18 +133,28 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 outlineImage.sprite = TweakAssets.KeyOutlineSprite;
                 outlineImage.color = Profile.ReleasedOutlineColor;
                 keyOutlineImages[code] = outlineImage;
+                outlineImage.type = Image.Type.Sliced;
 
                 GameObject keyTextObj = new GameObject();
                 keyTextObj.transform.SetParent(keysObject.transform);
                 Text text = keyTextObj.AddComponent<Text>();
                 text.font = RDString.GetFontDataForLanguage(SystemLanguage.English).font;
                 text.color = Profile.ReleasedTextColor;
-                text.alignment = TextAnchor.MiddleCenter;
+                text.alignment = TextAnchor.UpperCenter;
                 if (!KEY_TO_STRING.TryGetValue(code, out string codeString)) {
                     codeString = code.ToString();
                 }
                 text.text = codeString;
                 keyTexts[code] = text;
+
+                GameObject keyCountTextObj = new GameObject();
+                keyCountTextObj.transform.SetParent(keysObject.transform);
+                Text countText = keyCountTextObj.AddComponent<Text>();
+                countText.font = RDString.GetFontDataForLanguage(SystemLanguage.English).font;
+                countText.color = Profile.ReleasedTextColor;
+                countText.alignment = TextAnchor.LowerCenter;
+                countText.text = keyCounts[code] + "";
+                keyCountTexts[code] = countText;
 
                 keyPrevStates[code] = false;
             }
@@ -145,16 +164,18 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         public void UpdateLayout() {
             int count = keyOutlineImages.Keys.Count;
-            float keySize = Profile.KeyViewerSize;
-            float spacing = Profile.KeyViewerSize / 10;
-            float width = count * keySize + (count - 1) * spacing;
+            float keyWidth = 100;
+            float keyHeight = Profile.ShowKeyPressTotal ? 150 : 100;
+            float spacing = 10;
+            float width = count * keyWidth + (count - 1) * spacing;
             Vector2 pos = new Vector2(Profile.KeyViewerXPos, Profile.KeyViewerYPos);
 
             keysRectTransform.anchorMin = pos;
             keysRectTransform.anchorMax = pos;
             keysRectTransform.pivot = pos;
-            keysRectTransform.sizeDelta = new Vector2(width, keySize);
+            keysRectTransform.sizeDelta = new Vector2(width, keyHeight);
             keysRectTransform.anchoredPosition = Vector2.zero;
+            keysRectTransform.localScale = new Vector3(1, 1, 1) * Profile.KeyViewerSize / 100f;
 
             float x = 0;
             foreach (KeyCode code in keyOutlineImages.Keys) {
@@ -164,43 +185,64 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 bgImage.rectTransform.anchorMin = Vector2.zero;
                 bgImage.rectTransform.anchorMax = Vector2.zero;
                 bgImage.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                bgImage.rectTransform.sizeDelta = new Vector2(keySize, keySize);
+                bgImage.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight);
                 bgImage.rectTransform.anchoredPosition =
-                    new Vector2(x + keySize / 2, keySize / 2);
+                    new Vector2(x + keyWidth / 2, keyHeight / 2);
 
                 Image outlineImage = keyOutlineImages[code];
                 outlineImage.rectTransform.anchorMin = Vector2.zero;
                 outlineImage.rectTransform.anchorMax = Vector2.zero;
                 outlineImage.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                outlineImage.rectTransform.sizeDelta = new Vector2(keySize, keySize);
+                outlineImage.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight);
                 outlineImage.rectTransform.anchoredPosition =
-                    new Vector2(x + keySize / 2, keySize / 2);
+                    new Vector2(x + keyWidth / 2, keyHeight / 2);
 
+                float heightOffset = Profile.ShowKeyPressTotal ? 0 : keyHeight / 20f;
                 Text text = keyTexts[code];
                 text.rectTransform.anchorMin = Vector2.zero;
                 text.rectTransform.anchorMax = Vector2.zero;
                 text.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                text.rectTransform.sizeDelta = new Vector2(keySize, keySize);
+                text.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight * 1.03f);
                 text.rectTransform.anchoredPosition =
-                    new Vector2(x + keySize / 2, keySize / 2 + keySize / 20);
-                text.fontSize = Mathf.RoundToInt(keySize * 3 / 4);
+                    new Vector2(
+                        x + keyWidth / 2,
+                        keyHeight / 2 + heightOffset);
+                text.fontSize = Mathf.RoundToInt(keyWidth * 3 / 4);
+                text.alignment =
+                    Profile.ShowKeyPressTotal ? TextAnchor.UpperCenter : TextAnchor.MiddleCenter;
 
+                Text countText = keyCountTexts[code];
+                countText.rectTransform.anchorMin = Vector2.zero;
+                countText.rectTransform.anchorMax = Vector2.zero;
+                countText.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+                countText.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight * 0.8f);
+                countText.rectTransform.anchoredPosition =
+                    new Vector2(
+                        x + keyWidth / 2,
+                        keyHeight / 2);
+                countText.fontSize = Mathf.RoundToInt(keyWidth / 2);
+                countText.gameObject.SetActive(Profile.ShowKeyPressTotal);
+
+                // Press/release state
                 Vector3 scale = new Vector3(1, 1, 1);
                 if (keyPrevStates[code]) {
                     bgImage.color = Profile.PressedBackgroundColor;
                     outlineImage.color = Profile.PressedOutlineColor;
                     text.color = Profile.PressedTextColor;
+                    countText.color = Profile.PressedTextColor;
                     scale *= SHRINK_FACTOR;
                 } else {
                     bgImage.color = Profile.ReleasedBackgroundColor;
                     outlineImage.color = Profile.ReleasedOutlineColor;
                     text.color = Profile.ReleasedTextColor;
+                    countText.color = Profile.ReleasedTextColor;
                 }
                 bgImage.rectTransform.localScale = scale;
                 outlineImage.rectTransform.localScale = scale;
                 text.rectTransform.localScale = scale;
+                countText.rectTransform.localScale = scale;
 
-                x += keySize + spacing;
+                x += keyWidth + spacing;
             }
         }
 
@@ -220,10 +262,17 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 Image bgImage = keyBgImages[code];
                 Image outlineImage = keyOutlineImages[code];
                 Text text = keyTexts[code];
+                Text countText = keyCountTexts[code];
+
+                // Handle key count increment
+                if (state[code]) {
+                    keyCounts[code]++;
+                    countText.text = keyCounts[code] + "";
+                }
 
                 // Calculate the new color/size
                 Color bgColor, outlineColor, textColor;
-                Vector3 scale = new Vector3(1, 1, 1);
+                Vector3 scale = new Vector3(1, 1, 1) * Profile.KeyViewerSize / 100;
                 if (state[code]) {
                     bgColor = Profile.PressedBackgroundColor;
                     outlineColor = Profile.PressedOutlineColor;
@@ -241,6 +290,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 bgImage.color = bgColor;
                 outlineImage.color = outlineColor;
                 text.color = textColor;
+                countText.color = textColor;
                 if (Profile.AnimateKeys) {
                     bgImage.rectTransform.DOScale(scale, EASE_DURATION)
                         .SetId(id)
@@ -257,10 +307,16 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                         .SetEase(Ease.OutExpo)
                         .SetUpdate(true)
                         .OnKill(() => text.rectTransform.localScale = scale);
+                    countText.rectTransform.DOScale(scale, EASE_DURATION)
+                        .SetId(id)
+                        .SetEase(Ease.OutExpo)
+                        .SetUpdate(true)
+                        .OnKill(() => countText.rectTransform.localScale = scale);
                 } else {
                     bgImage.rectTransform.localScale = scale;
                     outlineImage.rectTransform.localScale = scale;
                     text.rectTransform.localScale = scale;
+                    countText.rectTransform.localScale = scale;
                 }
             }
         }

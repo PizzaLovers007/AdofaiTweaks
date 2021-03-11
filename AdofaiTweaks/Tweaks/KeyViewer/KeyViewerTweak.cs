@@ -191,6 +191,16 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                     CurrentProfile.AnimateKeys,
                     TweakStrings.Get(TranslationKeys.KeyViewer.ANIMATE_KEYS));
 
+            // Key press total toggle
+            bool newShowTotal =
+                GUILayout.Toggle(
+                    CurrentProfile.ShowKeyPressTotal,
+                    TweakStrings.Get(TranslationKeys.KeyViewer.SHOW_KEY_PRESS_TOTAL));
+            if (newShowTotal != CurrentProfile.ShowKeyPressTotal) {
+                CurrentProfile.ShowKeyPressTotal = newShowTotal;
+                keyViewer.UpdateLayout();
+            }
+
             // Size slider
             float newSize =
                 MoreGUILayout.NamedSlider(
