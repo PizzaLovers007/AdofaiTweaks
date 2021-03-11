@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
+using AdofaiTweaks.Tweaks.KeyLimiter;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.KeyViewer
@@ -35,6 +36,8 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         [SyncTweakSettings]
         private KeyViewerSettings Settings { get; set; }
+        [SyncTweakSettings]
+        private KeyLimiterSettings LimiterSettings { get; set; }
         private KeyViewerProfile CurrentProfile { get => Settings.CurrentProfile; }
 
         private Dictionary<KeyCode, bool> keyState;
@@ -408,6 +411,8 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 Settings.ProfileIndex = 0;
             }
 
+            MigrateOldSettings();
+
             GameObject keyViewerObj = new GameObject();
             GameObject.DontDestroyOnLoad(keyViewerObj);
             keyViewer = keyViewerObj.AddComponent<KeyViewer>();
@@ -416,6 +421,52 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             UpdateViewerVisibility();
 
             keyState = new Dictionary<KeyCode, bool>();
+        }
+
+        /// <summary>
+        /// Migrates old KeyLimiter settings to a KeyViewer profile if there are
+        /// settings to migrate.
+        /// TODO: Delete this after a few releases.
+        /// </summary>
+        private void MigrateOldSettings() {
+            // Check if there are settings to migrate
+            if (LimiterSettings.PressedBackgroundColor == Color.black
+                && LimiterSettings.ReleasedBackgroundColor == Color.black
+                && LimiterSettings.PressedOutlineColor == Color.black
+                && LimiterSettings.ReleasedOutlineColor == Color.black
+                && LimiterSettings.PressedTextColor == Color.black
+                && LimiterSettings.ReleasedTextColor == Color.black) {
+                return;
+            }
+
+            // Copy into new profile
+            KeyViewerProfile profile = new KeyViewerProfile {
+                Name = "Old Profile",
+                ActiveKeys = new List<KeyCode>(LimiterSettings.ActiveKeys),
+                ViewerOnlyGameplay = LimiterSettings.ViewerOnlyGameplay,
+                AnimateKeys = LimiterSettings.AnimateKeys,
+                KeyViewerSize = LimiterSettings.KeyViewerSize,
+                KeyViewerXPos = LimiterSettings.KeyViewerXPos,
+                KeyViewerYPos = LimiterSettings.KeyViewerYPos,
+                PressedOutlineColor = LimiterSettings.PressedOutlineColor,
+                ReleasedOutlineColor = LimiterSettings.ReleasedOutlineColor,
+                PressedBackgroundColor = LimiterSettings.PressedBackgroundColor,
+                ReleasedBackgroundColor = LimiterSettings.ReleasedBackgroundColor,
+                PressedTextColor = LimiterSettings.PressedTextColor,
+                ReleasedTextColor = LimiterSettings.ReleasedTextColor,
+            };
+
+            // Set current to migrated profile
+            Settings.Profiles.Insert(0, profile);
+            Settings.ProfileIndex = 0;
+
+            // Clear old settings
+            LimiterSettings.PressedBackgroundColor = Color.black;
+            LimiterSettings.ReleasedBackgroundColor = Color.black;
+            LimiterSettings.PressedOutlineColor = Color.black;
+            LimiterSettings.ReleasedOutlineColor = Color.black;
+            LimiterSettings.PressedTextColor = Color.black;
+            LimiterSettings.ReleasedTextColor = Color.black;
         }
 
         public override void OnDisable() {

@@ -91,12 +91,13 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         public string ReleasedTextColorHex { get; set; }
 
         public KeyLimiterSettings() {
-            PressedOutlineColor = Color.white;
-            ReleasedOutlineColor = Color.white;
-            PressedBackgroundColor = Color.white;
-            ReleasedBackgroundColor = Color.black.WithAlpha(0.4f);
+            // Settings no one would ever use
+            PressedOutlineColor = Color.black;
+            ReleasedOutlineColor = Color.black;
+            PressedBackgroundColor = Color.black;
+            ReleasedBackgroundColor = Color.black;
             PressedTextColor = Color.black;
-            ReleasedTextColor = Color.white;
+            ReleasedTextColor = Color.black;
         }
     }
 }
