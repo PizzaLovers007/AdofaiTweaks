@@ -272,7 +272,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
                 // Calculate the new color/size
                 Color bgColor, outlineColor, textColor;
-                Vector3 scale = new Vector3(1, 1, 1) * Profile.KeyViewerSize / 100;
+                Vector3 scale = new Vector3(1, 1, 1);
                 if (state[code]) {
                     bgColor = Profile.PressedBackgroundColor;
                     outlineColor = Profile.PressedOutlineColor;
