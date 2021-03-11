@@ -60,6 +60,11 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     return;
                 }
 
+                // Don't force keys if it's paused
+                if (scrController.instance?.paused ?? true) {
+                    return;
+                }
+
                 // Force active keys to not be special
                 foreach (KeyCode code in Settings.ActiveKeys) {
                     if (Input.GetKeyDown(code)) {
