@@ -21,15 +21,33 @@ namespace AdofaiTweaks.Core.Attributes
         public int Priority { get; private set; }
 
         /// <summary>
-        /// The <see cref="Type"/> of the <see cref="TweakSettings"/> object used.
+        /// The <see cref="Type"/> of the <see cref="TweakSettings"/> object
+        /// used.
         /// </summary>
         public Type SettingsType { get; private set; }
 
         /// <summary>
-        /// The <see cref="Type"/> of the class storing all patches for the tweak.
+        /// The <see cref="Type"/> of the class storing all patches for the
+        /// tweak.
         /// </summary>
         public Type PatchesType { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the
+        /// <see cref="RegisterTweakAttribute"/> class.
+        /// </summary>
+        /// <param name="id">The ID of the tweak.</param>
+        /// <param name="settingsType">
+        /// The <see cref="TweakSettings"/> type that the tweak uses.
+        /// </param>
+        /// <param name="patchesType">
+        /// The type that holds all the <see cref="HarmonyLib.Harmony"/>
+        /// patches.
+        /// </param>
+        /// <param name="priority">
+        /// Determines the ordering of the tweaks in the settings GUI. Lower
+        /// numbers indicate an earlier position.
+        /// </param>
         public RegisterTweakAttribute(
             string id, Type settingsType, Type patchesType, int priority = 0) {
             Id = id;
