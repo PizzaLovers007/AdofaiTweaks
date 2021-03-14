@@ -39,8 +39,6 @@ namespace AdofaiTweaks
         /// </summary>
         /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
         internal static void Setup(UnityModManager.ModEntry modEntry) {
-            RDString.Setup();
-
             allTweakTypes =
                 AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(a => a.GetTypes())
