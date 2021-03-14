@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.Miscellaneous
 {
+    /// <summary>
+    /// Patches for the Miscellaneous tweak.
+    /// </summary>
     internal static class MiscellaneousPatches
     {
         [SyncTweakSettings]

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.KeyLimiter
 {
+    /// <summary>
+    /// Patches for the Key Limiter tweak.
+    /// </summary>
     internal static class KeyLimiterPatches
     {
         [SyncTweakSettings]

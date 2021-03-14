@@ -97,7 +97,8 @@ namespace AdofaiTweaks.Core
         }
 
         /// <summary>
-        /// Creates the text with a drop shadow.
+        /// Unity's Awake lifecycle event handler. Creates the text with a drop
+        /// shadow.
         /// </summary>
         protected void Awake() {
             Canvas canvas = gameObject.AddComponent<Canvas>();

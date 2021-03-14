@@ -3,6 +3,9 @@ using HarmonyLib;
 
 namespace AdofaiTweaks.Tweaks.KeyViewer
 {
+    /// <summary>
+    /// Patches for the Key Viewer tweak.
+    /// </summary>
     internal static class KeyViewerPatches
     {
         [SyncTweakSettings]

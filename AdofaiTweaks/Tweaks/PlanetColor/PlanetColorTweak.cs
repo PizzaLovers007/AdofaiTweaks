@@ -5,15 +5,20 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.PlanetColor
 {
+    /// <summary>
+    /// A tweak for changing the planet colors to a custom color.
+    /// </summary>
     [RegisterTweak(
         id: "planet_color",
         settingsType: typeof(PlanetColorSettings),
         patchesType: typeof(PlanetColorPatches))]
     public class PlanetColorTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.PlanetColor.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.PlanetColor.DESCRIPTION);
 
@@ -28,6 +33,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         [SyncTweakSettings]
         private PlanetColorSettings Settings { get; set; }
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
             Color newBody, newTail;
             string newHex, newTailHex;
@@ -131,10 +137,12 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             MoreGUILayout.EndIndent();
         }
 
+        /// <inheritdoc/>
         public override void OnEnable() {
             UpdatePlanetColors();
         }
 
+        /// <inheritdoc/>
         public override void OnDisable() {
             UpdatePlanetColors();
         }
