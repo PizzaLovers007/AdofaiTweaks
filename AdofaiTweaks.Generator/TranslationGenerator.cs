@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using AdofaiTweaks.Translation;
 using ExcelDataReader;
 using LiteDB;
 
-namespace AdofaiTweaks.Translation
+namespace AdofaiTweaks.Generator
 {
     /// <summary>
     /// Generates an <c>AdofaiTweaks.Strings.dll</c> containing a class
