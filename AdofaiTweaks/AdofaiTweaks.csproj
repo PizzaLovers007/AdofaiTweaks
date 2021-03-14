@@ -153,6 +153,7 @@
     <Compile Include="AdofaiTweaks.cs" />
     <Compile Include="Core\Attributes\SyncTweakSettingsAttribute.cs" />
     <Compile Include="Core\Attributes\RegisterTweakAttribute.cs" />
+    <Compile Include="Core\MoreGUILayout.cs" />
     <Compile Include="Core\ShadowedText.cs" />
     <Compile Include="Core\TweakAssets.cs" />
     <Compile Include="Core\TweakRunner.cs" />
@@ -165,6 +166,11 @@
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsSettings.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsTweak.cs" />
+    <Compile Include="Tweaks\KeyViewer\KeyViewerPatches.cs" />
+    <Compile Include="Tweaks\KeyViewer\KeyViewerProfile.cs" />
+    <Compile Include="Tweaks\KeyViewer\KeyViewerSettings.cs" />
+    <Compile Include="Tweaks\KeyViewer\KeyViewerTweak.cs" />
+    <Compile Include="Tweaks\KeyViewer\KeyViewer.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousPatches.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousSettings.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousTweak.cs" />
@@ -183,11 +189,12 @@
     <Compile Include="Core\Tweak.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacitySettings.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacityTweak.cs" />
-    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatch.cs" />
+    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatches.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsSettings.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

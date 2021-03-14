@@ -1,54 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
-using AdofaiTweaks.Core;
 using UnityEngine;
 
-namespace AdofaiTweaks.Tweaks.KeyLimiter
+namespace AdofaiTweaks.Tweaks.KeyViewer
 {
     /// <summary>
-    /// Settings for the Key Limiter tweak.
+    /// Settings for a key viewer profile that controls properties such as
+    /// colors and position/size.
     /// </summary>
-    public class KeyLimiterSettings : TweakSettings
+    public class KeyViewerProfile
     {
         /// <summary>
-        /// The keys that are counted as input.
+        /// The user-defined name for the profile.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The list of keys to show in the key viewer.
         /// </summary>
         public List<KeyCode> ActiveKeys { get; set; } = new List<KeyCode>();
 
         /// <summary>
-        /// Old setting for showing the key viewer.
-        /// </summary>
-        public bool ShowKeyViewer { get; set; }
-
-        /// <summary>
-        /// Old setting for showing the key viewer only in gameplay.
+        /// Whether the key viewer should only be shown in gameplay.
         /// </summary>
         public bool ViewerOnlyGameplay { get; set; }
 
         /// <summary>
-        /// Old setting for animating key presses.
+        /// Whether the key presses should be animated.
         /// </summary>
         public bool AnimateKeys { get; set; } = true;
 
         /// <summary>
-        /// Old setting for the key viewer size.
+        /// The total number of presses since the game started.
+        /// </summary>
+        public bool ShowKeyPressTotal { get; set; } = true;
+
+        /// <summary>
+        /// The size of the key viewer.
         /// </summary>
         public float KeyViewerSize { get; set; } = 100f;
 
         /// <summary>
-        /// Old setting for the horizontal position of the key viewer.
+        /// The horizontal position of the key viewer. Should be bound to the
+        /// range <c>[0, 1]</c>.
         /// </summary>
         public float KeyViewerXPos { get; set; } = 0.89f;
 
         /// <summary>
-        /// Old setting for the vertical position of the key viewer.
+        /// The vertical position of the key viewer. Should be bound to the
+        /// range <c>[0, 1]</c>.
         /// </summary>
         public float KeyViewerYPos { get; set; } = 0.03f;
 
         private Color _pressedOutlineColor;
 
         /// <summary>
-        /// Old setting for the outline color of pressed keys.
+        /// The outline color of pressed keys.
         /// </summary>
         public Color PressedOutlineColor {
             get => _pressedOutlineColor;
@@ -61,7 +70,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private Color _releasedOutlineColor;
 
         /// <summary>
-        /// Old setting for the outline color of released keys.
+        /// The outline color of released keys.
         /// </summary>
         public Color ReleasedOutlineColor {
             get => _releasedOutlineColor;
@@ -74,7 +83,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private Color _pressedBackgroundColor;
 
         /// <summary>
-        /// Old setting for the background/fill color of pressed keys.
+        /// The background/fill color of pressed keys.
         /// </summary>
         public Color PressedBackgroundColor {
             get => _pressedBackgroundColor;
@@ -87,7 +96,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private Color _releasedBackgroundColor;
 
         /// <summary>
-        /// Old setting for the background/fill color of released keys.
+        /// The background/fill color of released keys.
         /// </summary>
         public Color ReleasedBackgroundColor {
             get => _releasedBackgroundColor;
@@ -100,7 +109,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private Color _pressedTextColor;
 
         /// <summary>
-        /// Old setting for the text color of pressed keys.
+        /// The text color of pressed keys.
         /// </summary>
         public Color PressedTextColor {
             get => _pressedTextColor;
@@ -113,7 +122,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private Color _releasedTextColor;
 
         /// <summary>
-        /// Old setting for the text color of released keys.
+        /// The text color of released keys.
         /// </summary>
         public Color ReleasedTextColor {
             get => _releasedTextColor;
@@ -124,60 +133,65 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         }
 
         /// <summary>
-        /// Whether the tweak is listening for keystrokes to change what keys
-        /// are active.
-        /// </summary>
-        [XmlIgnore]
-        public bool IsListening { get; set; }
-
-        /// <summary>
-        /// Old setting for the hex code for the pressed outline color.
+        /// The hex code for the pressed outline color.
         /// </summary>
         [XmlIgnore]
         public string PressedOutlineColorHex { get; set; }
 
         /// <summary>
-        /// Old setting for the hex code for the released outline color.
+        /// The hex code for the released outline color.
         /// </summary>
         [XmlIgnore]
         public string ReleasedOutlineColorHex { get; set; }
 
         /// <summary>
-        /// Old setting for the hex code for the pressed background/fill color.
+        /// The hex code for the pressed background/fill color.
         /// </summary>
         [XmlIgnore]
         public string PressedBackgroundColorHex { get; set; }
 
         /// <summary>
-        /// Old setting for the hex code for the released background/fill color.
+        /// The hex code for the released background/fill color.
         /// </summary>
         [XmlIgnore]
         public string ReleasedBackgroundColorHex { get; set; }
 
         /// <summary>
-        /// Old setting for the hex code for the pressed text color.
+        /// The hex code for the pressed text color.
         /// </summary>
         [XmlIgnore]
         public string PressedTextColorHex { get; set; }
 
         /// <summary>
-        /// Old setting for the hex code for the released text color.
+        /// The hex code for the released text color.
         /// </summary>
         [XmlIgnore]
         public string ReleasedTextColorHex { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="KeyLimiterSettings"/>
-        /// class with some default values set.
+        /// Initializes a new instance of the <see cref="KeyViewerProfile"/>
+        /// class with some default colors.
         /// </summary>
-        public KeyLimiterSettings() {
-            // Settings no one would ever use
-            PressedOutlineColor = Color.black;
-            ReleasedOutlineColor = Color.black;
-            PressedBackgroundColor = Color.black;
-            ReleasedBackgroundColor = Color.black;
+        public KeyViewerProfile() {
+            PressedOutlineColor = Color.white;
+            ReleasedOutlineColor = Color.white;
+            PressedBackgroundColor = Color.white;
+            ReleasedBackgroundColor = Color.black.WithAlpha(0.4f);
             PressedTextColor = Color.black;
-            ReleasedTextColor = Color.black;
+            ReleasedTextColor = Color.white;
+        }
+
+        /// <summary>
+        /// Creates a copy of <c>this</c>.
+        /// </summary>
+        /// <returns>A copy of <c>this</c>.</returns>
+        public KeyViewerProfile Copy() {
+            using (var ms = new MemoryStream()) {
+                var serializer = new XmlSerializer(GetType());
+                serializer.Serialize(ms, this);
+                ms.Position = 0;
+                return (KeyViewerProfile)serializer.Deserialize(ms);
+            }
         }
     }
 }

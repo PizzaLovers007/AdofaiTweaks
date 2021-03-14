@@ -10,7 +10,9 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 *   **Hide UI Elements** - Hides certain UI elements (Beta Build text, Otto,
    judgment text, etc.).
 *   **Judgment Visuals** - Improves the visuals of judgments.
+    *   Includes a hit error meter
 *   **Key Limiter** - Limits which keys count as inputs.
+*   **Key Viewer** - Shows a key viewer for registered keys.
 *   **Planet Color** - Sets the color of the planets and their tail
     individually.
 *   **Planet Opacity** - Sets the opacity of the planets individually.
@@ -22,8 +24,9 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 ## Supported Languages
 
 *   English
-*   한국어
-*   Español
+*   한국어 (Provided by [CrackThrough](https://github.com/CrackThrough))
+*   Español (Provided by
+    [Econ](https://www.youtube.com/channel/UCE7Kv2xKmB_pLnBV0VBrNYA))
 
 ## Images
 

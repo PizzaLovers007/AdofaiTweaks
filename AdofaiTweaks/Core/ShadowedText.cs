@@ -3,11 +3,18 @@ using UnityEngine.UI;
 
 namespace AdofaiTweaks.Core
 {
+    /// <summary>
+    /// A simple <see cref="UnityEngine.UI.Text"/> wrapper that has a drop
+    /// shadow.
+    /// </summary>
     public class ShadowedText : MonoBehaviour
     {
         private Text mainText;
         private Text shadowText;
 
+        /// <summary>
+        /// The text that this object displays.
+        /// </summary>
         public string Text {
             get {
                 return mainText.text;
@@ -18,6 +25,9 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        /// <summary>
+        /// The alignment of the text.
+        /// </summary>
         public TextAnchor Alignment {
             get {
                 return mainText.alignment;
@@ -28,6 +38,9 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        /// <summary>
+        /// The font size of the text.
+        /// </summary>
         public int FontSize {
             get {
                 return mainText.fontSize;
@@ -40,6 +53,9 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        /// <summary>
+        /// The color of the text.
+        /// </summary>
         public Color Color {
             get {
                 return mainText.color;
@@ -49,6 +65,9 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        /// <summary>
+        /// The normalized center position within the bounding box of the text.
+        /// </summary>
         public Vector2 Center {
             get {
                 return mainText.rectTransform.anchorMin;
@@ -63,6 +82,9 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        /// <summary>
+        /// The position within the <see cref="Canvas"/> that the text is at.
+        /// </summary>
         public Vector2 Position {
             get {
                 return mainText.rectTransform.anchoredPosition;
@@ -74,12 +96,16 @@ namespace AdofaiTweaks.Core
             }
         }
 
-        public void Awake() {
+        /// <summary>
+        /// Unity's Awake lifecycle event handler. Creates the text with a drop
+        /// shadow.
+        /// </summary>
+        protected void Awake() {
             Canvas canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            CanvasScaler scalar = gameObject.AddComponent<CanvasScaler>();
-            scalar.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scalar.referenceResolution = new Vector2(1920, 1080);
+            CanvasScaler scaler = gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920, 1080);
 
             ContentSizeFitter fitter;
 

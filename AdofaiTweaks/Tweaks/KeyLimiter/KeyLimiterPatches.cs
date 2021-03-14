@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.KeyLimiter
 {
+    /// <summary>
+    /// Patches for the Key Limiter tweak.
+    /// </summary>
     internal static class KeyLimiterPatches
     {
         [SyncTweakSettings]
@@ -57,6 +60,11 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 // Stop player inputs while we're editing the keys
                 if (Settings.IsListening) {
+                    return;
+                }
+
+                // Don't force keys if it's paused
+                if (scrController.instance?.paused ?? true) {
                     return;
                 }
 

@@ -5,15 +5,20 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 {
+    /// <summary>
+    /// A tweak for adjusting the visuals for judgments.
+    /// </summary>
     [RegisterTweak(
         id: "judgment_visuals",
         settingsType: typeof(JudgmentVisualsSettings),
         patchesType: typeof(JudgmentVisualsPatches))]
     public class JudgmentVisualsTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.JudgmentVisuals.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.JudgmentVisuals.DESCRIPTION);
 
@@ -22,6 +27,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 
         private GameObject errorMeterObj;
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
             Settings.ShowHitErrorMeter =
                 GUILayout.Toggle(
@@ -29,49 +35,34 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                     TweakStrings.Get(TranslationKeys.JudgmentVisuals.SHOW_HIT_ERROR_METER));
 
             if (Settings.ShowHitErrorMeter) {
-                GUILayout.BeginHorizontal();
-                GUILayout.Space(20f);
-                GUILayout.BeginVertical();
+                MoreGUILayout.BeginIndent();
 
                 // Scale slider
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(
-                    TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_SCALE));
-                GUILayout.Space(4f);
                 float newScale =
-                    GUILayout.HorizontalSlider(
-                        Settings.ErrorMeterScale, 0.25f, 4f, GUILayout.Width(200f));
-                newScale *= 4;
-                newScale = Mathf.Round(newScale);
-                newScale /= 4;
-                if (Settings.ErrorMeterScale != newScale) {
+                    MoreGUILayout.NamedSlider(
+                        TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_SCALE),
+                        Settings.ErrorMeterScale,
+                        0.25f,
+                        4f,
+                        200f,
+                        roundNearest: 0.125f,
+                        valueFormat: "{0}x");
+                if (newScale != Settings.ErrorMeterScale) {
                     Settings.ErrorMeterScale = newScale;
                     HitErrorMeter.Instance.Scale = newScale;
                 }
-                GUILayout.Space(8f);
-                GUILayout.Label(Settings.ErrorMeterScale + "x");
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
 
                 // Tick life slider
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(
-                    TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_TICK_LIFE));
-                GUILayout.Space(4f);
-                float newLife =
-                    GUILayout.HorizontalSlider(
-                        Settings.ErrorMeterTickLife, 1f, 10f, GUILayout.Width(200f));
-                newLife = Mathf.Round(newLife);
-                if (Settings.ErrorMeterTickLife != newLife) {
-                    Settings.ErrorMeterTickLife = newLife;
-                }
-                GUILayout.Space(8f);
-                GUILayout.Label(
-                    TweakStrings.Get(
-                        TranslationKeys.JudgmentVisuals.ERROR_METER_TICK_SECONDS,
-                        Settings.ErrorMeterTickLife));
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
+                Settings.ErrorMeterTickLife =
+                    MoreGUILayout.NamedSlider(
+                        TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_TICK_LIFE),
+                        Settings.ErrorMeterTickLife,
+                        1f,
+                        10f,
+                        200f,
+                        roundNearest: 1f,
+                        valueFormat: TweakStrings.Get(
+                            TranslationKeys.JudgmentVisuals.ERROR_METER_TICK_SECONDS));
 
                 // Sensitivity slider
                 GUILayout.BeginHorizontal();
@@ -98,8 +89,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
-                GUILayout.EndVertical();
-                GUILayout.EndHorizontal();
+                MoreGUILayout.EndIndent();
             }
 
             Settings.HidePerfects =
@@ -108,6 +98,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                     TweakStrings.Get(TranslationKeys.JudgmentVisuals.HIDE_PERFECTS));
         }
 
+        /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
             UpdateErrorMeter();
         }
@@ -123,6 +114,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             }
         }
 
+        /// <inheritdoc/>
         public override void OnEnable() {
             errorMeterObj = new GameObject();
             GameObject.DontDestroyOnLoad(errorMeterObj);
@@ -130,6 +122,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             errorMeter.Settings = Settings;
         }
 
+        /// <inheritdoc/>
         public override void OnDisable() {
             GameObject.Destroy(errorMeterObj);
         }

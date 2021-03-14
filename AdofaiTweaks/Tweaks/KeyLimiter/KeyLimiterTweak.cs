@@ -8,7 +8,7 @@ using UnityEngine;
 namespace AdofaiTweaks.Tweaks.KeyLimiter
 {
     /// <summary>
-    /// Restricts which keys can be counted as input.
+    /// A tweak for restricting which keys are counted as input.
     /// </summary>
     [RegisterTweak(
         id: "key_limiter",
@@ -16,12 +16,17 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         patchesType: typeof(KeyLimiterPatches))]
     public class KeyLimiterTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.KeyLimiter.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.KeyLimiter.DESCRIPTION);
 
+        /// <summary>
+        /// A set of keys that will always be counted as input.
+        /// </summary>
         public static readonly ISet<KeyCode> ALWAYS_BOUND_KEYS = new HashSet<KeyCode>() {
             KeyCode.Mouse0,
             KeyCode.Mouse1,
@@ -36,7 +41,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         [SyncTweakSettings]
         private KeyLimiterSettings Settings { get; set; }
 
+        /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
+            UpdateRegisteredKeys();
+        }
+
+        private void UpdateRegisteredKeys() {
             if (!Settings.IsListening) {
                 return;
             }
@@ -56,12 +66,17 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
         }
 
+        /// <inheritdoc/>
         public override void OnHideGUI() {
-            base.OnHideGUI();
             Settings.IsListening = false;
         }
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
+            DrawKeyRegisterSettingsGUI();
+        }
+
+        private void DrawKeyRegisterSettingsGUI() {
             // List of registered keys
             GUILayout.Label(TweakStrings.Get(TranslationKeys.KeyLimiter.REGISTERED_KEYS));
             GUILayout.BeginHorizontal();

@@ -6,6 +6,9 @@ using AdofaiPlanetColor = PlanetColor;
 
 namespace AdofaiTweaks.Tweaks.PlanetColor
 {
+    /// <summary>
+    /// Patches for the Planet Color tweak.
+    /// </summary>
     internal static class PlanetColorPatches
     {
         [SyncTweakSettings]
@@ -85,10 +88,13 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         [HarmonyPatch(typeof(scrPlanet), "LoadPlanetColor")]
         private static class LoadPlanetColorPatch
         {
+            private static Color originalColor1;
+            private static Color originalColor2;
+
             public static void Prefix() {
                 if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    Settings.OriginalColor1 = Persistence.GetPlayerColor(true);
-                    Settings.OriginalColor2 = Persistence.GetPlayerColor(false);
+                    originalColor1 = Persistence.GetPlayerColor(true);
+                    originalColor2 = Persistence.GetPlayerColor(false);
                     Persistence.SetPlayerColor(Settings.Color1, true);
                     Persistence.SetPlayerColor(Settings.Color2, false);
                 }
@@ -96,8 +102,8 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
             public static void Postfix() {
                 if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    Persistence.SetPlayerColor(Settings.OriginalColor1, true);
-                    Persistence.SetPlayerColor(Settings.OriginalColor2, false);
+                    Persistence.SetPlayerColor(originalColor1, true);
+                    Persistence.SetPlayerColor(originalColor2, false);
                 }
             }
         }

@@ -8,21 +8,27 @@ using UnityEngine.SceneManagement;
 
 namespace AdofaiTweaks.Tweaks.HideUiElements
 {
+    /// <summary>
+    /// A tweak for hiding certain elements of the UI.
+    /// </summary>
     [RegisterTweak(
         id: "hide_ui_elements",
         settingsType: typeof(HideUiElementsSettings),
         patchesType: typeof(HideUiElementsPatches))]
     public class HideUiElementsTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.HideUiElements.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.HideUiElements.DESCRIPTION);
 
         [SyncTweakSettings]
         private HideUiElementsSettings Settings { get; set; }
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
             bool newVal;
 
@@ -71,11 +77,13 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             }
         }
 
+        /// <inheritdoc/>
         public override void OnEnable() {
             SceneManager.activeSceneChanged += ChangedActiveScene;
             ShowOrHideElements();
         }
 
+        /// <inheritdoc/>
         public override void OnDisable() {
             SceneManager.activeSceneChanged -= ChangedActiveScene;
             ShowOrHideElements();

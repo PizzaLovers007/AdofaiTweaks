@@ -8,6 +8,23 @@ using UnityModManagerNet;
 
 namespace AdofaiTweaks.Core
 {
+    /// <summary>
+    /// This class helps synchronize <see cref="TweakSettings"/> properties
+    /// across the entire codebase. Two things must be done for the synchronizer
+    /// to inject the settings:
+    /// <list type="number">
+    /// <item>
+    /// The class type (or an instance of it) that has the
+    /// <see cref="TweakSettings"/> property must be registered to the
+    /// synchronizer via <see cref="Register(Type)"/> (or
+    /// <see cref="Register(object)"/> for the instance).
+    /// </item>
+    /// <item>
+    /// The <see cref="TweakSettings"/> property in the class must have the
+    /// <see cref="SyncTweakSettingsAttribute"/> attribute.
+    /// </item>
+    /// </list>
+    /// </summary>
     internal class SettingsSynchronizer
     {
         private readonly IDictionary<Type, TweakSettings> tweakSettingsDictionary =
@@ -16,6 +33,11 @@ namespace AdofaiTweaks.Core
         private readonly IDictionary<Type, object> registeredObjects =
             new Dictionary<Type, object>();
 
+        /// <summary>
+        /// Loads an instance of every <see cref="TweakSettings"/> type from the
+        /// saved settings files.
+        /// </summary>
+        /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
         public void Load(UnityModManager.ModEntry modEntry) {
             tweakSettingsDictionary.Clear();
             MethodInfo loadMethod =
@@ -46,6 +68,11 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        /// <summary>
+        /// Saves every <see cref="TweakSettings"/> instance to their respective
+        /// files.
+        /// </summary>
+        /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
         public void Save(UnityModManager.ModEntry modEntry) {
             foreach (Type type in tweakSettingsDictionary.Keys) {
                 modEntry.Logger.Log("Saving: " + type.FullName);
@@ -53,20 +80,47 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        /// <summary>
+        /// Injects the loaded <see cref="TweakSettings"/> instances into all
+        /// the registered types/objects.
+        /// </summary>
         public void Sync() {
             foreach (Type type in registeredObjects.Keys) {
                 ApplySettingsTo(type, registeredObjects[type]);
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="TweakSettings"/> instance for the given
+        /// <see cref="Tweak"/> type.
+        /// </summary>
+        /// <param name="tweakType">The type of the tweak.</param>
+        /// <returns>
+        /// The <see cref="TweakSettings"/> instance for the given
+        /// <see cref="Tweak"/> type.
+        /// </returns>
         public TweakSettings GetSettingsForType(Type tweakType) {
             return tweakSettingsDictionary[tweakType];
         }
 
+        /// <summary>
+        /// Registers the given type to the synchronizer.
+        /// </summary>
+        /// <param name="type">The type to register.</param>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the type is already registered.
+        /// </exception>
         public void Register(Type type) {
             Register(type, null);
         }
 
+        /// <summary>
+        /// Registers the given object to the synchronizer.
+        /// </summary>
+        /// <param name="obj">The object to register.</param>
+        /// <exception cref="ArgumentException">
+        /// Thrown when another object of this type is already registered.
+        /// </exception>
         public void Register(object obj) {
             Register(obj.GetType(), obj);
         }
@@ -83,10 +137,24 @@ namespace AdofaiTweaks.Core
             registeredObjects[type] = obj;
         }
 
+        /// <summary>
+        /// Unregisters the given type from the synchronizer.
+        /// </summary>
+        /// <param name="type">The type to unregister.</param>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the type is not registered.
+        /// </exception>
         public void Unregister(Type type) {
             Unregister(type, null);
         }
 
+        /// <summary>
+        /// Unregisters the given object from the synchronizer.
+        /// </summary>
+        /// <param name="obj">The object to unregister.</param>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the object is not registered.
+        /// </exception>
         public void Unregister(object obj) {
             Unregister(obj.GetType(), obj);
         }

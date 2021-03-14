@@ -9,8 +9,16 @@ using LiteDB;
 
 namespace AdofaiTweaks.Translation
 {
+    /// <summary>
+    /// Generates an <c>AdofaiTweaks.Strings.dll</c> containing a class
+    /// <c>TranslationKeys</c> that holds all the translation keys in the
+    /// downloaded translations spreadsheet.
+    /// </summary>
     internal class TranslationGenerator
     {
+        /// <summary>
+        /// Entry point.
+        /// </summary>
         public static void Main() {
             GenerateDatabase();
             GenerateKeyClass();
