@@ -21,6 +21,18 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     return true;
                 }
 
+                // Do not limit keys if current scene is CLS and player has
+                // disabled key limiting in CLS
+                if (!Settings.LimitKeyOnCLS && __instance.CLSMode) {
+                    return true;
+                }
+
+                // Do not limit keys if player is in main screen and has
+                // disabled key limiting in there
+                if (!Settings.LimitKeyOnMainScreen && !__instance.gameworld && !__instance.CLSMode) {
+                    return true;
+                }
+
                 // Stop player inputs while we're editing the keys
                 if (Settings.IsListening) {
                     __result = 0;
