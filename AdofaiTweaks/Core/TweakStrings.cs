@@ -5,7 +5,8 @@ using AdofaiTweaks.Translation;
 namespace AdofaiTweaks.Core
 {
     /// <summary>
-    /// Public-facing API for retrieving the translated tweak string from the database.
+    /// Public-facing API for retrieving the translated tweak string from the
+    /// database.
     /// </summary>
     public static class TweakStrings
     {
@@ -43,7 +44,9 @@ namespace AdofaiTweaks.Core
         /// </para>
         /// </summary>
         /// <param name="key">The key of the tweak string.</param>
-        /// <param name="language">The language to use for the translation.</param>
+        /// <param name="language">
+        /// The language to use for the translation.
+        /// </param>
         /// <param name="args">The arguments to insert into the string.</param>
         /// <returns>The translated string.</returns>
         public static string GetForLanguage(

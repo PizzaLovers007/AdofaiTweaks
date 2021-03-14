@@ -5,15 +5,20 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.PlanetOpacity
 {
+    /// <summary>
+    /// A tweak for changing the opacities of the planets.
+    /// </summary>
     [RegisterTweak(
         id: "planet_opacity",
         settingsType: typeof(PlanetOpacitySettings),
         patchesType: typeof(PlanetOpacityPatches))]
     public class PlanetOpacityTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.PlanetOpacity.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.PlanetOpacity.DESCRIPTION);
 
@@ -23,6 +28,7 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         [SyncTweakSettings]
         private PlanetOpacitySettings Settings { get; set; }
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
             float newOpacity;
 
@@ -55,10 +61,12 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             }
         }
 
+        /// <inheritdoc/>
         public override void OnEnable() {
             UpdatePlanetColors();
         }
 
+        /// <inheritdoc/>
         public override void OnDisable() {
             UpdatePlanetColors();
         }

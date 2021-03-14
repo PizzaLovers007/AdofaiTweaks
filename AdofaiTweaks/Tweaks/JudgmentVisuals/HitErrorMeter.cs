@@ -1,14 +1,21 @@
-﻿using System.IO;
-using AdofaiTweaks.Core;
+﻿using AdofaiTweaks.Core;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 {
+    /// <summary>
+    /// A curved meter that shows the user how off their hits are from the
+    /// actual tile timing.
+    /// </summary>
     internal class HitErrorMeter : MonoBehaviour
     {
         private static HitErrorMeter _instance;
+
+        /// <summary>
+        /// A singleton instance of <see cref="HitErrorMeter"/>.
+        /// </summary>
         public static HitErrorMeter Instance { get => _instance; }
 
         private readonly Color MISS_COLOR = new Color32(0xff, 0x00, 0x00, 0xff);
@@ -28,12 +35,19 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private string[] cachedTweenIds;
         private int tickIndex;
 
+        /// <summary>
+        /// The scale of the meter.
+        /// </summary>
         public float Scale {
             get => scaler.scaleFactor;
             set => scaler.scaleFactor = value;
         }
 
         private JudgmentVisualsSettings _settings = new JudgmentVisualsSettings();
+
+        /// <summary>
+        /// A singleton instance of <see cref="JudgmentVisualsSettings"/>.
+        /// </summary>
         public JudgmentVisualsSettings Settings {
             get => _settings;
             set {
@@ -42,6 +56,10 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             }
         }
 
+        /// <summary>
+        /// Unity's Awake lifecycle event handler. Creates the meter, hand, and
+        /// cached ticks.
+        /// </summary>
         protected void Awake() {
             _instance = this;
 
@@ -72,6 +90,10 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             gameObject.SetActive(false);
         }
 
+        /// <summary>
+        /// Unity's OnDestroy lifecycle event handler. Deletes the singleton
+        /// instance.
+        /// </summary>
         protected void OnDestroy() {
             _instance = null;
         }
@@ -98,6 +120,13 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             handImage.rectTransform.anchoredPosition = new Vector2(0, -10);
         }
 
+        /// <summary>
+        /// Displays a tick with the given angle difference and moves the hand
+        /// towards it.
+        /// </summary>
+        /// <param name="angleDiff">
+        /// The angle difference between the hit and the tile.
+        /// </param>
         public void AddHit(float angleDiff) {
             angleDiff *= -Mathf.Rad2Deg;
 
@@ -132,6 +161,9 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             DrawTick(angleDiff);
         }
 
+        /// <summary>
+        /// Clears all ticks and moves the hand back to the center.
+        /// </summary>
         public void Reset() {
             DOTween.Kill(TWEEN_ID);
             foreach (string id in cachedTweenIds) {

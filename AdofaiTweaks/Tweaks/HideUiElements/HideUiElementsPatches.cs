@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.HideUiElements
 {
+    /// <summary>
+    /// Patches for the Hide UI Elements tweak.
+    /// </summary>
     internal static class HideUiElementsPatches
     {
         [SyncTweakSettings]

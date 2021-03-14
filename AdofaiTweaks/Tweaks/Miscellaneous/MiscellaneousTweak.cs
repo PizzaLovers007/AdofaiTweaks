@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.Miscellaneous
 {
+    /// <summary>
+    /// A tweak for holding miscellaneous toggles.
+    /// </summary>
     [RegisterTweak(
         id: "miscellaneous",
         settingsType: typeof(MiscellaneousSettings),
@@ -12,15 +15,18 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         priority: 1000)]
     public class MiscellaneousTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.Miscellaneous.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.Miscellaneous.DESCRIPTION);
 
         [SyncTweakSettings]
         private MiscellaneousSettings Settings { get; set; }
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
             // Glitch flip
             Settings.DisableGlitchFlip =

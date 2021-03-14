@@ -1,25 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace AdofaiTweaks.Core
 {
+    /// <summary>
+    /// Additional <see cref="GUILayout"/> components.
+    /// </summary>
     public static class MoreGUILayout
     {
+        /// <summary>
+        /// Begins an indented section with a given indentation size.
+        /// </summary>
+        /// <param name="indentSize">The size of the indentation.</param>
         public static void BeginIndent(float indentSize = 20f) {
             GUILayout.BeginHorizontal();
             GUILayout.Space(indentSize);
             GUILayout.BeginVertical();
         }
 
+        /// <summary>
+        /// Ends an indented section.
+        /// </summary>
         public static void EndIndent() {
             GUILayout.EndVertical();
             GUILayout.EndHorizontal();
         }
 
+        /// <summary>
+        /// Displays RGB sliders for the given color.
+        /// </summary>
+        /// <param name="color">The color to set the sliders to.</param>
+        /// <returns>The resulting color from any changed sliders.</returns>
         public static Color ColorRgbSliders(Color color) {
             float oldR = Mathf.Round(color.r * 255);
             float oldG = Mathf.Round(color.g * 255);
@@ -33,6 +45,11 @@ namespace AdofaiTweaks.Core
             return color;
         }
 
+        /// <summary>
+        /// Displays RGBA sliders for the given color.
+        /// </summary>
+        /// <param name="color">The color to set the sliders to.</param>
+        /// <returns>The resulting color from any changed sliders.</returns>
         public static Color ColorRgbaSliders(Color color) {
             float oldR = Mathf.Round(color.r * 255);
             float oldG = Mathf.Round(color.g * 255);
@@ -48,6 +65,15 @@ namespace AdofaiTweaks.Core
             return color;
         }
 
+        /// <summary>
+        /// Displays two RGB sliders for two different colors horizontally
+        /// adjacent to each other.
+        /// </summary>
+        /// <param name="color1">The left color to set the sliders to.</param>
+        /// <param name="color2">The right color to set the sliders to.</param>
+        /// <returns>
+        /// The resulting colors pair from any changed sliders.
+        /// </returns>
         public static (Color, Color) ColorRgbSlidersPair(Color color1, Color color2) {
             float newR1, newR2, newG1, newG2, newB1, newB2;
             float oldR1 = Mathf.Round(color1.r * 255);
@@ -68,6 +94,15 @@ namespace AdofaiTweaks.Core
             return (color1, color2);
         }
 
+        /// <summary>
+        /// Displays two RGBA sliders for two different colors horizontally
+        /// adjacent to each other.
+        /// </summary>
+        /// <param name="color1">The left color to set the sliders to.</param>
+        /// <param name="color2">The right color to set the sliders to.</param>
+        /// <returns>
+        /// The resulting colors pair from any changed sliders.
+        /// </returns>
         public static (Color, Color) ColorRgbaSlidersPair(Color color1, Color color2) {
             float newR1, newR2, newG1, newG2, newB1, newB2, newA1, newA2;
             float oldR1 = Mathf.Round(color1.r * 255);
@@ -91,6 +126,28 @@ namespace AdofaiTweaks.Core
             return (color1, color2);
         }
 
+        /// <summary>
+        /// Displays a slider with a name on the left and its value on the
+        /// right.
+        /// </summary>
+        /// <param name="name">The name to show on the left.</param>
+        /// <param name="value">The value of the slider.</param>
+        /// <param name="leftValue">The minimum value for the slider.</param>
+        /// <param name="rightValue">The maximum value for the slider.</param>
+        /// <param name="sliderWidth">The width of the slider.</param>
+        /// <param name="roundNearest">
+        /// The fraction to round the value to. By default will result in no
+        /// rounding.
+        /// </param>
+        /// <param name="labelWidth">
+        /// The width of the name label on the left. By default will expand to
+        /// fit the name's width.
+        /// </param>
+        /// <param name="valueFormat">
+        /// The formatting for the value label on the right. By default will
+        /// simply show the value.
+        /// </param>
+        /// <returns>The resulting value from any change in the slider.</returns>
         public static float NamedSlider(
             string name,
             float value,
@@ -115,6 +172,36 @@ namespace AdofaiTweaks.Core
             return newValue;
         }
 
+        /// <summary>
+        /// Displays a two sliders that are horizontally adjacent with their
+        /// names on the left and their values on the right.
+        /// </summary>
+        /// <param name="name1">
+        /// The name for the left slider to show on the left.
+        /// </param>
+        /// <param name="name2">
+        /// The name for the right slider to show on the left.
+        /// </param>
+        /// <param name="value1">The value of the left slider.</param>
+        /// <param name="value2">The value of the right slider.</param>
+        /// <param name="leftValue">The minimum value for the slider.</param>
+        /// <param name="rightValue">The maximum value for the slider.</param>
+        /// <param name="sliderWidth">The width of the slider.</param>
+        /// <param name="roundNearest">
+        /// The fraction to round the value to. By default will result in no
+        /// rounding.
+        /// </param>
+        /// <param name="labelWidth">
+        /// The width of the name label on the left. By default will expand to
+        /// fit the name's width.
+        /// </param>
+        /// <param name="valueFormat">
+        /// The formatting for the value label on the right. By default will
+        /// simply show the value.
+        /// </param>
+        /// <returns>
+        /// The resulting values pair from any change in the sliders.
+        /// </returns>
         public static (float, float) NamedSliderPair(
             string name1,
             string name2,
@@ -178,6 +265,19 @@ namespace AdofaiTweaks.Core
             return newValue;
         }
 
+        /// <summary>
+        /// Displays a text field with a name on the left.
+        /// </summary>
+        /// <param name="name">The name to show on the left.</param>
+        /// <param name="value">The value of the text field.</param>
+        /// <param name="fieldWidth">The width of the text field.</param>
+        /// <param name="labelWidth">
+        /// The width of the name label on the left. By default will expand to
+        /// fit the name's width.
+        /// </param>
+        /// <returns>
+        /// The resulting value of the text field from any changes.
+        /// </returns>
         public static string NamedTextField(
             string name,
             string value,
@@ -189,6 +289,26 @@ namespace AdofaiTweaks.Core
             return newValue;
         }
 
+        /// <summary>
+        /// Displays two text fields that are horizontally adjacent with their
+        /// names on the left.
+        /// </summary>
+        /// <param name="name1">
+        /// The name of the left text field to show on the left.
+        /// </param>
+        /// <param name="name2">
+        /// The name of the right text field to show on the left.
+        /// </param>
+        /// <param name="value1">The value of the left text field.</param>
+        /// <param name="value2">The value of the right text field.</param>
+        /// <param name="fieldWidth">The width of the text field.</param>
+        /// <param name="labelWidth">
+        /// The width of the name label on the left. By default will expand to
+        /// fit the name's width.
+        /// </param>
+        /// <returns>
+        /// The resulting values pair from any change in the text fields.
+        /// </returns>
         public static (string, string) NamedTextFieldPair(
             string name1,
             string name2,
@@ -219,6 +339,22 @@ namespace AdofaiTweaks.Core
             return newValue;
         }
 
+        /// <summary>
+        /// Displays a generic list of items where only one can be selected. The
+        /// lists can be reordered via up and down buttons to the left of the
+        /// items.
+        /// </summary>
+        /// <typeparam name="T">The object type to display.</typeparam>
+        /// <param name="list">The list of generic objects to display.</param>
+        /// <param name="selectedIndex">
+        /// The currently selected index. If set to any value outside of the
+        /// range of the list, no items will appear as selected.
+        /// </param>
+        /// <param name="nameFunc">
+        /// The function determining what gets displayed for each object of type
+        /// <see cref="T"/>.
+        /// </param>
+        /// <returns><c>true</c> if the selected item changed.</returns>
         public static bool ToggleList<T>(List<T> list, ref int selectedIndex, Func<T, string> nameFunc) {
             bool changed = false;
             int moveUp = -1, moveDown = -1;
@@ -272,6 +408,14 @@ namespace AdofaiTweaks.Core
             return changed;
         }
 
+        /// <summary>
+        /// Displays a horizontal line.
+        /// </summary>
+        /// <param name="thickness">The thickness of the line.</param>
+        /// <param name="length">
+        /// The length of the line. By default expands to take the remaining
+        /// width of the GUI.
+        /// </param>
         public static void HorizontalLine(float thickness, float length = 0f) {
             GUILayout.Box(GUIContent.none, new GUIStyle() {
                 margin = new RectOffset(8, 8, 4, 4),

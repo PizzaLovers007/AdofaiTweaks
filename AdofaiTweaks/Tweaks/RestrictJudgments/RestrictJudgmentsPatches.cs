@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 namespace AdofaiTweaks.Tweaks.RestrictJudgments
 {
-    internal static class RestrictJudgmentsPatch
+    /// <summary>
+    /// Patches for the Restrict Judgments tweak.
+    /// </summary>
+    internal static class RestrictJudgmentsPatches
     {
         [SyncTweakSettings]
         private static RestrictJudgmentsSettings Settings { get; set; }

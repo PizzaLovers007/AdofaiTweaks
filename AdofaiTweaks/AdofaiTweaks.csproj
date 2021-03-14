@@ -189,7 +189,7 @@
     <Compile Include="Core\Tweak.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacitySettings.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacityTweak.cs" />
-    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatch.cs" />
+    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatches.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsSettings.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
   </ItemGroup>

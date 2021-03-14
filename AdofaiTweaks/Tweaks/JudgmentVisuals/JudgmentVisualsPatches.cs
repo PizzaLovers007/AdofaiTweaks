@@ -1,9 +1,11 @@
 ﻿using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
-using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 {
+    /// <summary>
+    /// Patches for the Judgment Visuals tweak.
+    /// </summary>
     internal static class JudgmentVisualsPatches
     {
         [SyncTweakSettings]

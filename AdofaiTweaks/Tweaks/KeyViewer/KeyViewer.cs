@@ -6,9 +6,13 @@ using UnityEngine.UI;
 
 namespace AdofaiTweaks.Tweaks.KeyViewer
 {
+    /// <summary>
+    /// A key viewer that shows if a list of given keys are currently being
+    /// pressed.
+    /// </summary>
     internal class KeyViewer : MonoBehaviour
     {
-        public static readonly Dictionary<KeyCode, string> KEY_TO_STRING =
+        private static readonly Dictionary<KeyCode, string> KEY_TO_STRING =
             new Dictionary<KeyCode, string>() {
                 { KeyCode.Alpha0, "0" },
                 { KeyCode.Alpha1, "1" },
@@ -67,6 +71,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 { KeyCode.PageUp, "Pg↑" },
                 { KeyCode.Insert, "Ins" },
             };
+
         private const float EASE_DURATION = 0.1f;
         private const float SHRINK_FACTOR = 0.9f;
 
@@ -81,6 +86,10 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         private RectTransform keysRectTransform;
 
         private KeyViewerProfile _profile = new KeyViewerProfile();
+
+        /// <summary>
+        /// The current profile that this key viewer is using.
+        /// </summary>
         public KeyViewerProfile Profile {
             get => _profile;
             set {
@@ -89,6 +98,9 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             }
         }
 
+        /// <summary>
+        /// Unity's Awake lifecycle event handler. Creates the key viewer.
+        /// </summary>
         protected void Awake() {
             Canvas mainCanvas = gameObject.AddComponent<Canvas>();
             mainCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -99,6 +111,9 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             UpdateKeys();
         }
 
+        /// <summary>
+        /// Updates what keys are displayed on the key viewer.
+        /// </summary>
         public void UpdateKeys() {
             if (keysObject) {
                 Destroy(keysObject);
@@ -162,6 +177,9 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             UpdateLayout();
         }
 
+        /// <summary>
+        /// Updates the position, size, and color of the displayed keys.
+        /// </summary>
         public void UpdateLayout() {
             int count = keyOutlineImages.Keys.Count;
             float keyWidth = 100;
@@ -246,6 +264,10 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             }
         }
 
+        /// <summary>
+        /// Updates the current state of the keys.
+        /// </summary>
+        /// <param name="state">The current state of the keys.</param>
         public void UpdateState(Dictionary<KeyCode, bool> state) {
             foreach (KeyCode code in keyOutlineImages.Keys) {
                 // Only change if the state changed

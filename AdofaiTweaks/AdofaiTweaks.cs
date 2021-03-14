@@ -11,9 +11,19 @@ using UnityModManagerNet;
 
 namespace AdofaiTweaks
 {
+    /// <summary>
+    /// The main runner of the AdofaiTweaks mod.
+    /// </summary>
     public static class AdofaiTweaks
     {
+        /// <summary>
+        /// UMM's logger instance.
+        /// </summary>
         public static UnityModManager.ModEntry.ModLogger Logger { get; private set; }
+
+        /// <summary>
+        /// Whether the tweak is enabled.
+        /// </summary>
         public static bool IsEnabled { get; private set; }
 
         private static List<Type> allTweakTypes;
@@ -24,9 +34,11 @@ namespace AdofaiTweaks
         [SyncTweakSettings]
         private static GlobalSettings GlobalSettings { get; set; }
 
+        /// <summary>
+        /// Runs the initial setup of AdofaiTweaks.
+        /// </summary>
+        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
         internal static void Setup(UnityModManager.ModEntry modEntry) {
-            RDString.Setup();
-
             allTweakTypes =
                 AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(a => a.GetTypes())
@@ -52,6 +64,15 @@ namespace AdofaiTweaks
             modEntry.OnUpdate = OnUpdate;
         }
 
+        /// <summary>
+        /// Handler for UMM's OnToggle event.
+        /// </summary>
+        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
+        /// <param name="value">
+        /// <c>true</c> if the mod is enabled, or <c>false</c> if the mod is
+        /// disabled.
+        /// </param>
+        /// <returns><c>true</c>.</returns>
         private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value) {
             IsEnabled = value;
             if (value) {
@@ -65,6 +86,9 @@ namespace AdofaiTweaks
             return true;
         }
 
+        /// <summary>
+        /// Starts all tweak runners.
+        /// </summary>
         private static void StartTweaks() {
             HashSet<string> tweakIds = new HashSet<string>();
 
@@ -100,6 +124,9 @@ namespace AdofaiTweaks
             }
         }
 
+        /// <summary>
+        /// Stops all tweak runners.
+        /// </summary>
         private static void StopTweaks() {
             // Stop all runners
             foreach (TweakRunner runner in tweakRunners) {
@@ -112,7 +139,13 @@ namespace AdofaiTweaks
             tweakRunners.Clear();
         }
 
+        /// <summary>
+        /// Handler for UMM's OnGUI event. Displays the language chooser and
+        /// every tweak's settings GUI.
+        /// </summary>
+        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
         private static void OnGUI(UnityModManager.ModEntry modEntry) {
+            // Set some default GUI settings for better layouts
             if (GlobalSettings.Language == LanguageEnum.KOREAN) {
                 GUI.skin.button.font = TweakAssets.KoreanNormalFont;
                 GUI.skin.label.font = TweakAssets.KoreanNormalFont;
@@ -166,11 +199,13 @@ namespace AdofaiTweaks
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
+            // Show each tweak's GUI
             GUILayout.Space(4);
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnGUI();
             }
 
+            // Reset GUI settings to defaults
             GUI.skin.button.font = null;
             GUI.skin.label.font = null;
             GUI.skin.textArea.font = null;
@@ -183,6 +218,10 @@ namespace AdofaiTweaks
             GUI.skin.toggle.fontSize = 0;
         }
 
+        /// <summary>
+        /// Handler for UMM's OnHideGUI event.
+        /// </summary>
+        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
         private static void OnHideGUI(UnityModManager.ModEntry modEntry) {
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnHideGUI();
@@ -190,10 +229,22 @@ namespace AdofaiTweaks
             synchronizer.Save(modEntry);
         }
 
+        /// <summary>
+        /// Handler for UMM's OnSaveGUI event.
+        /// </summary>
+        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
         private static void OnSaveGUI(UnityModManager.ModEntry modEntry) {
             synchronizer.Save(modEntry);
         }
 
+        /// <summary>
+        /// Handler for UMM's OnUpdate event.
+        /// </summary>
+        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
+        /// <param name="deltaTime">
+        /// The amount of time that has passed since the previous frame in
+        /// seconds.
+        /// </param>
         private static void OnUpdate(UnityModManager.ModEntry modEntry, float deltaTime) {
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnUpdate(deltaTime);

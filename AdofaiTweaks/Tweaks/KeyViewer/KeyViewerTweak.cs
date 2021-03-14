@@ -9,7 +9,7 @@ using UnityEngine;
 namespace AdofaiTweaks.Tweaks.KeyViewer
 {
     /// <summary>
-    /// Shows which keys are being pressed.
+    /// A tweak for showing which keys are being pressed.
     /// </summary>
     [RegisterTweak(
         id: "key_viewer",
@@ -17,13 +17,18 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         patchesType: typeof(KeyViewerPatches))]
     public class KeyViewerTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.KeyViewer.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.KeyViewer.DESCRIPTION);
 
-        public static readonly ISet<KeyCode> ALWAYS_BOUND_KEYS = new HashSet<KeyCode>() {
+        /// <summary>
+        /// Keys that should not be listened to.
+        /// </summary>
+        public static readonly ISet<KeyCode> SKIPPED_KEYS = new HashSet<KeyCode>() {
             KeyCode.Mouse0,
             KeyCode.Mouse1,
             KeyCode.Mouse2,
@@ -36,13 +41,16 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         [SyncTweakSettings]
         private KeyViewerSettings Settings { get; set; }
+
         [SyncTweakSettings]
         private KeyLimiterSettings LimiterSettings { get; set; }
+
         private KeyViewerProfile CurrentProfile { get => Settings.CurrentProfile; }
 
         private Dictionary<KeyCode, bool> keyState;
         private KeyViewer keyViewer;
 
+        /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
             UpdateRegisteredKeys();
             UpdateKeyState();
@@ -55,8 +63,8 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
             bool changed = false;
             foreach (KeyCode code in Enum.GetValues(typeof(KeyCode))) {
-                // Skip key if not pressed or should always be bound
-                if (!Input.GetKeyDown(code) || ALWAYS_BOUND_KEYS.Contains(code)) {
+                // Skip key if not pressed or should be skipped
+                if (!Input.GetKeyDown(code) || SKIPPED_KEYS.Contains(code)) {
                     continue;
                 }
 
@@ -82,10 +90,12 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             keyViewer.UpdateState(keyState);
         }
 
+        /// <inheritdoc/>
         public override void OnHideGUI() {
             Settings.IsListening = false;
         }
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
             DrawProfileSettingsGUI();
             GUILayout.Space(12f);
@@ -413,6 +423,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             MoreGUILayout.EndIndent();
         }
 
+        /// <inheritdoc/>
         public override void OnEnable() {
             if (Settings.Profiles.Count == 0) {
                 Settings.Profiles.Add(new KeyViewerProfile() { Name = "Default Profile" });
@@ -479,6 +490,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             LimiterSettings.ReleasedTextColor = Color.black;
         }
 
+        /// <inheritdoc/>
         public override void OnDisable() {
             GameObject.Destroy(keyViewer.gameObject);
         }

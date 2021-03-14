@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.PlanetOpacity
 {
+    /// <summary>
+    /// Patches for the Planet Opacity tweak.
+    /// </summary>
     internal static class PlanetOpacityPatches
     {
         [SyncTweakSettings]

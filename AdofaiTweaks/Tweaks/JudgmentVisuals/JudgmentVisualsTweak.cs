@@ -5,15 +5,20 @@ using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 {
+    /// <summary>
+    /// A tweak for adjusting the visuals for judgments.
+    /// </summary>
     [RegisterTweak(
         id: "judgment_visuals",
         settingsType: typeof(JudgmentVisualsSettings),
         patchesType: typeof(JudgmentVisualsPatches))]
     public class JudgmentVisualsTweak : Tweak
     {
+        /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.JudgmentVisuals.NAME);
 
+        /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.JudgmentVisuals.DESCRIPTION);
 
@@ -22,6 +27,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 
         private GameObject errorMeterObj;
 
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
             Settings.ShowHitErrorMeter =
                 GUILayout.Toggle(
@@ -92,6 +98,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                     TweakStrings.Get(TranslationKeys.JudgmentVisuals.HIDE_PERFECTS));
         }
 
+        /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
             UpdateErrorMeter();
         }
@@ -107,6 +114,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             }
         }
 
+        /// <inheritdoc/>
         public override void OnEnable() {
             errorMeterObj = new GameObject();
             GameObject.DontDestroyOnLoad(errorMeterObj);
@@ -114,6 +122,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             errorMeter.Settings = Settings;
         }
 
+        /// <inheritdoc/>
         public override void OnDisable() {
             GameObject.Destroy(errorMeterObj);
         }
