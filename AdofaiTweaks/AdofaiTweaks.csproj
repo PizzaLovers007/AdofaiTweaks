@@ -162,6 +162,9 @@
     <Compile Include="Core\TweakStringsDb.cs" />
     <Compile Include="Core\TweakStrings.cs" />
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="Tweaks\DisableEffects\DisableEffectsPatches.cs" />
+    <Compile Include="Tweaks\DisableEffects\DisableEffectsSettings.cs" />
+    <Compile Include="Tweaks\DisableEffects\DisableEffectsTweak.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\HitErrorMeter.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsSettings.cs" />
