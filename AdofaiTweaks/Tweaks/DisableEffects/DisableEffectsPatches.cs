@@ -127,5 +127,81 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                 return false;
             }
         }
+
+        [HarmonyPatch(typeof(ffxMoveFloorPlus), "StartEffect")]
+        private static class MoveFloorStartEffectLimitRangePatch
+        {
+            private static int origStart;
+            private static int origEnd;
+
+            public static void Prefix(ffxMoveFloorPlus __instance) {
+                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
+                    return;
+                }
+                if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
+                    return;
+                }
+                int index = scrController.instance.currFloor.seqID;
+                origStart = __instance.start;
+                origEnd = __instance.end;
+                if (origEnd < index + Settings.MoveTrackMax / 2) {
+                    __instance.start = Math.Max(origEnd - Settings.MoveTrackMax - 1, origStart);
+                } else if (origStart > index - Settings.MoveTrackMax / 2) {
+                    __instance.end = Math.Min(origStart + Settings.MoveTrackMax - 1, origEnd);
+                } else {
+                    __instance.start = Math.Max(index - Settings.MoveTrackMax / 2, origStart);
+                    __instance.end = Math.Min(index + Settings.MoveTrackMax / 2, origEnd);
+                }
+            }
+
+            public static void Postfix(ffxMoveFloorPlus __instance) {
+                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
+                    return;
+                }
+                if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
+                    return;
+                }
+                __instance.start = origStart;
+                __instance.end = origEnd;
+            }
+        }
+
+        [HarmonyPatch(typeof(ffxMoveFloorPlus), "ScrubToTime")]
+        private static class MoveFloorScrubToTimeLimitRangePatch
+        {
+            private static int origStart;
+            private static int origEnd;
+
+            public static void Prefix(ffxMoveFloorPlus __instance) {
+                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
+                    return;
+                }
+                if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
+                    return;
+                }
+                int index = scrController.instance.currFloor.seqID;
+                origStart = __instance.start;
+                origEnd = __instance.end;
+                if (origEnd < index + Settings.MoveTrackMax / 2) {
+                    __instance.start = Math.Max(origEnd - Settings.MoveTrackMax - 1, origStart);
+                } else if (origStart > index - Settings.MoveTrackMax / 2) {
+                    __instance.end = Math.Min(origStart + Settings.MoveTrackMax - 1, origEnd);
+                } else {
+                    __instance.start = Math.Max(index - Settings.MoveTrackMax / 2, origStart);
+                    __instance.end = Math.Min(index + Settings.MoveTrackMax / 2, origEnd);
+                }
+            }
+
+            public static void Postfix(ffxMoveFloorPlus __instance) {
+                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
+                    return;
+                }
+                if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
+                    return;
+                }
+                __instance.start = origStart;
+                __instance.end = origEnd;
+            }
+        }
     }
 }

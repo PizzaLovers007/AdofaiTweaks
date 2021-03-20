@@ -13,6 +13,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
     public class DisableEffectsSettings : TweakSettings
     {
         /// <summary>
+        /// The upper bound for the tile movement max slider.
+        /// </summary>
+        internal const int MOVE_TRACK_UPPER_BOUND = 100;
+
+        /// <summary>
         /// Disables VFX filters.
         /// </summary>
         public bool DisableFilter { get; set; }
@@ -36,5 +41,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         /// Disables screen shake.
         /// </summary>
         public bool DisableScreenShake { get; set; }
+
+        /// <summary>
+        /// Limits the max number of tile movements allowed for a "Move Track"
+        /// event.
+        /// </summary>
+        public int MoveTrackMax { get; set; } = 30;
     }
 }

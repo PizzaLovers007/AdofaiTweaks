@@ -56,6 +56,22 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                 GUILayout.Toggle(
                     Settings.DisableScreenShake,
                     TweakStrings.Get(TranslationKeys.DisableEffects.SCREEN_SHAKE));
+
+            // Move track
+            string trackMaxFormat =
+                Settings.MoveTrackMax == 101
+                    ? TweakStrings.Get(TranslationKeys.DisableEffects.TILE_MOVEMENT_UNLIMITED)
+                    : "{0}";
+            float newTrackMax =
+                MoreGUILayout.NamedSlider(
+                    TweakStrings.Get(TranslationKeys.DisableEffects.TILE_MOVEMENT_MAX),
+                    Settings.MoveTrackMax,
+                    4,
+                    DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND + 1,
+                    300f,
+                    roundNearest: 1,
+                    valueFormat: trackMaxFormat);
+            Settings.MoveTrackMax = Mathf.RoundToInt(newTrackMax);
         }
     }
 }
