@@ -149,7 +149,7 @@ Enabling it will show the "Write log..." toggle, which you should enable as well
 
 Then, close the menu and move around a bit. Open the menu back up to look at the logs, and you should see new log messages stating which planet you just switched to when moving.
 
-![log_planet_settings](.\log_planet_logs.png)
+![log_planet_logs](.\log_planet_logs.png)
 
 ## Conclusion
 
