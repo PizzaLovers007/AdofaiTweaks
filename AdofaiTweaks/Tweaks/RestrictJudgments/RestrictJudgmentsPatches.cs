@@ -20,9 +20,6 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         private static class MistakesManagerAddHitPatch
         {
             public static void Postfix(scrMistakesManager __instance, ref HitMargin hit) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
                 if (Settings.RestrictJudgments[(int)hit] && !invokedFailAction) {
                     invokedFailAction = true;
                     FAMargin = hit;
@@ -41,7 +38,9 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
 
                     FieldInfo field = typeof(scrCountdown).GetField("text", AccessTools.all);
                     Text text = (Text)field.GetValue(__instance);
-                    text.text = Settings.CustomDeathString.Replace("{judgment}", RDString.Get("HitMargin." + FAMargin.ToString()));
+                    text.text =
+                        Settings.CustomDeathString.Replace(
+                            "{judgment}", RDString.Get("HitMargin." + FAMargin.ToString()));
                     field.SetValue(__instance, text);
                 }
             }

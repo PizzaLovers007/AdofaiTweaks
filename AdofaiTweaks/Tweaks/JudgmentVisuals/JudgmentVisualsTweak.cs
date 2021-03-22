@@ -123,7 +123,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         }
 
         /// <inheritdoc/>
-        public override void OnDisable() {
+        public override void OnUnpatch() {
             GameObject.Destroy(errorMeterObj);
         }
     }

@@ -138,12 +138,12 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         }
 
         /// <inheritdoc/>
-        public override void OnEnable() {
+        public override void OnPatch() {
             UpdatePlanetColors();
         }
 
         /// <inheritdoc/>
-        public override void OnDisable() {
+        public override void OnUnpatch() {
             UpdatePlanetColors();
         }
 

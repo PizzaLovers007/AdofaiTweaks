@@ -18,12 +18,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class SetPlanetColorPatch
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    if (__instance.isRed) {
-                        color = Settings.Color1;
-                    } else {
-                        color = Settings.Color2;
-                    }
+                if (__instance.isRed) {
+                    color = Settings.Color1;
+                } else {
+                    color = Settings.Color2;
                 }
             }
         }
@@ -32,12 +30,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class SetCoreColorPatch
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    if (__instance.isRed) {
-                        color = Settings.Color1;
-                    } else {
-                        color = Settings.Color2;
-                    }
+                if (__instance.isRed) {
+                    color = Settings.Color1;
+                } else {
+                    color = Settings.Color2;
                 }
             }
         }
@@ -46,12 +42,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class SetTailColorPatch
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    if (__instance.isRed) {
-                        color = Settings.TailColor1;
-                    } else {
-                        color = Settings.TailColor2;
-                    }
+                if (__instance.isRed) {
+                    color = Settings.TailColor1;
+                } else {
+                    color = Settings.TailColor2;
                 }
             }
         }
@@ -60,12 +54,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class SetRingColorPatch
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    if (__instance.isRed) {
-                        color = Settings.Color1;
-                    } else {
-                        color = Settings.Color2;
-                    }
+                if (__instance.isRed) {
+                    color = Settings.Color1;
+                } else {
+                    color = Settings.Color2;
                 }
             }
         }
@@ -74,14 +66,12 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class SetColorPatch
         {
             public static void Postfix(scrPlanet __instance, AdofaiPlanetColor planetColor) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    __instance.RemoveGold();
-                    __instance.SetRainbow(false);
-                    Color color = planetColor.GetColor();
-                    __instance.EnableCustomColor();
-                    __instance.SetPlanetColor(color);
-                    __instance.SetTailColor(color);
-                }
+                __instance.RemoveGold();
+                __instance.SetRainbow(false);
+                Color color = planetColor.GetColor();
+                __instance.EnableCustomColor();
+                __instance.SetPlanetColor(color);
+                __instance.SetTailColor(color);
             }
         }
 
@@ -92,19 +82,15 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             private static Color originalColor2;
 
             public static void Prefix() {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    originalColor1 = Persistence.GetPlayerColor(true);
-                    originalColor2 = Persistence.GetPlayerColor(false);
-                    Persistence.SetPlayerColor(Settings.Color1, true);
-                    Persistence.SetPlayerColor(Settings.Color2, false);
-                }
+                originalColor1 = Persistence.GetPlayerColor(true);
+                originalColor2 = Persistence.GetPlayerColor(false);
+                Persistence.SetPlayerColor(Settings.Color1, true);
+                Persistence.SetPlayerColor(Settings.Color2, false);
             }
 
             public static void Postfix() {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    Persistence.SetPlayerColor(originalColor1, true);
-                    Persistence.SetPlayerColor(originalColor2, false);
-                }
+                Persistence.SetPlayerColor(originalColor1, true);
+                Persistence.SetPlayerColor(originalColor2, false);
             }
         }
 
@@ -112,12 +98,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class RainbowModePatch
         {
             public static void Postfix(scrController __instance) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    __instance.redPlanet.SetRainbow(false);
-                    __instance.redPlanet.LoadPlanetColor();
-                    __instance.bluePlanet.SetRainbow(false);
-                    __instance.bluePlanet.LoadPlanetColor();
-                }
+                __instance.redPlanet.SetRainbow(false);
+                __instance.redPlanet.LoadPlanetColor();
+                __instance.bluePlanet.SetRainbow(false);
+                __instance.bluePlanet.LoadPlanetColor();
             }
         }
 
@@ -125,10 +109,8 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class EnbyModePatch
         {
             public static void Postfix(scrController __instance) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    __instance.redPlanet.LoadPlanetColor();
-                    __instance.bluePlanet.LoadPlanetColor();
-                }
+                __instance.redPlanet.LoadPlanetColor();
+                __instance.bluePlanet.LoadPlanetColor();
             }
         }
 
@@ -136,10 +118,8 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         private static class TransModePatch
         {
             public static void Postfix(scrController __instance) {
-                if (Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
-                    __instance.redPlanet.LoadPlanetColor();
-                    __instance.bluePlanet.LoadPlanetColor();
-                }
+                __instance.redPlanet.LoadPlanetColor();
+                __instance.bluePlanet.LoadPlanetColor();
             }
         }
     }

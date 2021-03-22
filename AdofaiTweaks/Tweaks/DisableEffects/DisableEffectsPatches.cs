@@ -21,7 +21,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class SetFilterAlwaysFalsePatch
         {
             public static void Prefix(ref bool fEnable) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableFilter) {
+                if (!Settings.DisableFilter) {
                     return;
                 }
                 fEnable = false;
@@ -32,7 +32,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class ControllerDisableStartVfxPatch
         {
             public static void Postfix(scrController __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableFilter) {
+                if (!Settings.DisableFilter) {
                     return;
                 }
                 foreach (MonoBehaviour behavior in __instance.filterToComp.Values) {
@@ -45,7 +45,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class SetBloomAlwaysFalsePatch
         {
             public static void Prefix(ref bool bEnable) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableBloom) {
+                if (!Settings.DisableBloom) {
                     return;
                 }
                 bEnable = false;
@@ -56,7 +56,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class FlashStartEffectAlwaysClearPatch
         {
             public static void Prefix(ffxFlashPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableFlash) {
+                if (!Settings.DisableFlash) {
                     return;
                 }
                 __instance.startColor = Color.clear;
@@ -68,7 +68,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class FlashScrubToTimeAlwaysClearPatch
         {
             public static void Prefix(ffxFlashPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableFlash) {
+                if (!Settings.DisableFlash) {
                     return;
                 }
                 __instance.startColor = Color.clear;
@@ -80,9 +80,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class HomStartEffectAlwaysDisabledPatch
         {
             public static void Postfix(ffxHallOfMirrorsPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled
-                    || !Settings.IsEnabled
-                    || !Settings.DisableHallOfMirrors) {
+                if (!Settings.DisableHallOfMirrors) {
                     return;
                 }
                 __instance.cam.Bgcamstatic.enabled = true;
@@ -93,9 +91,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class HomScrubToTimeAlwaysDisabledPatch
         {
             public static void Postfix(ffxHallOfMirrorsPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled
-                    || !Settings.IsEnabled
-                    || !Settings.DisableHallOfMirrors) {
+                if (!Settings.DisableHallOfMirrors) {
                     return;
                 }
                 __instance.cam.Bgcamstatic.enabled = true;
@@ -106,12 +102,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class ShakeScreenStartEffectAlwaysDisabledPatch
         {
             public static bool Prefix() {
-                if (!AdofaiTweaks.IsEnabled
-                    || !Settings.IsEnabled
-                    || !Settings.DisableScreenShake) {
-                    return true;
-                }
-                return false;
+                return !Settings.DisableScreenShake;
             }
         }
 
@@ -119,12 +110,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private static class ShakeScreenScrubToTimeAlwaysDisabledPatch
         {
             public static bool Prefix() {
-                if (!AdofaiTweaks.IsEnabled
-                    || !Settings.IsEnabled
-                    || !Settings.DisableScreenShake) {
-                    return true;
-                }
-                return false;
+                return !Settings.DisableScreenShake;
             }
         }
 
@@ -135,9 +121,6 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             private static int origEnd;
 
             public static void Prefix(ffxMoveFloorPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
                 if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
                     return;
                 }
@@ -155,9 +138,6 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
 
             public static void Postfix(ffxMoveFloorPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
                 if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
                     return;
                 }
@@ -173,9 +153,6 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             private static int origEnd;
 
             public static void Prefix(ffxMoveFloorPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
                 if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
                     return;
                 }
@@ -193,9 +170,6 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
 
             public static void Postfix(ffxMoveFloorPlus __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
                 if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
                     return;
                 }

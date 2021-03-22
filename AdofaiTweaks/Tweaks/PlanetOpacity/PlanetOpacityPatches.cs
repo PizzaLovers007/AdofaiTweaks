@@ -29,9 +29,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static class SetPlanetColorPatch
         {
             public static void Postfix(scrPlanet __instance, Color color) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 float opacity =
                     __instance.isRed ? Settings.ActualOpacity1 : Settings.ActualOpacity2;
                 ParticleSystem.MainModule psmain = __instance.sparks.main;
@@ -44,9 +41,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static class SetCoreColorPatch
         {
             public static void Postfix(scrPlanet __instance, Color color) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 float opacity =
                     __instance.isRed ? Settings.ActualOpacity1 : Settings.ActualOpacity2;
                 __instance.glow.color = ApplyOpacity(__instance.glow.color, opacity);
@@ -66,9 +60,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static class SetTailColorPatch
         {
             public static void Postfix(scrPlanet __instance, Color color) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 float opacity =
                     __instance.isRed ? Settings.ActualOpacity1 : Settings.ActualOpacity2;
                 setParticleSystemColorMethod.Invoke(
@@ -87,9 +78,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static class SetRingColorPatch
         {
             public static void Postfix(scrPlanet __instance) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 float opacity =
                     __instance.isRed ? Settings.ActualOpacity1 : Settings.ActualOpacity2;
                 __instance.ring.color = ApplyOpacity(__instance.ring.color, opacity);
@@ -100,9 +88,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static class DisableCustomColorPatch
         {
             public static void Postfix(scrPlanet __instance) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 float opacity =
                     __instance.isRed ? Settings.ActualOpacity1 : Settings.ActualOpacity2;
                 __instance.sprite.color = ApplyOpacity(Color.white, opacity);
@@ -113,9 +98,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static class SwitchToGoldPatch
         {
             public static void Postfix(scrPlanet __instance) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 float alpha =
                     __instance.isRed ? Settings.ActualOpacity1 : Settings.ActualOpacity2;
                 alpha /= 100;
@@ -136,9 +118,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             [HarmonyPriority(Priority.LowerThanNormal)]
             public static bool Prefix(
                 scrPlanet __instance, bool enabled, ref Sequence ___rainbowSeq) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return true;
-                }
                 float opacity =
                     __instance.isRed ? Settings.ActualOpacity1 : Settings.ActualOpacity2;
                 if (!enabled) {

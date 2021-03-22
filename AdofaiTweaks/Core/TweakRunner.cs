@@ -52,32 +52,42 @@ namespace AdofaiTweaks.Core
             harmony = new Harmony("adofai_tweaks." + TweakMetadata.Id);
         }
 
-        /// <summary>
-        /// Starts up the runner.
-        /// </summary>
-        public void Start() {
+        private void EnableTweak() {
+            Tweak.OnEnable();
             foreach (Type type in TweakMetadata.PatchesType.GetNestedTypes(AccessTools.all)) {
                 harmony.CreateClassProcessor(type).Patch();
             }
+            Tweak.OnPatch();
+        }
+
+        private void DisableTweak() {
+            Tweak.OnDisable();
+            harmony.UnpatchAll(harmony.Id);
+            Tweak.OnUnpatch();
+        }
+
+        /// <summary>
+        /// Starts up the runner.
+        /// </summary>
+        internal void Start() {
             if (Settings.IsEnabled) {
-                Tweak.OnEnable();
+                EnableTweak();
             }
         }
 
         /// <summary>
         /// Stops the runner.
         /// </summary>
-        public void Stop() {
+        internal void Stop() {
             if (Settings.IsEnabled) {
-                Tweak.OnDisable();
+                DisableTweak();
             }
-            harmony.UnpatchAll(harmony.Id);
         }
 
         /// <summary>
         /// Handler for adding this tweak's settings GUI to UMM's settings GUI.
         /// </summary>
-        public void OnGUI() {
+        internal void OnGUI() {
             // Draw header
             GUILayout.BeginHorizontal();
             bool newIsExpanded = GUILayout.Toggle(
@@ -112,10 +122,10 @@ namespace AdofaiTweaks.Core
             if (newIsEnabled != Settings.IsEnabled) {
                 Settings.IsEnabled = newIsEnabled;
                 if (newIsEnabled) {
-                    Tweak.OnEnable();
+                    EnableTweak();
                     newIsExpanded = true;
                 } else {
-                    Tweak.OnDisable();
+                    DisableTweak();
                 }
             }
 
@@ -142,7 +152,7 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Handler for when UMM's settings GUI is hidden.
         /// </summary>
-        public void OnHideGUI() {
+        internal void OnHideGUI() {
             if (Settings.IsEnabled) {
                 Tweak.OnHideGUI();
             }
@@ -155,7 +165,7 @@ namespace AdofaiTweaks.Core
         /// The amount of time that has passed since the previous frame in
         /// seconds.
         /// </param>
-        public void OnUpdate(float deltaTime) {
+        internal void OnUpdate(float deltaTime) {
             if (Settings.IsEnabled) {
                 Tweak.OnUpdate(deltaTime);
             }
@@ -164,7 +174,7 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Handler for changing the language of AdofaiTweaks.
         /// </summary>
-        public void OnLanguageChange() {
+        internal void OnLanguageChange() {
             if (Settings.IsEnabled) {
                 Tweak.OnLanguageChange();
             }

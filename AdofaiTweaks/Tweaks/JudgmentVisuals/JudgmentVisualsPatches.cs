@@ -15,14 +15,11 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private static class PlanetSwitchChosenPatch
         {
             public static void Prefix(scrPlanet __instance) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
                 float angleDiff = (float)(__instance.angle - __instance.targetExitAngle);
                 if (!__instance.controller.isCW) {
                     angleDiff *= -1;
                 }
-                HitErrorMeter.Instance?.AddHit(angleDiff);
+                HitErrorMeter.Instance.AddHit(angleDiff);
             }
         }
 
@@ -30,10 +27,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private static class ControllerAwakeRewindPatch
         {
             public static void Prefix() {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
-                HitErrorMeter.Instance?.Reset();
+                HitErrorMeter.Instance.Reset();
             }
         }
 
@@ -41,9 +35,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private static class ControllerShowHitTextPatch
         {
             public static bool Prefix(HitMargin hitMargin) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return true;
-                }
                 if (!Settings.HidePerfects) {
                     return true;
                 }
