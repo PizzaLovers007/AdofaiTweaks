@@ -59,17 +59,17 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
 
             // Move track
             string trackMaxFormat =
-                Settings.MoveTrackMax == 101
+                Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND
                     ? TweakStrings.Get(TranslationKeys.DisableEffects.TILE_MOVEMENT_UNLIMITED)
                     : "{0}";
             float newTrackMax =
                 MoreGUILayout.NamedSlider(
                     TweakStrings.Get(TranslationKeys.DisableEffects.TILE_MOVEMENT_MAX),
                     Settings.MoveTrackMax,
-                    4,
-                    DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND + 1,
+                    5,
+                    DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND + 5,
                     300f,
-                    roundNearest: 1,
+                    roundNearest: 4,
                     valueFormat: trackMaxFormat);
             Settings.MoveTrackMax = Mathf.RoundToInt(newTrackMax);
         }
