@@ -92,10 +92,13 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 MoreGUILayout.EndIndent();
             }
 
+            // Hide perfects
             Settings.HidePerfects =
                 GUILayout.Toggle(
                     Settings.HidePerfects,
-                    TweakStrings.Get(TranslationKeys.JudgmentVisuals.HIDE_PERFECTS));
+                    TweakStrings.Get(
+                        TranslationKeys.JudgmentVisuals.HIDE_PERFECTS,
+                        RDString.Get("HitMargin." + HitMargin.Perfect)));
         }
 
         /// <inheritdoc/>
