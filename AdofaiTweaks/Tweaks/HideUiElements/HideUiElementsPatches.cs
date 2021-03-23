@@ -16,9 +16,6 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         private static class JudgmentTextShowPatch
         {
             public static void Prefix(ref Vector3 position) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 if (Settings.HideEverything || Settings.HideJudgment) {
                     position = new Vector3(123456f, 123456f, 123456f);
                 }
@@ -29,9 +26,6 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         private static class MissIndicatorPatch
         {
             public static void Postfix(scrMissIndicator __instance) {
-                if (!Settings.IsEnabled || !AdofaiTweaks.IsEnabled) {
-                    return;
-                }
                 if (Settings.HideEverything || Settings.HideMissIndicators) {
                     __instance.transform.position = new Vector3(123456f, 123456f, 123456f);
                 }
@@ -45,8 +39,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
 
             public static void Prefix() {
                 prevVal = RDC.auto;
-                bool hideOtto = Settings.HideEverything || Settings.HideOtto;
-                if (hideOtto && Settings.IsEnabled && AdofaiTweaks.IsEnabled) {
+                if (Settings.HideEverything || Settings.HideOtto) {
                     RDC.auto = false;
                 }
             }

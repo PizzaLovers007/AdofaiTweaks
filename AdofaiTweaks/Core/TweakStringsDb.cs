@@ -57,6 +57,10 @@ namespace AdofaiTweaks.Core
                 LoadFromDb(language);
             }
             Dictionary<string, TweakString> dict = cache[language];
+            if (!dict.ContainsKey(key))
+            {
+                return $"no such key {key}";
+            }
             if (string.IsNullOrEmpty(dict[key].Content)) {
                 return cache[LanguageEnum.ENGLISH][key].Content;
             }

@@ -16,5 +16,15 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         /// Disables editor zoom in/out when in gameplay.
         /// </summary>
         public bool DisableEditorZoom { get; set; }
+
+        /// <summary>
+        /// Overrides the hitsound volume.
+        /// </summary>
+        public bool SetHitsoundVolume { get; set; }
+
+        /// <summary>
+        /// The hitsound volume value.
+        /// </summary>
+        public float HitsoundVolumeScale { get; set; } = 1f;
     }
 }

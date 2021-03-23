@@ -28,7 +28,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             };
 
             public static void Prefix(ref float ___TimeX) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableGlitchFlip) {
+                if (!Settings.DisableGlitchFlip) {
                     return;
                 }
                 ___TimeX += Time.deltaTime;
@@ -48,7 +48,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
 
             public static void Prefix(scnEditor __instance) {
                 scrollEventInside = ScrollEvent.inside;
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled || !Settings.DisableEditorZoom) {
+                if (!Settings.DisableEditorZoom) {
                     return;
                 }
                 if (!__instance.isLevelEditor || __instance.controller.paused) {

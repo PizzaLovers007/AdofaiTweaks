@@ -106,6 +106,17 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+
+            // Limit CLS toggle
+            Settings.LimitKeyOnCLS =
+                GUILayout.Toggle(
+                    Settings.LimitKeyOnCLS, TweakStrings.Get(TranslationKeys.KeyLimiter.LIMIT_CLS));
+
+            // Limit main menu toggle
+            Settings.LimitKeyOnMainScreen =
+                GUILayout.Toggle(
+                    Settings.LimitKeyOnMainScreen,
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.LIMIT_MAIN_MENU));
         }
     }
 }

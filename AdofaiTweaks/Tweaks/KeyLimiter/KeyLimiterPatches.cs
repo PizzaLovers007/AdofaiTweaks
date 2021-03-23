@@ -16,8 +16,15 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private static class CountValidKeysPressedPatch
         {
             public static bool Prefix(ref int __result, scrController __instance) {
-                // Don't make changes if the tweak is diabled
-                if (!Settings.IsEnabled) {
+                // Do not limit keys if current scene is CLS and player has
+                // disabled key limiting in CLS
+                if (!Settings.LimitKeyOnCLS && __instance.CLSMode) {
+                    return true;
+                }
+
+                // Do not limit keys if player is in main screen and has
+                // disabled key limiting in there
+                if (!Settings.LimitKeyOnMainScreen && !__instance.gameworld && !__instance.CLSMode) {
                     return true;
                 }
 
@@ -54,10 +61,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private static class ControllerCheckForSpecialInputKeysOrPausePatch
         {
             public static void Postfix(ref bool __result) {
-                if (!AdofaiTweaks.IsEnabled || !Settings.IsEnabled) {
-                    return;
-                }
-
                 // Stop player inputs while we're editing the keys
                 if (Settings.IsListening) {
                     return;

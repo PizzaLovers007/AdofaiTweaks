@@ -45,6 +45,16 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         /// </summary>
         public float KeyViewerYPos { get; set; } = 0.03f;
 
+        /// <summary>
+        /// Limit key on custom level selection scene.
+        /// </summary>
+        public bool LimitKeyOnCLS { get; set; } = true;
+
+        /// <summary>
+        /// Limit key on main screen.
+        /// </summary>
+        public bool LimitKeyOnMainScreen { get; set; } = true;
+
         private Color _pressedOutlineColor;
 
         /// <summary>

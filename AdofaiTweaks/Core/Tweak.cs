@@ -17,27 +17,41 @@
         public abstract string Description { get; }
 
         /// <summary>
-        /// Handler for the tweak's settings GUI.
+        /// Called when tweak's settings GUI is updated per frame.
         /// </summary>
         public virtual void OnSettingsGUI() { }
 
         /// <summary>
-        /// Handler for when UMM's setttngs GUI is hidden.
+        /// Called when UMM's settings GUI is hidden.
         /// </summary>
         public virtual void OnHideGUI() { }
 
         /// <summary>
-        /// Handler for when the tweak is enabled.
+        /// Called when the tweak is enabled. Runs before Harmony patches the
+        /// methods for this tweak.
         /// </summary>
         public virtual void OnEnable() { }
 
         /// <summary>
-        /// Handler for when the tweak is disabled.
+        /// Called after Harmony patches the methods for this tweak when the
+        /// tweak is enabled.
+        /// </summary>
+        public virtual void OnPatch() { }
+
+        /// <summary>
+        /// Called when the tweak is disabled. Runs before Harmony unpatches the
+        /// methods for this tweak.
         /// </summary>
         public virtual void OnDisable() { }
 
         /// <summary>
-        /// Handler for UMM's update event.
+        /// Called after Harmony unpatches the methods for this tweak when the
+        /// tweak is disabled.
+        /// </summary>
+        public virtual void OnUnpatch() { }
+
+        /// <summary>
+        /// Called when the game updates per frame.
         /// </summary>
         /// <param name="deltaTime">
         /// The amount of time that has passed since the previous frame in
@@ -46,7 +60,7 @@
         public virtual void OnUpdate(float deltaTime) { }
 
         /// <summary>
-        /// Handler for changing the language of AdofaiTweaks.
+        /// Called after the language for AdofaiTweaks is changed.
         /// </summary>
         public virtual void OnLanguageChange() { }
     }
