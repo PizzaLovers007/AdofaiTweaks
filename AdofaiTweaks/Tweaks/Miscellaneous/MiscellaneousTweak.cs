@@ -32,7 +32,9 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             Settings.DisableGlitchFlip =
                 GUILayout.Toggle(
                     Settings.DisableGlitchFlip,
-                    TweakStrings.Get(TranslationKeys.Miscellaneous.GLITCH_FLIP));
+                    TweakStrings.Get(
+                        TranslationKeys.Miscellaneous.GLITCH_FLIP,
+                        RDString.GetEnumValue(Filter.Glitch)));
 
             // Editor zoom
             Settings.DisableEditorZoom =

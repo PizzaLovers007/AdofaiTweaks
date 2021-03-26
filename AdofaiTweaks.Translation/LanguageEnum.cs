@@ -8,5 +8,7 @@
         ENGLISH = 0,
         KOREAN = 1,
         SPANISH = 2,
+        POLISH = 3,
+        FRENCH = 4,
     }
 }
