@@ -48,7 +48,10 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             Settings.HideJudgment =
                 GUILayout.Toggle(
                     Settings.HideJudgment,
-                    TweakStrings.Get(TranslationKeys.HideUiElements.JUDGE_TEXT));
+                    TweakStrings.Get(
+                        TranslationKeys.HideUiElements.JUDGE_TEXT,
+                        RDString.Get("HitMargin." + HitMargin.Perfect),
+                        RDString.Get("HitMargin." + HitMargin.EarlyPerfect)));
 
             Settings.HideMissIndicators =
                 GUILayout.Toggle(
