@@ -7,6 +7,7 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 
 ## Available Tweaks
 
+* **Disable Effects** - Disables certain effects to improve performance.
 * **Hide UI Elements** - Hides certain UI elements (Beta Build text, Otto,
    judgment text, etc.).
 * **Judgment Visuals** - Improves the visuals of judgments.
