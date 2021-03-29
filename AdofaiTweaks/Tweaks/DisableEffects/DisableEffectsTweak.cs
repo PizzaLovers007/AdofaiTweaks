@@ -1,4 +1,4 @@
-﻿using System;
+﻿using ADOFAI;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
@@ -31,7 +31,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             Settings.DisableFilter =
                 GUILayout.Toggle(
                     Settings.DisableFilter,
-                    TweakStrings.Get(TranslationKeys.DisableEffects.FILTER));
+                    TweakStrings.Get(
+                        TranslationKeys.DisableEffects.FILTER,
+                        RDString.GetEnumValue(Filter.Grayscale),
+                        RDString.GetEnumValue(Filter.Arcade)));
 
             // Bloom
             Settings.DisableBloom =
@@ -49,7 +52,9 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             Settings.DisableHallOfMirrors =
                 GUILayout.Toggle(
                     Settings.DisableHallOfMirrors,
-                    TweakStrings.Get(TranslationKeys.DisableEffects.HALL_OF_MIRRORS));
+                    TweakStrings.Get(
+                        TranslationKeys.DisableEffects.HALL_OF_MIRRORS,
+                        RDString.Get("editor." + LevelEventType.HallOfMirrors)));
 
             // Screen shake
             Settings.DisableScreenShake =
