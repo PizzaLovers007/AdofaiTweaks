@@ -19,7 +19,11 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                 if (!__instance.controller.isCW) {
                     angleDiff *= -1;
                 }
-                HitErrorMeter.Instance.AddHit(angleDiff);
+                if (RDC.auto) {
+                    HitErrorMeter.Instance.AddHit(0);
+                } else {
+                    HitErrorMeter.Instance.AddHit(angleDiff);
+                }
             }
         }
 
