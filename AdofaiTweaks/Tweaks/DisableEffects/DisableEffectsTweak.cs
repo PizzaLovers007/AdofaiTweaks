@@ -74,7 +74,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                     5,
                     DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND + 5,
                     300f,
-                    roundNearest: 4,
+                    roundNearest: 5,
                     valueFormat: trackMaxFormat);
             Settings.MoveTrackMax = Mathf.RoundToInt(newTrackMax);
         }
