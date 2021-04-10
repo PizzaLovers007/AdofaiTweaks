@@ -46,13 +46,13 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             if (Settings.SetHitsoundVolume =
                 GUILayout.Toggle(
                     Settings.SetHitsoundVolume,
-                    TweakStrings.Get("")))
+                    TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME)))
             {
                 bool valueChanged = Settings.HitsoundVolumeScale * 1 == (
                     Settings.HitsoundVolumeScale =
                         Mathf.Min(
                             MoreGUILayout.NamedSlider(
-                                TweakStrings.Get(""),
+                                TweakStrings.Get(TranslationKeys.Miscellaneous.CURRENT_HITSOUND_VOLUME),
                                 Settings.HitsoundVolumeScale * 100,
                                 0,
                                 100.0001f,
@@ -61,20 +61,8 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                                 valueFormat: "{0:0.#}%") / 100, 1));
                 if (valueChanged)
                 {
-                    UpdateVolume();
+                    Settings.UpdateVolume();
                 }
-            }
-        }
-
-        /// <summary>
-        /// Updates volume, should be called every map loads.
-        /// </summary>
-        public void UpdateVolume()
-        {
-            scrConductor instance = scrConductor.instance;
-            if (instance)
-            {
-                instance.hitSoundVolume *= Settings.HitsoundVolumeScale;
             }
         }
     }

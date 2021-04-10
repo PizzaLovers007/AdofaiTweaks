@@ -67,10 +67,9 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         {
             private static void Postfix()
             {
-                scrConductor instance = scrConductor.instance;
-                if (instance)
+                if (Settings.IsEnabled && Settings.SetHitsoundVolume)
                 {
-                    instance.hitSoundVolume *= Settings.HitsoundVolumeScale;
+                    Settings.UpdateVolume();
                 }
             }
         }

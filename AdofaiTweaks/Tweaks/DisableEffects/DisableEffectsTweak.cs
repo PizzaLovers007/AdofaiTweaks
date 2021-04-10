@@ -28,13 +28,28 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
             // Filter
-            Settings.DisableFilter =
+            if (Settings.DisableFilter =
                 GUILayout.Toggle(
                     Settings.DisableFilter,
                     TweakStrings.Get(
                         TranslationKeys.DisableEffects.FILTER,
                         RDString.GetEnumValue(Filter.Grayscale),
-                        RDString.GetEnumValue(Filter.Arcade)));
+                        RDString.GetEnumValue(Filter.Arcade))))
+            {
+                /*
+                // Enable specific filter
+                if (GUILayout.Button(TweakStrings.Get("")))
+                {
+                    //
+                }
+
+                // Disable specific filter
+                if (GUILayout.Button(TweakStrings.Get("")))
+                {
+                    //
+                }
+                */
+            }
 
             // Bloom
             Settings.DisableBloom =
