@@ -1,6 +1,7 @@
 ﻿using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.Miscellaneous
@@ -48,16 +49,31 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.SetHitsoundVolume,
                     TweakStrings.Get("")))
             {
-                Settings.HitsoundVolumeScale =
-                    Mathf.Min(
-                        MoreGUILayout.NamedSlider(
-                            TweakStrings.Get(""),
-                            Settings.HitsoundVolumeScale * 100,
-                            0,
-                            100.0001f,
-                            200f,
-                            roundNearest: 0.001f,
-                            valueFormat: "{0:0.#}%") / 100, 1);
+                bool valueChanged = Settings.HitsoundVolumeScale * 1 == (
+                    Settings.HitsoundVolumeScale =
+                        Mathf.Min(
+                            MoreGUILayout.NamedSlider(
+                                TweakStrings.Get(""),
+                                Settings.HitsoundVolumeScale * 100,
+                                0,
+                                100.0001f,
+                                200f,
+                                roundNearest: 0.001f,
+                                valueFormat: "{0:0.#}%") / 100, 1));
+                if (valueChanged) UpdateVolume();
+            }
+        }
+
+        /// <summary>
+        /// Updates volume, should be called every map loads.
+        /// </summary>
+        public void UpdateVolume()
+        {
+            scrConductor instance = scrConductor.instance;
+            if (instance)
+            {
+                instance.hitSoundVolume *= Settings.HitsoundVolumeScale;
+                // List<object> hitSoundsData = (List) typeof(scrConductor).GetField("hitSoundsData").GetValue(instance);
             }
         }
     }
