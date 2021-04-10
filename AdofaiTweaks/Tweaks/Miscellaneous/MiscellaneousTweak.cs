@@ -1,7 +1,6 @@
 ﻿using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.Miscellaneous
@@ -60,7 +59,10 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                                 200f,
                                 roundNearest: 0.001f,
                                 valueFormat: "{0:0.#}%") / 100, 1));
-                if (valueChanged) UpdateVolume();
+                if (valueChanged)
+                {
+                    UpdateVolume();
+                }
             }
         }
 
@@ -73,7 +75,6 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             if (instance)
             {
                 instance.hitSoundVolume *= Settings.HitsoundVolumeScale;
-                // List<object> hitSoundsData = (List) typeof(scrConductor).GetField("hitSoundsData").GetValue(instance);
             }
         }
     }
