@@ -24,7 +24,9 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 // Do not limit keys if player is in main screen and has
                 // disabled key limiting in there
-                if (!Settings.LimitKeyOnMainScreen && !__instance.gameworld && !__instance.CLSMode) {
+                if (!Settings.LimitKeyOnMainScreen
+                    && !__instance.gameworld
+                    && !__instance.CLSMode) {
                     return true;
                 }
 
@@ -60,7 +62,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         [HarmonyPatch(typeof(scrController), "CheckForSpecialInputKeysOrPause")]
         private static class ControllerCheckForSpecialInputKeysOrPausePatch
         {
-            public static void Postfix(ref bool __result) {
+            public static void Postfix(ref bool __result, scrController __instance) {
                 // Stop player inputs while we're editing the keys
                 if (Settings.IsListening) {
                     return;
@@ -68,6 +70,11 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 // Don't force keys if it's paused
                 if (scrController.instance?.paused ?? true) {
+                    return;
+                }
+
+                // Do not override special keys in CLS
+                if (__instance.CLSMode) {
                     return;
                 }
 
