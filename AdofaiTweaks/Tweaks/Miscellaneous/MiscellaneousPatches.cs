@@ -61,5 +61,17 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 ScrollEvent.inside = scrollEventInside;
             }
         }
+
+        [HarmonyPatch(typeof(CustomLevel), "Play")]
+        private static class CustomLevelPlayPatch
+        {
+            private static void Postfix()
+            {
+                if (Settings.IsEnabled && Settings.SetHitsoundVolume)
+                {
+                    Settings.UpdateVolume();
+                }
+            }
+        }
     }
 }

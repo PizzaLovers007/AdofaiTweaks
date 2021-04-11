@@ -32,7 +32,9 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             Settings.DisableGlitchFlip =
                 GUILayout.Toggle(
                     Settings.DisableGlitchFlip,
-                    TweakStrings.Get(TranslationKeys.Miscellaneous.GLITCH_FLIP));
+                    TweakStrings.Get(
+                        TranslationKeys.Miscellaneous.GLITCH_FLIP,
+                        RDString.GetEnumValue(Filter.Glitch)));
 
             // Editor zoom
             Settings.DisableEditorZoom =
@@ -44,18 +46,23 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             if (Settings.SetHitsoundVolume =
                 GUILayout.Toggle(
                     Settings.SetHitsoundVolume,
-                    TweakStrings.Get("")))
+                    TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME)))
             {
-                Settings.HitsoundVolumeScale =
-                    Mathf.Min(
-                        MoreGUILayout.NamedSlider(
-                            TweakStrings.Get(""),
-                            Settings.HitsoundVolumeScale * 100,
-                            0,
-                            100.0001f,
-                            200f,
-                            roundNearest: 0.001f,
-                            valueFormat: "{0:0.#}%") / 100, 1);
+                bool valueChanged = Settings.HitsoundVolumeScale * 1 == (
+                    Settings.HitsoundVolumeScale =
+                        Mathf.Min(
+                            MoreGUILayout.NamedSlider(
+                                TweakStrings.Get(TranslationKeys.Miscellaneous.CURRENT_HITSOUND_VOLUME),
+                                Settings.HitsoundVolumeScale * 100,
+                                0,
+                                100.0001f,
+                                200f,
+                                roundNearest: 0.001f,
+                                valueFormat: "{0:0.#}%") / 100, 1));
+                if (valueChanged)
+                {
+                    Settings.UpdateVolume();
+                }
             }
         }
     }

@@ -26,5 +26,17 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         /// The hitsound volume value.
         /// </summary>
         public float HitsoundVolumeScale { get; set; } = 1f;
+
+        /// <summary>
+        /// Updates volume, should be called every map loads.
+        /// </summary>
+        public void UpdateVolume()
+        {
+            scrConductor instance = scrConductor.instance;
+            if (instance)
+            {
+                instance.hitSoundVolume *= HitsoundVolumeScale;
+            }
+        }
     }
 }
