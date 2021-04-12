@@ -48,16 +48,15 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.SetHitsoundVolume,
                     TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME)))
             {
-                bool valueChanged = Settings.HitsoundVolumeScale * 1 == (
+                bool valueChanged = Settings.HitsoundVolumeScale == (
                     Settings.HitsoundVolumeScale =
                         Mathf.Min(
                             MoreGUILayout.NamedSlider(
                                 TweakStrings.Get(TranslationKeys.Miscellaneous.CURRENT_HITSOUND_VOLUME),
                                 Settings.HitsoundVolumeScale * 100,
                                 0,
-                                100.0001f,
+                                100f,
                                 200f,
-                                roundNearest: 0.001f,
                                 valueFormat: "{0:0.#}%") / 100, 1));
                 if (valueChanged)
                 {

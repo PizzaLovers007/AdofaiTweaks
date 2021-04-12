@@ -16,11 +16,14 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         [HarmonyPatch(typeof(ffxSetFilterPlus), "SetFilter")]
         private static class SetFilterAlwaysFalsePatch
         {
-            public static void Prefix(ref bool fEnable) {
+            public static void Prefix(ffxSetFilterPlus __instance, ref bool fEnable) {
                 if (!Settings.DisableFilter) {
                     return;
                 }
-                fEnable = false;
+                if (!Settings.FilterExcludeList.Contains(__instance.filter))
+                {
+                    fEnable = false;
+                }
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using AdofaiTweaks.Core;
+﻿using System.Collections.Generic;
+using AdofaiTweaks.Core;
 
 namespace AdofaiTweaks.Tweaks.DisableEffects
 {
@@ -16,6 +17,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         /// Disables VFX filters.
         /// </summary>
         public bool DisableFilter { get; set; }
+
+        /// <summary>
+        /// List of filters to exclude from being disabled.
+        /// </summary>
+        public List<Filter> FilterExcludeList { get; set; }
 
         /// <summary>
         /// Disables bloom.

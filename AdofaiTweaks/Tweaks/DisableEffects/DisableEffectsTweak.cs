@@ -1,4 +1,7 @@
-﻿using ADOFAI;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ADOFAI;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
@@ -25,9 +28,17 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         [SyncTweakSettings]
         private DisableEffectsSettings Settings { get; set; }
 
+        private IDictionary<Filter, bool> FilterExcludeDict;
+        private bool DisplayList = false;
+
+        private Vector2 scrollPosition;
+
+        private readonly List<Filter> limitableFilters = new List<Filter>(new[] { Filter.VHS, Filter.MotionBlur, Filter.Funk });
+
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
             // Filter
+            GUILayout.BeginHorizontal();
             if (Settings.DisableFilter =
                 GUILayout.Toggle(
                     Settings.DisableFilter,
@@ -36,20 +47,37 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                         RDString.GetEnumValue(Filter.Grayscale),
                         RDString.GetEnumValue(Filter.Arcade))))
             {
-                /*
-                // Enable specific filter
-                if (GUILayout.Button(TweakStrings.Get("")))
+                // Exclude specific filter from being disabled
+                if (GUILayout.Button(TweakStrings.Get(TranslationKeys.DisableEffects.EXCLUDE_FILTER_LIST, Settings.FilterExcludeList.Count)))
                 {
-                    //
+                    DisplayList = !DisplayList;
                 }
 
-                // Disable specific filter
-                if (GUILayout.Button(TweakStrings.Get("")))
+                if (DisplayList)
                 {
-                    //
+                    GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Space(20f);
+
+                    scrollPosition = GUILayout.BeginScrollView(
+                        scrollPosition, GUILayout.Height(140f));
+                    foreach (Filter f in Enum.GetValues(typeof(Filter)))
+                    {
+                        if (limitableFilters.Contains(f))
+                        {
+                            bool flag = GUILayout.Toggle(FilterExcludeDict[f], RDString.GetEnumValue(f));
+                            if (FilterExcludeDict[f] != flag)
+                            {
+                                FilterExcludeDict[f] = flag;
+                                UpdateExcludeList();
+                            }
+                        }
+                    }
+                    GUILayout.EndScrollView();
                 }
-                */
             }
+
+            GUILayout.EndHorizontal();
 
             // Bloom
             Settings.DisableBloom =
@@ -92,6 +120,30 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                     roundNearest: 4,
                     valueFormat: trackMaxFormat);
             Settings.MoveTrackMax = Mathf.RoundToInt(newTrackMax);
+        }
+
+        /// <inheritdoc/>
+        public override void OnEnable()
+        {
+            FilterExcludeDict = new Dictionary<Filter, bool>();
+
+            foreach (Filter f in Enum.GetValues(typeof(Filter)))
+            {
+                FilterExcludeDict.Add(f, Settings.FilterExcludeList.Contains(f));
+            }
+        }
+
+        private void UpdateExcludeList()
+        {
+            List<Filter> result = new List<Filter>();
+            foreach (KeyValuePair<Filter, bool> p in FilterExcludeDict.Where(p => p.Value))
+            {
+                if (limitableFilters.Contains(p.Key))
+                {
+                    result.Add(p.Key);
+                }
+            }
+            Settings.FilterExcludeList = result;
         }
     }
 }
