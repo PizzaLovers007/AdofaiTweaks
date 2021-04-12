@@ -181,14 +181,22 @@ namespace AdofaiTweaks
             foreach (LanguageEnum language in Enum.GetValues(typeof(LanguageEnum))) {
                 string langString =
                     TweakStrings.GetForLanguage(TranslationKeys.Global.LANGUAGE_NAME, language);
-                bool click = GUILayout.Button(
-                    langString,
-                    new GUIStyle(GUI.skin.button) {
-                        font = language == LanguageEnum.KOREAN
-                            ? TweakAssets.KoreanNormalFont
-                            : null,
-                        fontSize = language == LanguageEnum.KOREAN ? 15 : 0,
-                    });
+
+                // Set special styles for selected and Korean language
+                GUIStyle style = new GUIStyle(GUI.skin.button);
+                if (language == GlobalSettings.Language) {
+                    if (language == LanguageEnum.KOREAN) {
+                        style.font = TweakAssets.KoreanBoldFont;
+                        style.fontSize = 15;
+                    } else {
+                        style.fontStyle = FontStyle.Bold;
+                    }
+                } else if (language == LanguageEnum.KOREAN) {
+                    style.font = TweakAssets.KoreanNormalFont;
+                    style.fontSize = 15;
+                }
+
+                bool click = GUILayout.Button(langString, style);
                 if (click) {
                     GlobalSettings.Language = language;
                     foreach (TweakRunner runner in tweakRunners) {

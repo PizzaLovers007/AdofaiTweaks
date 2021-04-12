@@ -10,5 +10,6 @@
         SPANISH = 2,
         POLISH = 3,
         FRENCH = 4,
+        VIETNAMESE = 5,
     }
 }
