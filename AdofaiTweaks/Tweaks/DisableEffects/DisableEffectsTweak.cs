@@ -33,8 +33,6 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
 
         private Vector2 scrollPosition;
 
-        private readonly List<Filter> limitableFilters = new List<Filter>(new[] { Filter.VHS, Filter.MotionBlur, Filter.Funk });
-
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
             // Filter
@@ -63,14 +61,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                         scrollPosition, GUILayout.Height(140f));
                     foreach (Filter f in Enum.GetValues(typeof(Filter)))
                     {
-                        if (limitableFilters.Contains(f))
+                        bool flag = GUILayout.Toggle(FilterExcludeDict[f], RDString.GetEnumValue(f));
+                        if (FilterExcludeDict[f] != flag)
                         {
-                            bool flag = GUILayout.Toggle(FilterExcludeDict[f], RDString.GetEnumValue(f));
-                            if (FilterExcludeDict[f] != flag)
-                            {
-                                FilterExcludeDict[f] = flag;
-                                UpdateExcludeList();
-                            }
+                            FilterExcludeDict[f] = flag;
+                            UpdateExcludeList();
                         }
                     }
                     GUILayout.EndScrollView();
@@ -138,10 +133,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             List<Filter> result = new List<Filter>();
             foreach (KeyValuePair<Filter, bool> p in FilterExcludeDict.Where(p => p.Value))
             {
-                if (limitableFilters.Contains(p.Key))
-                {
-                    result.Add(p.Key);
-                }
+                result.Add(p.Key);
             }
             Settings.FilterExcludeList = result;
         }
