@@ -54,6 +54,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                 if (DisplayList)
                 {
                     GUILayout.EndHorizontal();
+
+                    GUILayout.Space(10f);
+                    GUILayout.Label(TweakStrings.Get(TranslationKeys.DisableEffects.EXCLUDE_FILTER_START_LIST));
+
                     GUILayout.BeginHorizontal();
                     GUILayout.Space(20f);
 
