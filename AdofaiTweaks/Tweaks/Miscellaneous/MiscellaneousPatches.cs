@@ -1,4 +1,6 @@
-﻿using AdofaiTweaks.Core.Attributes;
+﻿using System.Collections.Generic;
+using ADOFAI;
+using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
 using UnityEngine;
 
@@ -70,6 +72,26 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 if (Settings.IsEnabled && Settings.SetHitsoundVolume)
                 {
                     Settings.UpdateVolume();
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(CustomLevel), "ApplyEvent")]
+        private static class CustomLevelApplyEventPatch
+        {
+            private static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors)
+            {
+                if (evnt.eventType == LevelEventType.SetHitsound)
+                {
+                    int floor = evnt.floor;
+                    GameObject gameObject = floors[floor].gameObject;
+
+                    ffxSetHitsound[] ffxSetHitsounds = gameObject.GetComponents<ffxSetHitsound>();
+
+                    foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds)
+                    {
+                        Settings.UpdateVolume(ffxSetHitsound);
+                    }
                 }
             }
         }

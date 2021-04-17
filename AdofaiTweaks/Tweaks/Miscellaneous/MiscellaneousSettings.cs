@@ -38,5 +38,18 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 instance.hitSoundVolume *= HitsoundVolumeScale;
             }
         }
+
+        /// <summary>
+        /// Updates volume, should be called every map loads.
+        /// </summary>
+        /// <param name="ffxSetHitsound">hitsound variable to change volume.</param>
+        public void UpdateVolume(ffxSetHitsound ffxSetHitsound)
+        {
+            scrConductor instance = scrConductor.instance;
+            if (instance)
+            {
+                ffxSetHitsound.volume *= HitsoundVolumeScale;
+            }
+        }
     }
 }
