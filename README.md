@@ -29,6 +29,7 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
     [Econ](https://www.youtube.com/channel/UCE7Kv2xKmB_pLnBV0VBrNYA))
 * Polski (Provided by crispy)
 * Français (Provided by Woopie 2)
+* Tiếng Việt (Provided by Gesomaru)
 
 ## Images
 
