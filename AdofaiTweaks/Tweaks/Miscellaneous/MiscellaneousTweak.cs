@@ -43,27 +43,25 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     TweakStrings.Get(TranslationKeys.Miscellaneous.EDITOR_ZOOM));
 
             // Hitsound volume
-            //if (Settings.SetHitsoundVolume =
-            //    GUILayout.Toggle(
-            //        Settings.SetHitsoundVolume,
-            //        TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME)))
-            //{
-            //    bool valueChanged = Settings.HitsoundVolumeScale * 1 == (
-            //        Settings.HitsoundVolumeScale =
-            //            Mathf.Min(
-            //                MoreGUILayout.NamedSlider(
-            //                    TweakStrings.Get(TranslationKeys.Miscellaneous.CURRENT_HITSOUND_VOLUME),
-            //                    Settings.HitsoundVolumeScale * 100,
-            //                    0,
-            //                    100.0001f,
-            //                    200f,
-            //                    roundNearest: 0.001f,
-            //                    valueFormat: "{0:0.#}%") / 100, 1));
-            //    if (valueChanged)
-            //    {
-            //        Settings.UpdateVolume();
-            //    }
-            //}
+            if (Settings.SetHitsoundVolume =
+                GUILayout.Toggle(
+                    Settings.SetHitsoundVolume,
+                    TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME))) {
+                bool valueChanged = Settings.HitsoundVolumeScale * 1 == (
+                    Settings.HitsoundVolumeScale =
+                        Mathf.Min(
+                            MoreGUILayout.NamedSlider(
+                                TweakStrings.Get(TranslationKeys.Miscellaneous.CURRENT_HITSOUND_VOLUME),
+                                Settings.HitsoundVolumeScale * 100,
+                                0,
+                                100.0001f,
+                                200f,
+                                roundNearest: 0.001f,
+                                valueFormat: "{0:0.#}%") / 100, 1));
+                if (valueChanged) {
+                    Settings.UpdateVolume();
+                }
+            }
         }
     }
 }
