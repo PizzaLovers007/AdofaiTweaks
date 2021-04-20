@@ -18,6 +18,18 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         public float ErrorMeterScale { get; set; } = 1f;
 
         /// <summary>
+        /// The horizontal position of the hit error meter. Should be bound to
+        /// the range <c>[0, 1]</c>.
+        /// </summary>
+        public float ErrorMeterXPos { get; set; } = 0.5f;
+
+        /// <summary>
+        /// The vertical position of the hit error meter. Should be bound to the
+        /// range <c>[0, 1]</c>.
+        /// </summary>
+        public float ErrorMeterYPos { get; set; } = 0.03f;
+
+        /// <summary>
         /// The length of time in seconds that a tick is visible on screen.
         /// </summary>
         public float ErrorMeterTickLife { get; set; } = 4f;

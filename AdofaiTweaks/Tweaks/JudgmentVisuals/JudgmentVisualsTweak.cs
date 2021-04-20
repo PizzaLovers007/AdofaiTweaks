@@ -49,7 +49,37 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                         valueFormat: "{0}x");
                 if (newScale != Settings.ErrorMeterScale) {
                     Settings.ErrorMeterScale = newScale;
-                    HitErrorMeter.Instance.Scale = newScale;
+                    HitErrorMeter.Instance.UpdateLayout();
+                }
+
+                // X position slider
+                float newX =
+                    MoreGUILayout.NamedSlider(
+                        TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_X_POS),
+                        Settings.ErrorMeterXPos,
+                        0f,
+                        1f,
+                        300f,
+                        roundNearest: 0.01f,
+                        valueFormat: "{0:0.##}");
+                if (newX != Settings.ErrorMeterXPos) {
+                    Settings.ErrorMeterXPos = newX;
+                    HitErrorMeter.Instance.UpdateLayout();
+                }
+
+                // Y position slider
+                float newY =
+                    MoreGUILayout.NamedSlider(
+                        TweakStrings.Get(TranslationKeys.JudgmentVisuals.ERROR_METER_Y_POS),
+                        Settings.ErrorMeterYPos,
+                        0f,
+                        1f,
+                        300f,
+                        roundNearest: 0.01f,
+                        valueFormat: "{0:0.##}");
+                if (newY != Settings.ErrorMeterYPos) {
+                    Settings.ErrorMeterYPos = newY;
+                    HitErrorMeter.Instance.UpdateLayout();
                 }
 
                 // Tick life slider
