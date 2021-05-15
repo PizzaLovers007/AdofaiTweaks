@@ -1,4 +1,6 @@
-﻿# AdofaiTweaks
+﻿# [Click here to download the latest version](https://github.com/PizzaLovers007/AdofaiTweaks/releases)
+
+# AdofaiTweaks
 
 General tweaks for the rhythm game
 [A Dance of Fire and Ice](https://store.steampowered.com/app/977950/A_Dance_of_Fire_and_Ice/).
