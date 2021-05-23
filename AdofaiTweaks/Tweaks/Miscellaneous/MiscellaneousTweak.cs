@@ -29,7 +29,8 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         private string bpmString = "";
 
         /// <inheritdoc/>
-        public override void OnSettingsGUI() {
+        public override void OnSettingsGUI()
+        {
             // Glitch flip
             Settings.DisableGlitchFlip =
                 GUILayout.Toggle(

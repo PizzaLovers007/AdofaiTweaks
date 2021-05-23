@@ -1,4 +1,6 @@
-﻿# AdofaiTweaks
+﻿# [Click here to download the latest version](https://github.com/PizzaLovers007/AdofaiTweaks/releases)
+
+# AdofaiTweaks
 
 General tweaks for the rhythm game
 [A Dance of Fire and Ice](https://store.steampowered.com/app/977950/A_Dance_of_Fire_and_Ice/).
@@ -29,6 +31,7 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
     [Econ](https://www.youtube.com/channel/UCE7Kv2xKmB_pLnBV0VBrNYA))
 * Polski (Provided by crispy)
 * Français (Provided by Woopie 2)
+* Tiếng Việt (Provided by Gesomaru)
 
 ## Images
 

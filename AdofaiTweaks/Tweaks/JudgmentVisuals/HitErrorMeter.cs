@@ -27,6 +27,10 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 
         private CanvasScaler scaler;
 
+        private GameObject wrapperObj;
+        private Canvas wrapperCanvas;
+        private RectTransform wrapperRectTransform;
+
         private Image handImage;
 
         private float averageAngle;
@@ -34,14 +38,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private GameObject[] cachedTicks;
         private string[] cachedTweenIds;
         private int tickIndex;
-
-        /// <summary>
-        /// The scale of the meter.
-        /// </summary>
-        public float Scale {
-            get => scaler.scaleFactor;
-            set => scaler.scaleFactor = value;
-        }
 
         private JudgmentVisualsSettings _settings = new JudgmentVisualsSettings();
 
@@ -52,7 +48,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             get => _settings;
             set {
                 _settings = value;
-                Scale = _settings.ErrorMeterScale;
+                UpdateLayout();
             }
         }
 
@@ -63,11 +59,17 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         protected void Awake() {
             _instance = this;
 
-            Canvas canvas = gameObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = 10000;
+            Canvas rootCanvas = gameObject.AddComponent<Canvas>();
+            rootCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            rootCanvas.sortingOrder = 10000;
             scaler = gameObject.AddComponent<CanvasScaler>();
-            Scale = Settings.ErrorMeterScale;
+
+            wrapperObj = new GameObject();
+            wrapperObj.transform.SetParent(transform);
+            wrapperCanvas = wrapperObj.AddComponent<Canvas>();
+            wrapperRectTransform = wrapperObj.GetComponent<RectTransform>();
+            wrapperRectTransform.anchoredPosition = new Vector2(0, -48);
+            wrapperRectTransform.sizeDelta = new Vector2(334, 135);
 
             GenerateMeterPng();
 
@@ -75,17 +77,19 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             cachedTweenIds = new string[TICK_CACHE_SIZE];
             for (int i = 0; i < TICK_CACHE_SIZE; i++) {
                 cachedTicks[i] = new GameObject();
-                cachedTicks[i].transform.SetParent(transform);
+                cachedTicks[i].transform.SetParent(wrapperObj.transform);
                 Image tickImage = cachedTicks[i].AddComponent<Image>();
                 tickImage.sprite = TweakAssets.TickSprite;
                 tickImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
                 tickImage.rectTransform.pivot = new Vector2(0.5f, 0f);
-                tickImage.rectTransform.anchoredPosition = new Vector2(0, -10);
+                tickImage.rectTransform.anchoredPosition = Vector2.zero;
                 tickImage.rectTransform.sizeDelta = new Vector2(8, 182);
                 tickImage.color = Color.clear;
                 cachedTweenIds[i] = TWEEN_ID + "_tick_" + i;
             }
+
+            UpdateLayout();
 
             gameObject.SetActive(false);
         }
@@ -100,24 +104,35 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 
         private void GenerateMeterPng() {
             GameObject meterObj = new GameObject();
-            meterObj.transform.SetParent(transform);
+            meterObj.transform.SetParent(wrapperObj.transform);
             Image image = meterObj.AddComponent<Image>();
             image.sprite = TweakAssets.MeterSprite;
             image.rectTransform.anchorMin = new Vector2(0.5f, 0f);
             image.rectTransform.anchorMax = new Vector2(0.5f, 0f);
             image.rectTransform.pivot = new Vector2(0.5f, 0f);
+            image.rectTransform.anchoredPosition = Vector2.zero;
             image.rectTransform.sizeDelta = new Vector2(400, 200);
-            image.rectTransform.anchoredPosition = new Vector2(0, -10);
 
             GameObject handObj = new GameObject();
-            handObj.transform.SetParent(transform);
+            handObj.transform.SetParent(wrapperObj.transform);
             handImage = handObj.AddComponent<Image>();
             handImage.sprite = TweakAssets.HandSprite;
             handImage.rectTransform.anchorMin = new Vector2(0.5f, 0f);
             handImage.rectTransform.anchorMax = new Vector2(0.5f, 0f);
             handImage.rectTransform.pivot = new Vector2(0.5f, 0f);
+            handImage.rectTransform.anchoredPosition = Vector2.zero;
             handImage.rectTransform.sizeDelta = new Vector2(30, 140);
-            handImage.rectTransform.anchoredPosition = new Vector2(0, -10);
+        }
+
+        /// <summary>
+        /// Updates the size and position of the hit error meter.
+        /// </summary>
+        public void UpdateLayout() {
+            Vector2 pos = new Vector2(Settings.ErrorMeterXPos, Settings.ErrorMeterYPos);
+            wrapperRectTransform.anchorMin = pos;
+            wrapperRectTransform.anchorMax = pos;
+            wrapperRectTransform.pivot = pos;
+            scaler.scaleFactor = Settings.ErrorMeterScale;
         }
 
         /// <summary>
