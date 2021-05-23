@@ -26,6 +26,8 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [SyncTweakSettings]
         private MiscellaneousSettings Settings { get; set; }
 
+        private string bpmString = "";
+
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
             // Glitch flip
@@ -61,6 +63,19 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 if (valueChanged)
                 {
                     Settings.UpdateVolume();
+                }
+            }
+
+            if (Settings.SetBpmInFirstTile =
+                GUILayout.Toggle(
+                    Settings.SetBpmInFirstTile,
+                    TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
+            {
+                bpmString = MoreGUILayout.NamedTextField(TranslationKeys.Global.TEST_KEY, bpmString, 200f);
+
+                if (float.TryParse(bpmString, out float bpm))
+                {
+                    Settings.Bpm = bpm;
                 }
             }
         }

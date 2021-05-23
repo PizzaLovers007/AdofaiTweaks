@@ -67,11 +67,37 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [HarmonyPatch(typeof(CustomLevel), "Play")]
         private static class CustomLevelPlayPatch
         {
-            private static void Postfix()
+            private static void Postfix(CustomLevel __instance, ref int seqID)
             {
                 if (Settings.IsEnabled && Settings.SetHitsoundVolume)
                 {
                     Settings.UpdateVolume();
+                }
+
+                if (Settings.SetBpmInFirstTile)
+                {
+                    float oldBpm = __instance.conductor.bpm, // original bpm
+                        newBpm = Settings.Bpm; // new bpm to replace
+
+                    // floor the player is currently on
+                    scrFloor floor = scrLevelMaker.instance.listFloors[seqID];
+
+                    // bpm has to be bpmConstant when floor.speed is multiplied, so dividing floor.speed here
+                    newBpm /= floor.speed;
+
+                    // floor's speed should be changed, to set the bpm right
+                    floor.speed *= oldBpm / newBpm;
+
+                    // the formula for getting ms in tile is (1000 * angle) / (3 * bpm), but angleLength gives pi when angle is 180 so i had to multiply 180 / pi
+                    float timeCalcBase = (float)floor.angleLength * (180000 / Mathf.PI),
+                        oldTime = timeCalcBase / (oldBpm * 3),
+                        newTime = timeCalcBase / (Settings.Bpm * 3);
+
+                    // add the time difference between the old and new time, to sync the music
+                    __instance.conductor.song.time += oldTime - newTime;
+                    __instance.conductor.song2.time += oldTime - newTime;
+
+                    __instance.StartCoroutine("DesyncFix");
                 }
             }
         }
@@ -81,7 +107,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         {
             private static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors)
             {
-                if (evnt.eventType == LevelEventType.SetHitsound)
+                if (evnt.eventType == LevelEventType.SetHitsound && Settings.IsEnabled && Settings.SetHitsoundVolume)
                 {
                     int floor = evnt.floor;
                     GameObject gameObject = floors[floor].gameObject;

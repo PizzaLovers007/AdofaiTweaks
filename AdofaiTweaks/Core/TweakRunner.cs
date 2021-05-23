@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Translation;
 using HarmonyLib;
@@ -32,6 +35,8 @@ namespace AdofaiTweaks.Core
 
         private TweakSettings Settings { get; set; }
 
+        private IList<TweakPatch> TweakPatches { get; set; } = new List<TweakPatch>();
+
         private readonly Harmony harmony;
 
         [SyncTweakSettings]
@@ -55,7 +60,30 @@ namespace AdofaiTweaks.Core
         private void EnableTweak() {
             Tweak.OnEnable();
             foreach (Type type in TweakMetadata.PatchesType.GetNestedTypes(AccessTools.all)) {
-                harmony.CreateClassProcessor(type).Patch();
+                TweakPatchAttribute attr = type.GetCustomAttributes(false).OfType<TweakPatchAttribute>()?.SingleOrDefault();
+                if (attr != null)
+                {
+                    TweakPatch tweakPatch = new TweakPatch(type, attr, harmony);
+                    if (tweakPatch?.IsValidPatch() ?? false)
+                    {
+                        TweakPatch duplicatePatch = TweakPatches.SingleOrDefault(p => p.Metadata.PatchId.Equals(attr.PatchId));
+                        if (duplicatePatch != null)
+                        {
+                            AdofaiTweaks.Logger.Log($"Patch with the ID of '{duplicatePatch.Metadata.PatchId}' is already registered. Please check if you have two patches with the same ID.");
+                        }
+                        else
+                        {
+                            TweakPatches.Add(tweakPatch);
+                            tweakPatch.Patch();
+                            // tweakPatch.Unpatch();
+                        }
+                    }
+                }
+                else
+                {
+                    // Old patch code
+                    harmony.CreateClassProcessor(type).Patch();
+                }
             }
             Tweak.OnPatch();
         }

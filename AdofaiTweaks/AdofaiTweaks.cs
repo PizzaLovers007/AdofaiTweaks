@@ -26,13 +26,16 @@ namespace AdofaiTweaks
         /// </summary>
         public static bool IsEnabled { get; private set; }
 
+        /// <summary>
+        /// GlobalSettings instance.
+        /// </summary>
+        [SyncTweakSettings]
+        public static GlobalSettings GlobalSettings { get; set; }
+
         private static List<Type> allTweakTypes;
         private static readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
 
         private static SettingsSynchronizer synchronizer;
-
-        [SyncTweakSettings]
-        private static GlobalSettings GlobalSettings { get; set; }
 
         /// <summary>
         /// Runs the initial setup of AdofaiTweaks.
@@ -62,6 +65,11 @@ namespace AdofaiTweaks
             modEntry.OnHideGUI = OnHideGUI;
             modEntry.OnSaveGUI = OnSaveGUI;
             modEntry.OnUpdate = OnUpdate;
+
+#if DEBUG
+            modEntry.HasUpdate = false;
+            modEntry.Info.DisplayName += $" <color=#a7a7a7><i>[Debug Build]</i></color>";
+#endif
         }
 
         /// <summary>
@@ -224,6 +232,10 @@ namespace AdofaiTweaks
             GUI.skin.textArea.fontSize = 0;
             GUI.skin.textField.fontSize = 0;
             GUI.skin.toggle.fontSize = 0;
+
+#if DEBUG
+            GUILayout.Label($"<color=#a7a7a7><i>This build is a debug build.\nGame Version: r{GCNS.releaseNumber}\nBuild Date: {GCNS.buildDate}</i></color>");
+#endif
         }
 
         /// <summary>

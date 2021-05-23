@@ -1,4 +1,5 @@
 ﻿using AdofaiTweaks.Core;
+using System.Xml.Serialization;
 
 namespace AdofaiTweaks.Tweaks.Miscellaneous
 {
@@ -28,6 +29,22 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         public float HitsoundVolumeScale { get; set; } = 1f;
 
         /// <summary>
+        /// Set bpm in the first tile starting the level.
+        /// </summary>
+        public bool SetBpmInFirstTile { get; set; }
+
+        /// <summary>
+        /// Starting tile's bpm.
+        /// </summary>
+        public float Bpm { get; set; } = 100;
+
+        /// <summary>
+        /// Original Hitsound Volume.
+        /// </summary>
+        [XmlIgnore]
+        public float OriginalHitsoundVolume { get; set; } = scrConductor.instance?.hitSoundVolume ?? 1f;
+
+        /// <summary>
         /// Updates volume, should be called every map loads.
         /// </summary>
         public void UpdateVolume()
@@ -35,12 +52,12 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             scrConductor instance = scrConductor.instance;
             if (instance)
             {
-                instance.hitSoundVolume *= HitsoundVolumeScale;
+                instance.hitSoundVolume = HitsoundVolumeScale * OriginalHitsoundVolume;
             }
         }
 
         /// <summary>
-        /// Updates volume, should be called every map loads.
+        /// Updates volume in event.
         /// </summary>
         /// <param name="ffxSetHitsound">hitsound variable to change volume.</param>
         public void UpdateVolume(ffxSetHitsound ffxSetHitsound)
