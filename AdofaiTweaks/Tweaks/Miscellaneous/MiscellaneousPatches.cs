@@ -74,7 +74,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.UpdateVolume();
                 }
 
-                if (Settings.SetBpmInFirstTile)
+                if (Settings.SetBpmOnStart)
                 {
                     float oldBpm = __instance.conductor.bpm, // original bpm
                         newBpm = Settings.Bpm; // new bpm to replace
@@ -97,7 +97,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     __instance.conductor.song.time += oldTime - newTime;
                     __instance.conductor.song2.time += oldTime - newTime;
 
-                    __instance.StartCoroutine("DesyncFix");
+                    __instance.conductor.StartCoroutine("DesyncFix");
                 }
             }
         }

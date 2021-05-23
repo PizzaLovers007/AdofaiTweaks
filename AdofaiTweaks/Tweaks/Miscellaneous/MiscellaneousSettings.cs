@@ -1,5 +1,4 @@
 ﻿using AdofaiTweaks.Core;
-using System.Xml.Serialization;
 
 namespace AdofaiTweaks.Tweaks.Miscellaneous
 {
@@ -29,9 +28,19 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         public float HitsoundVolumeScale { get; set; } = 1f;
 
         /// <summary>
-        /// Set bpm in the first tile starting the level.
+        /// Whether to force hitsound's volume to be static.
         /// </summary>
-        public bool SetBpmInFirstTile { get; set; }
+        public bool HitsoundForceVolume { get; set; }
+
+        /// <summary>
+        /// Whether to ignore the hitsound volume in the level's settings and overwrite hitsound volume.
+        /// </summary>
+        public bool HitsoundIgnoreStartingValue { get; set; }
+
+        /// <summary>
+        /// Set the bpm when starting the level.
+        /// </summary>
+        public bool SetBpmOnStart { get; set; }
 
         /// <summary>
         /// Starting tile's bpm.
@@ -39,20 +48,26 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         public float Bpm { get; set; } = 100;
 
         /// <summary>
-        /// Original Hitsound Volume.
-        /// </summary>
-        [XmlIgnore]
-        public float OriginalHitsoundVolume { get; set; } = scrConductor.instance?.hitSoundVolume ?? 1f;
-
-        /// <summary>
         /// Updates volume, should be called every map loads.
         /// </summary>
         public void UpdateVolume()
         {
+            if (!HitsoundIgnoreStartingValue)
+            {
+                return;
+            }
+
             scrConductor instance = scrConductor.instance;
             if (instance)
             {
-                instance.hitSoundVolume = HitsoundVolumeScale * OriginalHitsoundVolume;
+                if (HitsoundForceVolume)
+                {
+                    instance.hitSoundVolume = HitsoundVolumeScale;
+                }
+                else
+                {
+                    instance.hitSoundVolume *= HitsoundVolumeScale;
+                }
             }
         }
 
@@ -62,8 +77,11 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         /// <param name="ffxSetHitsound">hitsound variable to change volume.</param>
         public void UpdateVolume(ffxSetHitsound ffxSetHitsound)
         {
-            scrConductor instance = scrConductor.instance;
-            if (instance)
+            if (HitsoundForceVolume)
+            {
+                ffxSetHitsound.volume = HitsoundVolumeScale;
+            }
+            else
             {
                 ffxSetHitsound.volume *= HitsoundVolumeScale;
             }

@@ -50,6 +50,9 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.SetHitsoundVolume,
                     TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME)))
             {
+                MoreGUILayout.BeginIndent();
+
+                // Hitsound volume slider
                 bool valueChanged = Settings.HitsoundVolumeScale == (
                     Settings.HitsoundVolumeScale =
                         Mathf.Min(
@@ -60,15 +63,33 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                                 100f,
                                 200f,
                                 valueFormat: "{0:0.#}%") / 100, 1));
+
                 if (valueChanged)
                 {
                     Settings.UpdateVolume();
                 }
+
+                // Force volume checkbox
+                Settings.HitsoundForceVolume =
+                    GUILayout.Toggle(
+                        Settings.HitsoundForceVolume,
+                        TweakStrings.Get(TranslationKeys.Miscellaneous.HITSOUND_FORCE_VOLUME));
+
+#if DEBUG
+                // Ignore first value checkbox
+                Settings.HitsoundIgnoreStartingValue =
+                    GUILayout.Toggle(
+                        Settings.HitsoundIgnoreStartingValue,
+                        TweakStrings.Get(TranslationKeys.Miscellaneous.HITSOUND_IGNORE_STARTING_VALUE));
+#endif
+
+                MoreGUILayout.EndIndent();
             }
 
-            if (Settings.SetBpmInFirstTile =
+            // Test feature
+            if (Settings.SetBpmOnStart =
                 GUILayout.Toggle(
-                    Settings.SetBpmInFirstTile,
+                    Settings.SetBpmOnStart,
                     TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
             {
                 bpmString = MoreGUILayout.NamedTextField(TranslationKeys.Global.TEST_KEY, bpmString, 200f);
@@ -78,6 +99,12 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.Bpm = bpm;
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public override void OnEnable()
+        {
+            bpmString = Settings.Bpm.ToString();
         }
     }
 }
