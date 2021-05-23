@@ -67,7 +67,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [HarmonyPatch(typeof(CustomLevel), "Play")]
         private static class CustomLevelPlayPatch
         {
-            private static void Postfix(CustomLevel __instance, ref int seqID)
+            public static void Postfix(CustomLevel __instance, ref int seqID)
             {
                 if (Settings.IsEnabled && Settings.SetHitsoundVolume)
                 {
@@ -105,7 +105,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [HarmonyPatch(typeof(CustomLevel), "ApplyEvent")]
         private static class CustomLevelApplyEventPatch
         {
-            private static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors)
+            public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors)
             {
                 if (evnt.eventType == LevelEventType.SetHitsound && Settings.IsEnabled && Settings.SetHitsoundVolume)
                 {
@@ -121,5 +121,35 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 }
             }
         }
+
+#if DEBUG
+        [TweakPatch(
+            PatchId = "MiscellaneousPatch.TestPatch",
+            ClassName = "scnEditor",
+            MethodName = "Play",
+            MinVersion = -1,
+            MaxVersion = -1)]
+        private static class TestPatch
+        {
+            public static void Prefix()
+            {
+                // Do nothing
+            }
+        }
+
+        [TweakPatch(
+            PatchId = "MiscellaneousPatch.TestPatchInvalid",
+            ClassName = "scnEditor",
+            MethodName = "Play",
+            MinVersion = 1,
+            MaxVersion = 0)]
+        private static class TestPatchInvalid
+        {
+            public static void Prefix()
+            {
+                // Do nothing
+            }
+        }
+#endif
     }
 }

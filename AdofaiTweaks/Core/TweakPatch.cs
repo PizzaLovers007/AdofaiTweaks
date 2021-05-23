@@ -18,14 +18,13 @@ namespace AdofaiTweaks.Core
         /// <param name="PatchType">Type of the patching method.</param>
         /// <param name="attr">Attribute of the tweak's patch.</param>
         /// <param name="harmony">Harmony class to apply patch.</param>
-        internal TweakPatch(Type PatchType, TweakPatchAttribute attr, Harmony harmony)
+        /// <param name="assembly">Assembly to find class from.</param>
+        internal TweakPatch(Type PatchType, TweakPatchAttribute attr, Harmony harmony, Assembly assembly = null)
         {
             this.PatchType = PatchType;
             Metadata = attr;
             Harmony = harmony;
-
-            // Did you know that ADOBase existed from way before, even before the very first version released to steam? This code is FULLY compatible!
-            ClassType = typeof(ADOBase).Assembly.GetType(Metadata.ClassName);
+            ClassType = (assembly ?? typeof(ADOBase).Assembly).GetType(Metadata.ClassName);
             PatchTargetMethods = ClassType?.GetMethods().Where(m => m.Name.Equals(Metadata.MethodName));
         }
 
@@ -33,7 +32,6 @@ namespace AdofaiTweaks.Core
         private Type ClassType { get; set; }
         private Type PatchType { get; set; }
         private IEnumerable<MethodInfo> PatchTargetMethods { get; set; }
-        private List<MethodInfo> PatchedMethods { get; set; }
 
         /// <summary>
         /// Tweak's patch metadata (attribute data).
@@ -43,18 +41,14 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Whether the patch is patched (enabled).
         /// </summary>
-        internal bool IsEnabled {
-            get
-            {
-                return PatchedMethods != null;
-            }
-        }
+        internal bool IsEnabled { get; private set; }
 
         /// <summary>
         /// Checks whether the patch is valid for current game's version.
         /// </summary>
+        /// <param name="showDebuggingMessage">Whether to show debugging message in logs.</param>
         /// <returns>Patch's current availability in <see cref="bool"/>.</returns>
-        internal bool IsValidPatch()
+        internal bool IsValidPatch(bool showDebuggingMessage = false)
         {
             if ((Metadata.MinVersion <= GCNS.releaseNumber || Metadata.MinVersion == -1) &&
                 (Metadata.MaxVersion >= GCNS.releaseNumber || Metadata.MaxVersion == -1) &&
@@ -66,12 +60,15 @@ namespace AdofaiTweaks.Core
             }
 
 #if DEBUG
-            AdofaiTweaks.Logger.Log($"Patch {Metadata.PatchId} is invalid! - Specific criteria check:\n" +
+            if (showDebuggingMessage)
+            {
+                AdofaiTweaks.Logger.Log($"Patch {Metadata.PatchId} is invalid! - Specific criteria check:\n" +
                 $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MinVersion} <= {GCNS.releaseNumber}) is {Metadata.MinVersion <= GCNS.releaseNumber}\n" +
                 $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MaxVersion} >= {GCNS.releaseNumber}) is {Metadata.MaxVersion >= GCNS.releaseNumber}\n" +
                 $"ClassType is {ClassType}\n" +
                 $"PatchType is {PatchType}\n" +
                 $"PatchTargetMethods count is {PatchTargetMethods?.Count() ?? 0}");
+            }
 #endif
             return false;
         }
@@ -83,8 +80,6 @@ namespace AdofaiTweaks.Core
         {
             if (!IsEnabled)
             {
-                // this patch below does not work because there is no HarmonyPatch Attribute.
-                // PatchedMethods = Harmony.CreateClassProcessor(PatchType).Patch();
                 foreach (MethodInfo method in PatchTargetMethods)
                 {
                     MethodInfo prefixMethodInfo = PatchType.GetMethod("Prefix", AccessTools.all),
@@ -108,6 +103,8 @@ namespace AdofaiTweaks.Core
                         prefixMethod,
                         postfixMethod);
                 }
+
+                IsEnabled = true;
             }
         }
 
@@ -118,18 +115,15 @@ namespace AdofaiTweaks.Core
         {
             if (IsEnabled)
             {
-                // its theorically not possible to have a multiple patches here but I don't know what harmony does so I put a loop here instead of .First()
-                // TODO: stop using loop here if possible
-                PatchedMethods.ForEach((MethodInfo patchedMethod) =>
+                foreach (MethodInfo original in PatchTargetMethods)
                 {
-                    foreach (MethodInfo patchMethod in PatchType.GetMethods())
+                    foreach (MethodInfo patch in PatchType.GetMethods())
                     {
-                        Harmony.Unpatch(patchMethod, patchedMethod);
+                        Harmony.Unpatch(original, patch);
                     }
-                });
+                }
 
-                // this marks the patch as disabled
-                PatchedMethods = null;
+                IsEnabled = false;
             }
         }
     }

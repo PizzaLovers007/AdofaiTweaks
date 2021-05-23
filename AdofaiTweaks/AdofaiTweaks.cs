@@ -68,7 +68,7 @@ namespace AdofaiTweaks
 
 #if DEBUG
             modEntry.HasUpdate = false;
-            modEntry.Info.DisplayName += $" <color=#a7a7a7><i>[Debug Build]</i></color>";
+            modEntry.Info.DisplayName += " <color=#a7a7a7><i>[Debug Build]</i></color>";
 #endif
         }
 
