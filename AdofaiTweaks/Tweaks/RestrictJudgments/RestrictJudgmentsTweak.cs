@@ -46,9 +46,14 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         public override void OnEnable() {
             if (Settings.RestrictJudgments == null) {
                 Settings.RestrictJudgments = new bool[TOTAL_JUDGMENTS];
-                for (int i = 0; i < TOTAL_JUDGMENTS; i++) {
-                    Settings.RestrictJudgments[i] = false;
+            } else if (Settings.RestrictJudgments.Length != TOTAL_JUDGMENTS) {
+                // Judgments were added/removed, migrate to new settings
+                bool[] migratedJudgments = new bool[TOTAL_JUDGMENTS];
+                int len = Math.Min(TOTAL_JUDGMENTS, Settings.RestrictJudgments.Length);
+                for (int i = 0; i < len; i++) {
+                    migratedJudgments[i] = Settings.RestrictJudgments[i];
                 }
+                Settings.RestrictJudgments = migratedJudgments;
             }
         }
     }
