@@ -67,33 +67,34 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [HarmonyPatch(typeof(CustomLevel), "Play")]
         private static class CustomLevelPlayPatch
         {
-            public static void Postfix(CustomLevel __instance, ref int seqID)
-            {
-                if (Settings.IsEnabled && Settings.SetHitsoundVolume)
-                {
+            public static void Postfix(CustomLevel __instance, ref int seqID) {
+                if (Settings.IsEnabled && Settings.SetHitsoundVolume) {
                     Settings.UpdateVolume();
                 }
 
-                if (Settings.SetBpmOnStart)
-                {
+                if (Settings.SetBpmOnStart) {
                     float oldBpm = __instance.conductor.bpm, // original bpm
                         newBpm = Settings.Bpm; // new bpm to replace
 
                     // floor the player is currently on
                     scrFloor floor = scrLevelMaker.instance.listFloors[seqID];
 
-                    // bpm has to be bpmConstant when floor.speed is multiplied, so dividing floor.speed here
+                    // bpm has to be bpmConstant when floor.speed is multiplied,
+                    // so dividing floor.speed here
                     newBpm /= floor.speed;
 
                     // floor's speed should be changed, to set the bpm right
                     floor.speed *= oldBpm / newBpm;
 
-                    // the formula for getting ms in tile is (1000 * angle) / (3 * bpm), but angleLength gives pi when angle is 180 so i had to multiply 180 / pi
+                    // the formula for getting ms in tile is (1000 * angle) / (3
+                    // * bpm), but angleLength gives pi when angle is 180 so i
+                    // had to multiply 180 / pi
                     float timeCalcBase = (float)floor.angleLength * (180000 / Mathf.PI),
                         oldTime = timeCalcBase / (oldBpm * 3),
                         newTime = timeCalcBase / (Settings.Bpm * 3);
 
-                    // add the time difference between the old and new time, to sync the music
+                    // add the time difference between the old and new time, to
+                    // sync the music
                     __instance.conductor.song.time += oldTime - newTime;
                     __instance.conductor.song2.time += oldTime - newTime;
 
@@ -105,17 +106,14 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [HarmonyPatch(typeof(CustomLevel), "ApplyEvent")]
         private static class CustomLevelApplyEventPatch
         {
-            public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors)
-            {
-                if (evnt.eventType == LevelEventType.SetHitsound && Settings.IsEnabled && Settings.SetHitsoundVolume)
-                {
+            public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors) {
+                if (evnt.eventType == LevelEventType.SetHitsound && Settings.IsEnabled && Settings.SetHitsoundVolume) {
                     int floor = evnt.floor;
                     GameObject gameObject = floors[floor].gameObject;
 
                     ffxSetHitsound[] ffxSetHitsounds = gameObject.GetComponents<ffxSetHitsound>();
 
-                    foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds)
-                    {
+                    foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds) {
                         Settings.UpdateVolume(ffxSetHitsound);
                     }
                 }
@@ -123,33 +121,30 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         }
 
 #if DEBUG
+
         [TweakPatch(
-            PatchId = "MiscellaneousPatch.TestPatch",
-            ClassName = "scnEditor",
-            MethodName = "Play",
-            MinVersion = -1,
-            MaxVersion = -1)]
+            "MiscellaneousPatches.TestPatch",
+            "scnEditor",
+            "Play")]
         private static class TestPatch
         {
-            public static void Prefix()
-            {
+            public static void Prefix() {
                 // Do nothing
             }
         }
 
         [TweakPatch(
-            PatchId = "MiscellaneousPatch.TestPatchInvalid",
-            ClassName = "scnEditor",
-            MethodName = "Play",
-            MinVersion = 1,
-            MaxVersion = 0)]
+            "MiscellaneousPatch.TestPatchInvalid",
+            "scnEditor",
+            "Play",
+            maxVersion: 0)]
         private static class TestPatchInvalid
         {
-            public static void Prefix()
-            {
+            public static void Prefix() {
                 // Do nothing
             }
         }
+
 #endif
     }
 }

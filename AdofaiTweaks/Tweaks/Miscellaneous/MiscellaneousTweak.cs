@@ -29,8 +29,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         private string bpmString = "";
 
         /// <inheritdoc/>
-        public override void OnSettingsGUI()
-        {
+        public override void OnSettingsGUI() {
             // Glitch flip
             Settings.DisableGlitchFlip =
                 GUILayout.Toggle(
@@ -49,8 +48,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             if (Settings.SetHitsoundVolume =
                 GUILayout.Toggle(
                     Settings.SetHitsoundVolume,
-                    TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME)))
-            {
+                    TweakStrings.Get(TranslationKeys.Miscellaneous.SET_HITSOUND_VOLUME))) {
                 MoreGUILayout.BeginIndent();
 
                 // Hitsound volume slider
@@ -65,8 +63,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                                 200f,
                                 valueFormat: "{0:0.#}%") / 100, 1));
 
-                if (valueChanged)
-                {
+                if (valueChanged) {
                     Settings.UpdateVolume();
                 }
 
@@ -91,20 +88,17 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             if (Settings.SetBpmOnStart =
                 GUILayout.Toggle(
                     Settings.SetBpmOnStart,
-                    TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
-            {
+                    TweakStrings.Get(TranslationKeys.Global.TEST_KEY))) {
                 bpmString = MoreGUILayout.NamedTextField(TranslationKeys.Global.TEST_KEY, bpmString, 200f);
 
-                if (float.TryParse(bpmString, out float bpm))
-                {
+                if (float.TryParse(bpmString, out float bpm)) {
                     Settings.Bpm = bpm;
                 }
             }
         }
 
         /// <inheritdoc/>
-        public override void OnEnable()
-        {
+        public override void OnEnable() {
             bpmString = Settings.Bpm.ToString();
         }
     }
