@@ -26,7 +26,9 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [SyncTweakSettings]
         private MiscellaneousSettings Settings { get; set; }
 
+#if DEBUG
         private string bpmString = "";
+#endif
 
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
@@ -61,6 +63,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                                 0,
                                 100f,
                                 200f,
+                                roundNearest: 1f,
                                 valueFormat: "{0:0.#}%") / 100, 1));
 
                 if (valueChanged) {
@@ -84,6 +87,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 MoreGUILayout.EndIndent();
             }
 
+#if DEBUG
             // Test feature
             if (Settings.SetBpmOnStart =
                 GUILayout.Toggle(
@@ -95,11 +99,14 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.Bpm = bpm;
                 }
             }
+#endif
         }
 
+#if DEBUG
         /// <inheritdoc/>
         public override void OnEnable() {
             bpmString = Settings.Bpm.ToString();
         }
+#endif
     }
 }
