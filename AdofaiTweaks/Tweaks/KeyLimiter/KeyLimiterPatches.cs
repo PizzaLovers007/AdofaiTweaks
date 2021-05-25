@@ -108,7 +108,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 }
 
                 // Limit keys pressed
-                __result = Mathf.Min(3, keysPressed);
+                __result = Mathf.Min(4, keysPressed);
 
                 return false;
             }
