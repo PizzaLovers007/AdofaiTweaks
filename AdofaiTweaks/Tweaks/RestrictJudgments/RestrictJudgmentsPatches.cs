@@ -16,15 +16,44 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         private static bool invokedFailAction = false;
         private static HitMargin FAMargin;
 
-        [HarmonyPatch(typeof(scrMistakesManager), "AddHit")]
-        private static class MistakesManagerAddHitPatch
+        [TweakPatch(
+            "RestrictJudgments.KillPlayerBeforeMultipress",
+            "scrMistakesManager",
+            "AddHit",
+            maxVersion: 71)]
+        private static class KillPlayerBeforeMultipressPatch
         {
+            private static readonly MethodInfo FAIL_ACTION_METHOD =
+                AccessTools.Method(typeof(scrController), "FailAction");
+
             public static void Postfix(scrMistakesManager __instance, ref HitMargin hit) {
                 if (Settings.RestrictJudgments[(int)hit] && !invokedFailAction) {
                     invokedFailAction = true;
                     FAMargin = hit;
 
-                    __instance.controller.FailAction(true);
+                    AdofaiTweaks.Logger.Log("FailAction 1 argument");
+                    FAIL_ACTION_METHOD.Invoke(__instance.controller, new object[] { true });
+                }
+            }
+        }
+
+        [TweakPatch(
+            "RestrictJudgments.KillPlayerAfterMultipress",
+            "scrMistakesManager",
+            "AddHit",
+            minVersion: 72)]
+        private static class KillPlayerAfterMultipressPatch
+        {
+            private static readonly MethodInfo FAIL_ACTION_METHOD =
+                AccessTools.Method(typeof(scrController), "FailAction");
+
+            public static void Postfix(scrMistakesManager __instance, ref HitMargin hit) {
+                if (Settings.RestrictJudgments[(int)hit] && !invokedFailAction) {
+                    invokedFailAction = true;
+                    FAMargin = hit;
+
+                    AdofaiTweaks.Logger.Log("FailAction 2 arguments");
+                    FAIL_ACTION_METHOD.Invoke(__instance.controller, new object[] { true, false });
                 }
             }
         }
