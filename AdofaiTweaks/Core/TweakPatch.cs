@@ -4,14 +4,19 @@ using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
+using UnityEngine;
 
 namespace AdofaiTweaks.Core
 {
     /// <summary>
-    /// Tweak's patch system specifically designed to work at all versions of the game to avoid mod from crashing.
+    /// Tweak's patch system specifically designed to work at all versions of
+    /// the game to avoid mod from crashing.
     /// </summary>
     internal class TweakPatch
     {
+        private static readonly FieldInfo RELEASE_NUMBER_FIELD =
+            AccessTools.Field(typeof(GCNS), "releaseNumber");
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TweakPatch"/> class.
         /// </summary>
@@ -19,8 +24,7 @@ namespace AdofaiTweaks.Core
         /// <param name="attr">Attribute of the tweak's patch.</param>
         /// <param name="harmony">Harmony class to apply patch.</param>
         /// <param name="assembly">Assembly to find class from.</param>
-        internal TweakPatch(Type PatchType, TweakPatchAttribute attr, Harmony harmony, Assembly assembly = null)
-        {
+        internal TweakPatch(Type PatchType, TweakPatchAttribute attr, Harmony harmony, Assembly assembly = null) {
             this.PatchType = PatchType;
             Metadata = attr;
             Harmony = harmony;
@@ -46,16 +50,19 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Checks whether the patch is valid for current game's version.
         /// </summary>
-        /// <param name="showDebuggingMessage">Whether to show debugging message in logs.</param>
-        /// <returns>Patch's current availability in <see cref="bool"/>.</returns>
-        internal bool IsValidPatch(bool showDebuggingMessage = false)
-        {
-            if ((Metadata.MinVersion <= GCNS.releaseNumber || Metadata.MinVersion == -1) &&
-                (Metadata.MaxVersion >= GCNS.releaseNumber || Metadata.MaxVersion == -1) &&
+        /// <param name="showDebuggingMessage">
+        /// Whether to show debugging message in logs.
+        /// </param>
+        /// <returns>
+        /// Patch's current availability in <see cref="bool"/>.
+        /// </returns>
+        internal bool IsValidPatch(bool showDebuggingMessage = false) {
+            int releaseNumber = (int)RELEASE_NUMBER_FIELD.GetValue(null);
+            if ((Metadata.MinVersion <= releaseNumber || Metadata.MinVersion == -1) &&
+                (Metadata.MaxVersion >= releaseNumber || Metadata.MaxVersion == -1) &&
                 ClassType != null &&
                 PatchType != null &&
-                (PatchTargetMethods?.Count() ?? 0) != 0)
-            {
+                (PatchTargetMethods?.Count() ?? 0) != 0) {
                 return true;
             }
 
@@ -76,25 +83,20 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Patches this patch.
         /// </summary>
-        internal void Patch()
-        {
-            if (!IsEnabled)
-            {
-                foreach (MethodInfo method in PatchTargetMethods)
-                {
+        internal void Patch() {
+            if (!IsEnabled) {
+                foreach (MethodInfo method in PatchTargetMethods) {
                     MethodInfo prefixMethodInfo = PatchType.GetMethod("Prefix", AccessTools.all),
                         postfixMethodInfo = PatchType.GetMethod("Postfix", AccessTools.all);
 
                     HarmonyMethod prefixMethod = null,
                         postfixMethod = null;
 
-                    if (prefixMethodInfo != null)
-                    {
+                    if (prefixMethodInfo != null) {
                         prefixMethod = new HarmonyMethod(prefixMethodInfo);
                     }
 
-                    if (postfixMethodInfo != null)
-                    {
+                    if (postfixMethodInfo != null) {
                         postfixMethod = new HarmonyMethod(postfixMethodInfo);
                     }
 
@@ -111,14 +113,10 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Unpatches this patch.
         /// </summary>
-        internal void Unpatch()
-        {
-            if (IsEnabled)
-            {
-                foreach (MethodInfo original in PatchTargetMethods)
-                {
-                    foreach (MethodInfo patch in PatchType.GetMethods())
-                    {
+        internal void Unpatch() {
+            if (IsEnabled) {
+                foreach (MethodInfo original in PatchTargetMethods) {
+                    foreach (MethodInfo patch in PatchType.GetMethods()) {
                         Harmony.Unpatch(original, patch);
                     }
                 }
