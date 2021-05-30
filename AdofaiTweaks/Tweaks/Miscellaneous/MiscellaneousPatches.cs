@@ -67,13 +67,27 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [HarmonyPatch(typeof(CustomLevel), "Play")]
         private static class CustomLevelPlayPatch
         {
+            private static scrConductor conductor;
+
+            public static void IncreaseInputOffset(int offset)
+            {
+                scrConductor.currentPreset.inputOffset += offset;
+            }
+
+            public static void IncreaseVisualOffset(int offset)
+            {
+                scrConductor.visualOffset += offset;
+            }
+
             public static void Postfix(CustomLevel __instance, ref int seqID) {
+                conductor = __instance.conductor;
+
                 if (Settings.IsEnabled && Settings.SetHitsoundVolume) {
                     Settings.UpdateVolume();
                 }
 
                 if (Settings.SetBpmOnStart) {
-                    float oldBpm = __instance.conductor.bpm, // original bpm
+                    float oldBpm = conductor.bpm, // original bpm
                         newBpm = Settings.Bpm; // new bpm to replace
 
                     // floor the player is currently on
@@ -92,13 +106,20 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     float timeCalcBase = (float)floor.angleLength * (180000 / Mathf.PI),
                         oldTime = timeCalcBase / (oldBpm * 3),
                         newTime = timeCalcBase / (Settings.Bpm * 3);
+                    int timeDiff = Mathf.RoundToInt(oldTime - newTime);
 
+                    // add the time difference to sync the music
+                    scrConductor.currentPreset.inputOffset += timeDiff;
+                    scrConductor.visualOffset += timeDiff;
+
+                    /*
                     // add the time difference between the old and new time, to
                     // sync the music
-                    __instance.conductor.song.time += oldTime - newTime;
-                    __instance.conductor.song2.time += oldTime - newTime;
+                    conductor.song.time += timeDiff;
+                    conductor.song2.time += timeDiff;
+                    */
 
-                    __instance.conductor.StartCoroutine("DesyncFix");
+                    // conductor.StartCoroutine("DesyncFix");
                 }
             }
         }

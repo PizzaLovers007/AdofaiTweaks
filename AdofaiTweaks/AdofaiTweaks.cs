@@ -6,6 +6,7 @@ using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
 using AdofaiTweaks.Translation;
+using HarmonyLib;
 using UnityEngine;
 using UnityModManagerNet;
 
@@ -36,6 +37,10 @@ namespace AdofaiTweaks
         private static readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
 
         private static SettingsSynchronizer synchronizer;
+
+#if DEBUG
+        private static readonly int releaseNumber = (int)AccessTools.Field(typeof(GCNS), "releaseNumber").GetValue(null);
+#endif
 
         /// <summary>
         /// Runs the initial setup of AdofaiTweaks.
@@ -234,7 +239,7 @@ namespace AdofaiTweaks
             GUI.skin.toggle.fontSize = 0;
 
 #if DEBUG
-            GUILayout.Label($"<color=#a7a7a7><i>This build is a debug build.\nGame Version: r{GCNS.releaseNumber}\nBuild Date: {GCNS.buildDate}</i></color>");
+            GUILayout.Label($"<color=#a7a7a7><i>This build is a debug build.\nGame Version: r{releaseNumber}\nBuild Date: {GCNS.buildDate}</i></color>");
 #endif
         }
 
