@@ -67,11 +67,10 @@ namespace AdofaiTweaks.Core
             }
 
 #if DEBUG
-            if (showDebuggingMessage)
-            {
+            if (showDebuggingMessage) {
                 AdofaiTweaks.Logger.Log($"Patch {Metadata.PatchId} is invalid! - Specific criteria check:\n" +
-                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MinVersion} <= {GCNS.releaseNumber}) is {Metadata.MinVersion <= GCNS.releaseNumber}\n" +
-                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MaxVersion} >= {GCNS.releaseNumber}) is {Metadata.MaxVersion >= GCNS.releaseNumber}\n" +
+                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MinVersion} <= {releaseNumber}) is {Metadata.MinVersion <= releaseNumber}\n" +
+                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MaxVersion} >= {releaseNumber}) is {Metadata.MaxVersion >= releaseNumber}\n" +
                 $"ClassType is {ClassType}\n" +
                 $"PatchType is {PatchType}\n" +
                 $"PatchTargetMethods count is {PatchTargetMethods?.Count() ?? 0}");
