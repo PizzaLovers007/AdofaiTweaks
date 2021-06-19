@@ -94,8 +94,12 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             }
         }
 
-        [HarmonyPatch(typeof(scrController), "RainbowMode")]
-        private static class RainbowModePatch
+        [TweakPatch(
+            "PlanetColorPatches.RainbowModeBeforeControllerRefactor",
+            "scrLevelSelect",
+            "RainbowMode",
+            maxVersion: 74)]
+        private static class RainbowModeBeforeControllerRefactorPatch
         {
             public static void Postfix(scrController __instance) {
                 __instance.redPlanet.SetRainbow(false);
@@ -105,8 +109,27 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             }
         }
 
-        [HarmonyPatch(typeof(scrController), "EnbyMode")]
-        private static class EnbyModePatch
+        [TweakPatch(
+            "PlanetColorPatches.RainbowModeAfterControllerRefactor",
+            "scrLevelSelect",
+            "RainbowMode",
+            minVersion: 75)]
+        private static class RainbowModeAfterControllerRefactorPatch
+        {
+            public static void Postfix(scnLevelSelect __instance) {
+                __instance.controller.redPlanet.SetRainbow(false);
+                __instance.controller.redPlanet.LoadPlanetColor();
+                __instance.controller.bluePlanet.SetRainbow(false);
+                __instance.controller.bluePlanet.LoadPlanetColor();
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.EnbyModeBeforeControllerRefactor",
+            "scrLevelSelect",
+            "EnbyMode",
+            maxVersion: 74)]
+        private static class EnbyModeBeforeControllerRefactorPatch
         {
             public static void Postfix(scrController __instance) {
                 __instance.redPlanet.LoadPlanetColor();
@@ -114,12 +137,42 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             }
         }
 
-        [HarmonyPatch(typeof(scrController), "TransMode")]
-        private static class TransModePatch
+        [TweakPatch(
+            "PlanetColorPatches.EnbyModeAfterControllerRefactor",
+            "scrLevelSelect",
+            "EnbyMode",
+            minVersion: 75)]
+        private static class EnbyModeAfterControllerRefactorPatch
+        {
+            public static void Postfix(scnLevelSelect __instance) {
+                __instance.controller.redPlanet.LoadPlanetColor();
+                __instance.controller.bluePlanet.LoadPlanetColor();
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.TransModeBeforeControllerRefactor",
+            "scrLevelSelect",
+            "TransMode",
+            maxVersion: 74)]
+        private static class TransModeBeforeControllerRefactorPatch
         {
             public static void Postfix(scrController __instance) {
                 __instance.redPlanet.LoadPlanetColor();
                 __instance.bluePlanet.LoadPlanetColor();
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.TransModeAfterControllerRefactor",
+            "scrLevelSelect",
+            "TransMode",
+            minVersion: 75)]
+        private static class TransModeAfterControllerRefactorPatch
+        {
+            public static void Postfix(scnLevelSelect __instance) {
+                __instance.controller.redPlanet.LoadPlanetColor();
+                __instance.controller.bluePlanet.LoadPlanetColor();
             }
         }
     }
