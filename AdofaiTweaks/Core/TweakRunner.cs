@@ -60,23 +60,18 @@ namespace AdofaiTweaks.Core
             harmony = new Harmony("adofai_tweaks." + TweakMetadata.Id);
 
             // Setup TweakPatch list
-            foreach (Type type in TweakMetadata.PatchesType.GetNestedTypes(AccessTools.all))
-            {
+            foreach (Type type in TweakMetadata.PatchesType.GetNestedTypes(AccessTools.all)) {
                 TweakPatchAttribute attr = type.GetCustomAttributes(false).OfType<TweakPatchAttribute>()?.FirstOrDefault();
-                if (attr != null)
-                {
+                if (attr != null) {
                     TweakPatch tweakPatch = new TweakPatch(type, attr, harmony);
 
-                    // Find a ID-duplicating patch and ignore the current patch if found one
+                    // Find a ID-duplicating patch and ignore the current patch
+                    // if found one
                     TweakPatch duplicatePatch = TweakPatches.FirstOrDefault(p => p.Metadata.PatchId.Equals(attr.PatchId));
-                    if (duplicatePatch != null)
-                    {
+                    if (duplicatePatch != null) {
                         AdofaiTweaks.Logger.Log($"Patch with the ID of '{duplicatePatch.Metadata.PatchId}' is already registered. Please check if you have two patches with the same ID.");
-                    }
-                    else
-                    {
-                        if (tweakPatch?.IsValidPatch(true) ?? false)
-                        {
+                    } else {
+                        if (tweakPatch?.IsValidPatch(true) ?? false) {
                             ValidTweakPatches.Add(tweakPatch);
                         }
                         TweakPatches.Add(tweakPatch);
@@ -90,8 +85,7 @@ namespace AdofaiTweaks.Core
             foreach (Type type in TweakMetadata.PatchesType.GetNestedTypes(AccessTools.all)) {
                 harmony.CreateClassProcessor(type).Patch();
             }
-            foreach (TweakPatch patch in ValidTweakPatches)
-            {
+            foreach (TweakPatch patch in ValidTweakPatches) {
                 patch.Patch();
             }
             Tweak.OnPatch();
@@ -100,8 +94,7 @@ namespace AdofaiTweaks.Core
         private void DisableTweak() {
             Tweak.OnDisable();
             harmony.UnpatchAll(harmony.Id);
-            foreach (TweakPatch patch in ValidTweakPatches)
-            {
+            foreach (TweakPatch patch in ValidTweakPatches) {
                 patch.Unpatch();
             }
             Tweak.OnUnpatch();
@@ -144,10 +137,10 @@ namespace AdofaiTweaks.Core
                 Settings.IsEnabled,
                 Tweak.Name,
                 new GUIStyle(GUI.skin.toggle) {
-                    fontStyle = GlobalSettings.Language == LanguageEnum.KOREAN
+                    fontStyle = GlobalSettings.Language.IsSymbolLanguage()
                         ? FontStyle.Normal
                         : FontStyle.Bold,
-                    font = GlobalSettings.Language == LanguageEnum.KOREAN
+                    font = GlobalSettings.Language.IsSymbolLanguage()
                         ? TweakAssets.KoreanBoldFont
                         : null,
                     margin = new RectOffset(0, 4, 4, 4),
@@ -224,31 +217,24 @@ namespace AdofaiTweaks.Core
             }
         }
 
-        private void OnDebugGUI()
-        {
+        private void OnDebugGUI() {
             GUILayout.Space(12f);
             if (ShowDebuggingDetails =
-            GUILayout.Toggle(ShowDebuggingDetails, "<color=#a7a7a7><i>Show debugging details</i></color>"))
-            {
+            GUILayout.Toggle(ShowDebuggingDetails, "<color=#a7a7a7><i>Show debugging details</i></color>")) {
                 GUILayout.Space(12f);
                 GUILayout.Label("<color=#a7a7a7><i>List of patches</i></color>");
 
                 MoreGUILayout.BeginIndent();
-                foreach (TweakPatch patch in TweakPatches)
-                {
+                foreach (TweakPatch patch in TweakPatches) {
                     if (patch.IsEnabled !=
                         GUILayout.Toggle(
                             patch.IsEnabled,
                             $"<color=#a7a7a7><i>{(patch.IsEnabled ? "En" : "Dis")}abled | " +
                             $"{(patch.IsValidPatch() ? "" : "Invalid ")}Patch [{patch.Metadata.PatchId}]</i></color>")
-                        && patch.IsValidPatch())
-                    {
-                        if (patch.IsEnabled)
-                        {
+                        && patch.IsValidPatch()) {
+                        if (patch.IsEnabled) {
                             patch.Unpatch();
-                        }
-                        else
-                        {
+                        } else {
                             patch.Patch();
                         }
                     }

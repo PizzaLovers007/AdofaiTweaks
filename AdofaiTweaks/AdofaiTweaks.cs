@@ -154,12 +154,12 @@ namespace AdofaiTweaks
         /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
         private static void OnGUI(UnityModManager.ModEntry modEntry) {
             // Set some default GUI settings for better layouts
-            if (GlobalSettings.Language == LanguageEnum.KOREAN) {
-                GUI.skin.button.font = TweakAssets.KoreanNormalFont;
-                GUI.skin.label.font = TweakAssets.KoreanNormalFont;
-                GUI.skin.textArea.font = TweakAssets.KoreanNormalFont;
-                GUI.skin.textField.font = TweakAssets.KoreanNormalFont;
-                GUI.skin.toggle.font = TweakAssets.KoreanNormalFont;
+            if (GlobalSettings.Language.IsSymbolLanguage()) {
+                GUI.skin.button.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.label.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.textArea.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.textField.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.toggle.font = TweakAssets.SymbolLangNormalFont;
                 GUI.skin.button.fontSize = 15;
                 GUI.skin.label.fontSize = 15;
                 GUI.skin.textArea.fontSize = 15;
@@ -179,10 +179,10 @@ namespace AdofaiTweaks
             GUILayout.Label(
                 TweakStrings.Get(TranslationKeys.Global.GLOBAL_LANGUAGE),
                 new GUIStyle(GUI.skin.label) {
-                    fontStyle = GlobalSettings.Language == LanguageEnum.KOREAN
+                    fontStyle = GlobalSettings.Language.IsSymbolLanguage()
                         ? FontStyle.Normal
                         : FontStyle.Bold,
-                    font = GlobalSettings.Language == LanguageEnum.KOREAN
+                    font = GlobalSettings.Language.IsSymbolLanguage()
                         ? TweakAssets.KoreanBoldFont
                         : null,
                 });
@@ -193,14 +193,14 @@ namespace AdofaiTweaks
                 // Set special styles for selected and Korean language
                 GUIStyle style = new GUIStyle(GUI.skin.button);
                 if (language == GlobalSettings.Language) {
-                    if (language == LanguageEnum.KOREAN) {
+                    if (language.IsSymbolLanguage()) {
                         style.font = TweakAssets.KoreanBoldFont;
                         style.fontSize = 15;
                     } else {
                         style.fontStyle = FontStyle.Bold;
                     }
-                } else if (language == LanguageEnum.KOREAN) {
-                    style.font = TweakAssets.KoreanNormalFont;
+                } else if (language.IsSymbolLanguage()) {
+                    style.font = TweakAssets.SymbolLangNormalFont;
                     style.fontSize = 15;
                 }
 
