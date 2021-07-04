@@ -10,9 +10,9 @@ namespace AdofaiTweaks.Core
     public static class TweakAssets
     {
         /// <summary>
-        /// The normal font to use for Korean text.
+        /// The normal font to use for text for symbol languages.
         /// </summary>
-        public static Font KoreanNormalFont { get; private set; }
+        public static Font SymbolLangNormalFont { get; private set; }
 
         /// <summary>
         /// The bold font to use for Korean text.
@@ -50,7 +50,7 @@ namespace AdofaiTweaks.Core
             assets =
                 AssetBundle.LoadFromFile(
                     Path.Combine("Mods", "AdofaiTweaks", "adofai_tweaks.assets"));
-            KoreanNormalFont = assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
+            SymbolLangNormalFont = assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
             KoreanBoldFont = assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
             HandSprite = assets.LoadAsset<Sprite>("Assets/Hand.png");
             MeterSprite = assets.LoadAsset<Sprite>("Assets/Meter.png");

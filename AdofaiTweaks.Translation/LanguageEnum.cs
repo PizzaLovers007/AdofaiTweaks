@@ -11,5 +11,6 @@
         POLISH = 3,
         FRENCH = 4,
         VIETNAMESE = 5,
+        CHINESE_SIMPLIFIED = 6,
     }
 }
