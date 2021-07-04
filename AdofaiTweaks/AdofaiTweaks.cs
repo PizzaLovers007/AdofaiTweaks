@@ -28,6 +28,11 @@ namespace AdofaiTweaks
         public static bool IsEnabled { get; private set; }
 
         /// <summary>
+        /// The game's release number.
+        /// </summary>
+        public static readonly int ReleaseNumber = (int)AccessTools.Field(typeof(GCNS), "releaseNumber").GetValue(null);
+
+        /// <summary>
         /// GlobalSettings instance.
         /// </summary>
         [SyncTweakSettings]
@@ -37,10 +42,6 @@ namespace AdofaiTweaks
         private static readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
 
         private static SettingsSynchronizer synchronizer;
-
-#if DEBUG
-        private static readonly int releaseNumber = (int)AccessTools.Field(typeof(GCNS), "releaseNumber").GetValue(null);
-#endif
 
         /// <summary>
         /// Runs the initial setup of AdofaiTweaks.
