@@ -9,7 +9,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
     {
         /// <summary>
         /// Whether to restrict the judgment. If <c>RestrictJudgments[i]</c> is
-        /// <c>true</c>, then kill the player on judgment <c>i</c>.
+        /// <c>true</c>, then punish the player on judgment <c>i</c>.
         /// </summary>
         public bool[] RestrictJudgments { get; set; }
 
@@ -19,5 +19,10 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         /// that killed the player.
         /// </summary>
         public string CustomDeathString { get; set; } = "No {judgment}s allowed!";
+
+        /// <summary>
+        /// An action to restrict judgment.
+        /// </summary>
+        public RestrictJudgmentAction RestrictJudgmentAction { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ADOFAI;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
@@ -86,40 +87,45 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.UpdateVolume();
                 }
 
-                if (Settings.SetBpmOnStart) {
+                if (Settings.IsEnabled && Settings.SetBpmOnStart) {
                     float oldBpm = conductor.bpm, // original bpm
                         newBpm = Settings.Bpm; // new bpm to replace
 
                     // floor the player is currently on
                     scrFloor floor = scrLevelMaker.instance.listFloors[seqID];
 
+                    // current floor's angle
+                    double angle = (floor.exitangle - floor.entryangle + 360) % 360;
+                    if (angle == 0)
+                    {
+                        angle = 360;
+                    }
+
+                    // (bpm, angle) => (1000 * angle) / (3 * bpm)
+
                     // bpm has to be bpmConstant when floor.speed is multiplied,
                     // so dividing floor.speed here
-                    newBpm /= floor.speed;
+                    // (this code does not work properly)
+                    // conductor.controller.speed = newBpm / conductor.controller.speed;
 
                     // floor's speed should be changed, to set the bpm right
-                    floor.speed *= oldBpm / newBpm;
-
-                    // the formula for getting ms in tile is (1000 * angle) / (3
-                    // * bpm), but angleLength gives pi when angle is 180 so i
-                    // had to multiply 180 / pi
-                    float timeCalcBase = (float)floor.angleLength * (180000 / Mathf.PI),
+                    float timeCalcBase = (float)angle * 1000,
                         oldTime = timeCalcBase / (oldBpm * 3),
                         newTime = timeCalcBase / (Settings.Bpm * 3);
                     int timeDiff = Mathf.RoundToInt(oldTime - newTime);
 
                     // add the time difference to sync the music
-                    scrConductor.currentPreset.inputOffset += timeDiff;
-                    scrConductor.visualOffset += timeDiff;
+                    // scrConductor.currentPreset.inputOffset += timeDiff;
+                    // scrConductor.visualOffset += timeDiff;
 
-                    /*
+                    /* old code:
                     // add the time difference between the old and new time, to
                     // sync the music
                     conductor.song.time += timeDiff;
                     conductor.song2.time += timeDiff;
                     */
 
-                    // conductor.StartCoroutine("DesyncFix");
+                    conductor.StartCoroutine("DesyncFix");
                 }
             }
         }

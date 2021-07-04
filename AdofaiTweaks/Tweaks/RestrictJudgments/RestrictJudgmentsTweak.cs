@@ -7,7 +7,7 @@ using UnityEngine;
 namespace AdofaiTweaks.Tweaks.RestrictJudgments
 {
     /// <summary>
-    /// A tweak for killing the player on certain judgments.
+    /// A tweak for punishing the player on certain judgments.
     /// </summary>
     [RegisterTweak(
         id: "restrict_judgments",
@@ -27,9 +27,13 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         private RestrictJudgmentsSettings Settings { get; set; }
 
         private readonly int TOTAL_JUDGMENTS = Enum.GetNames(typeof(HitMargin)).Length;
+        private readonly int TOTAL_ACTIONS = Enum.GetNames(typeof(RestrictJudgmentAction)).Length;
 
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
+            // select judgment
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_HEADER));
+            MoreGUILayout.BeginIndent();
             for (int i = 0; i < TOTAL_JUDGMENTS; i++) {
                 Settings.RestrictJudgments[i] = GUILayout.Toggle(
                     Settings.RestrictJudgments[i],
@@ -37,9 +41,27 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                         TranslationKeys.RestrictJudgments.RESTRICT,
                         RDString.Get("HitMargin." + (HitMargin)i)));
             }
+            MoreGUILayout.EndIndent();
 
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_DEATH));
-            Settings.CustomDeathString = GUILayout.TextField(Settings.CustomDeathString);
+            // select restriction method
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_HEADER));
+            MoreGUILayout.BeginIndent();
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_ACTION));
+            for (int i = 0; i < TOTAL_ACTIONS; i++) {
+                if (GUILayout.Toggle(
+                    Settings.RestrictJudgmentAction == (RestrictJudgmentAction)i,
+                    ((RestrictJudgmentAction)i).ToString()) &&
+                        Settings.RestrictJudgmentAction != (RestrictJudgmentAction)i) {
+                    Settings.RestrictJudgmentAction = (RestrictJudgmentAction)i;
+                }
+            }
+
+            // set custom death message
+            if (Settings.RestrictJudgmentAction == RestrictJudgmentAction.KillPlayer) {
+                GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_DEATH));
+                Settings.CustomDeathString = GUILayout.TextField(Settings.CustomDeathString);
+            }
+            MoreGUILayout.EndIndent();
         }
 
         /// <inheritdoc/>

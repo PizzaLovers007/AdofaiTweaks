@@ -196,6 +196,7 @@
     <Compile Include="Core\Tweak.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacitySettings.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacityTweak.cs" />
+    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentAction.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatches.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsSettings.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
@@ -222,6 +223,8 @@
   <ItemGroup>
     <Content Include="AdofaiTweaks.Strings.dll" />
     <Content Include="AdofaiTweaks.Translation.dll" />
+    <Content Include="Assembly-CSharp-firstpass.dll" />
+    <Content Include="Assembly-CSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

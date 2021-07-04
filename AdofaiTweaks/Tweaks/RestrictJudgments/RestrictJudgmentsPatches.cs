@@ -26,13 +26,27 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             private static readonly MethodInfo FAIL_ACTION_METHOD =
                 AccessTools.Method(typeof(scrController), "FailAction");
 
-            public static void Postfix(scrMistakesManager __instance, ref HitMargin hit) {
-                if (Settings.RestrictJudgments[(int)hit] && !invokedFailAction) {
-                    invokedFailAction = true;
-                    FAMargin = hit;
+            public static void Postfix(scrMistakesManager __instance, ref HitMargin hit)
+            {
+                if (Settings.RestrictJudgments[(int)hit])
+                {
+                    switch (Settings.RestrictJudgmentAction)
+                    {
+                        case RestrictJudgmentAction.KillPlayer:
+                            if (!invokedFailAction) {
+                                invokedFailAction = true;
+                                FAMargin = hit;
 
-                    AdofaiTweaks.Logger.Log("FailAction 1 argument");
-                    FAIL_ACTION_METHOD.Invoke(__instance.controller, new object[] { true });
+                                // AdofaiTweaks.Logger.Log("FailAction 1 argument");
+                                FAIL_ACTION_METHOD.Invoke(__instance.controller, new object[] { true });
+                            }
+                            break;
+                        case RestrictJudgmentAction.NoRegister:
+                            scrController.instance.chosenplanet.SwitchChosen();
+                            break;
+                        case RestrictJudgmentAction.InstantRestart:
+                            break;
+                    }
                 }
             }
         }
@@ -46,14 +60,66 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         {
             private static readonly MethodInfo FAIL_ACTION_METHOD =
                 AccessTools.Method(typeof(scrController), "FailAction");
+            private static readonly MethodInfo MOVE_TO_NEXT_FLOOR_METHOD =
+                AccessTools.Method(typeof(scrController), "MoveToNextFloor");
+
+            private static scrController Controller {
+                get {
+                    return scrController.instance;
+                }
+            }
 
             public static void Postfix(scrMistakesManager __instance, ref HitMargin hit) {
-                if (Settings.RestrictJudgments[(int)hit] && !invokedFailAction) {
-                    invokedFailAction = true;
-                    FAMargin = hit;
+                if (Settings.RestrictJudgments[(int)hit])
+                {
+                    switch (Settings.RestrictJudgmentAction)
+                    {
+                        case RestrictJudgmentAction.KillPlayer:
+                            if (!invokedFailAction) {
+                                invokedFailAction = true;
+                                FAMargin = hit;
 
-                    AdofaiTweaks.Logger.Log("FailAction 2 arguments");
-                    FAIL_ACTION_METHOD.Invoke(__instance.controller, new object[] { true, false });
+                                // AdofaiTweaks.Logger.Log("FailAction 1 argument");
+                                FAIL_ACTION_METHOD.Invoke(__instance.controller, new object[] { true, false });
+                            }
+                            break;
+                        case RestrictJudgmentAction.NoRegister:
+                            // Controller.currentSeqID--;
+                            switch (hit) {
+                                case HitMargin.TooEarly:
+                                case HitMargin.TooLate:
+                                    break;
+                                default:
+                                    if (GCS.perfectOnlyMode) {
+                                        switch (hit) {
+                                            case HitMargin.VeryEarly:
+                                            case HitMargin.VeryLate:
+                                                break;
+                                            default:
+                                                Controller.currentSeqID -= 2;
+                                                scrFloor previousFloor =
+                                                    Controller.customLevel.levelMaker.listFloors[0];
+                                                previousFloor.nextfloor.bottomglow.enabled = false;
+                                                previousFloor.nextfloor.topglow.enabled = false;
+                                                MOVE_TO_NEXT_FLOOR_METHOD.Invoke(Controller.chosenplanet, new object[] {
+                                                    previousFloor, Controller.chosenplanet.angle, hit, });
+                                                break;
+                                        }
+                                    } else {
+                                        Controller.currentSeqID--;
+                                        scrFloor previousFloor =
+                                            Controller.customLevel.levelMaker.listFloors[Controller.currentSeqID];
+                                        previousFloor.nextfloor.bottomglow.enabled = false;
+                                        previousFloor.nextfloor.topglow.enabled = false;
+                                        MOVE_TO_NEXT_FLOOR_METHOD.Invoke(Controller.chosenplanet, new object[] {
+                                            previousFloor, Controller.chosenplanet.angle, hit, });
+                                    }
+                                    break;
+                            }
+                            break;
+                        case RestrictJudgmentAction.InstantRestart:
+                            break;
+                    }
                 }
             }
         }
@@ -65,7 +131,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                 if (invokedFailAction) {
                     invokedFailAction = false;
 
-                    FieldInfo field = typeof(scrCountdown).GetField("text", AccessTools.all);
+                    FieldInfo field = AccessTools.Field(typeof(scrCountdown), "text");
                     Text text = (Text)field.GetValue(__instance);
                     text.text =
                         Settings.CustomDeathString.Replace(
