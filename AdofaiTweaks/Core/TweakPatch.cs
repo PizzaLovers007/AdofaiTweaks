@@ -14,9 +14,6 @@ namespace AdofaiTweaks.Core
     /// </summary>
     internal class TweakPatch
     {
-        private static readonly FieldInfo RELEASE_NUMBER_FIELD =
-            AccessTools.Field(typeof(GCNS), "releaseNumber");
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TweakPatch"/> class.
         /// </summary>
@@ -57,9 +54,8 @@ namespace AdofaiTweaks.Core
         /// Patch's current availability in <see cref="bool"/>.
         /// </returns>
         internal bool IsValidPatch(bool showDebuggingMessage = false) {
-            int releaseNumber = (int)RELEASE_NUMBER_FIELD.GetValue(null);
-            if ((Metadata.MinVersion <= releaseNumber || Metadata.MinVersion == -1) &&
-                (Metadata.MaxVersion >= releaseNumber || Metadata.MaxVersion == -1) &&
+            if ((Metadata.MinVersion <= AdofaiTweaks.ReleaseNumber || Metadata.MinVersion == -1) &&
+                (Metadata.MaxVersion >= AdofaiTweaks.ReleaseNumber || Metadata.MaxVersion == -1) &&
                 ClassType != null &&
                 PatchType != null &&
                 (PatchTargetMethods?.Count() ?? 0) != 0) {
@@ -69,11 +65,11 @@ namespace AdofaiTweaks.Core
 #if DEBUG
             if (showDebuggingMessage) {
                 AdofaiTweaks.Logger.Log($"Patch {Metadata.PatchId} is invalid! - Specific criteria check:\n" +
-                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MinVersion} <= {releaseNumber}) is {Metadata.MinVersion <= releaseNumber}\n" +
-                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MaxVersion} >= {releaseNumber}) is {Metadata.MaxVersion >= releaseNumber}\n" +
+                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MinVersion} <= {AdofaiTweaks.ReleaseNumber}) is {Metadata.MinVersion <= AdofaiTweaks.ReleaseNumber}\n" +
+                $"Metadata.MaxVersion <= GCNS.releaseNumber ({Metadata.MaxVersion} >= {AdofaiTweaks.ReleaseNumber}) is {Metadata.MaxVersion >= AdofaiTweaks.ReleaseNumber}\n" +
                 $"ClassType is {ClassType}\n" +
                 $"PatchType is {PatchType}\n" +
-                $"PatchTargetMethods count is {PatchTargetMethods?.Count() ?? 0}");
+                $"PatchTargetMethods count is {PatchTargetMethods?.Count() ?? 0}{(PatchTargetMethods == null ? " (null)" : "")}");
             }
 #endif
             return false;
@@ -85,8 +81,8 @@ namespace AdofaiTweaks.Core
         internal void Patch() {
             if (!IsEnabled) {
                 foreach (MethodInfo method in PatchTargetMethods) {
-                    MethodInfo prefixMethodInfo = PatchType.GetMethod("Prefix", AccessTools.all),
-                        postfixMethodInfo = PatchType.GetMethod("Postfix", AccessTools.all);
+                    MethodInfo prefixMethodInfo = AccessTools.Method(PatchType, "Prefix"),
+                        postfixMethodInfo = AccessTools.Method(PatchType, "Postfix");
 
                     HarmonyMethod prefixMethod = null,
                         postfixMethod = null;
