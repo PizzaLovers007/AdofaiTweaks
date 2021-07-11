@@ -82,6 +82,11 @@ namespace AdofaiTweaks.Generator
                     foreach (DataRow row in table.Select()) {
                         string shortKey = row["KEY"] as string;
                         shortKey = shortKey.ToUpper();
+                        if (shortKey.StartsWith("I_")) {
+                            // Ignore key if we don't want to generate code for
+                            // it
+                            continue;
+                        }
                         string fullKey = tweakNameUpperCamel + "_" + shortKey;
                         sb.AppendFormat("public static string {0} = \"{1}\"; ", shortKey, fullKey);
                     }
