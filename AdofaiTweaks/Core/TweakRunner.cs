@@ -39,7 +39,6 @@ namespace AdofaiTweaks.Core
         private IList<TweakPatch> ValidTweakPatches { get; set; } = new List<TweakPatch>();
 
         private readonly Harmony harmony;
-
         private bool ShowDebuggingDetails = false;
 
         [SyncTweakSettings]
@@ -80,9 +79,22 @@ namespace AdofaiTweaks.Core
             }
         }
 
+        private Type[] GetAllNestedTypes(Type type)
+        {
+            return GetAllNestedTypes(type.GetNestedTypes(AccessTools.all));
+        }
+
+        private Type[] GetAllNestedTypes(Type[] types) {
+            List<Type> typeList = new List<Type>(types.ToArray());
+            foreach (Type t in types) {
+                typeList.Add(GetAllNestedTypes(t));
+            }
+            return typeList.ToArray();
+        }
+
         private void EnableTweak() {
             Tweak.OnEnable();
-            foreach (Type type in TweakMetadata.PatchesType.GetNestedTypes(AccessTools.all)) {
+            foreach (Type type in GetAllNestedTypes(TweakMetadata.PatchesType)) {
                 harmony.CreateClassProcessor(type).Patch();
             }
             foreach (TweakPatch patch in ValidTweakPatches) {

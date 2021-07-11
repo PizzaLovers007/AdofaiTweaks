@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
-using UnityEngine;
 
 namespace AdofaiTweaks.Core
 {
@@ -17,22 +16,23 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="TweakPatch"/> class.
         /// </summary>
-        /// <param name="PatchType">Type of the patching method.</param>
-        /// <param name="attr">Attribute of the tweak's patch.</param>
+        /// <param name="patchType">Type of the patching method.</param>
+        /// <param name="metadata">Attribute of the tweak's patch.</param>
         /// <param name="harmony">Harmony class to apply patch.</param>
         /// <param name="assembly">Assembly to find class from.</param>
-        internal TweakPatch(Type PatchType, TweakPatchAttribute attr, Harmony harmony, Assembly assembly = null) {
-            this.PatchType = PatchType;
-            Metadata = attr;
+        internal TweakPatch(Type patchType, TweakPatchAttribute metadata, Harmony harmony, Assembly assembly = null) {
+            PatchType = patchType;
+            Metadata = metadata;
             Harmony = harmony;
             ClassType = (assembly ?? typeof(ADOBase).Assembly).GetType(Metadata.ClassName);
-            PatchTargetMethods = ClassType?.GetMethods().Where(m => m.Name.Equals(Metadata.MethodName));
+            PatchTargetMethods = ClassType?.GetMethods(AccessTools.all).Where(m => m.Name.Equals(Metadata.MethodName));
         }
 
         private Harmony Harmony { get; set; }
         private Type ClassType { get; set; }
         private Type PatchType { get; set; }
         private IEnumerable<MethodInfo> PatchTargetMethods { get; set; }
+        private readonly string[] HardcodedMethodNames = new[] { "Prefix", "Postfix", "Transpiler", "Finalizer" };
 
         /// <summary>
         /// Tweak's patch metadata (attribute data).
@@ -63,42 +63,57 @@ namespace AdofaiTweaks.Core
             }
 
 #if DEBUG
-            if (showDebuggingMessage) {
-                AdofaiTweaks.Logger.Log($"Patch {Metadata.PatchId} is invalid! - Specific criteria check:\n" +
-                $"Metadata.MinVersion <= GCNS.releaseNumber ({Metadata.MinVersion} <= {AdofaiTweaks.ReleaseNumber}) is {Metadata.MinVersion <= AdofaiTweaks.ReleaseNumber}\n" +
-                $"Metadata.MaxVersion <= GCNS.releaseNumber ({Metadata.MaxVersion} >= {AdofaiTweaks.ReleaseNumber}) is {Metadata.MaxVersion >= AdofaiTweaks.ReleaseNumber}\n" +
-                $"ClassType is {ClassType}\n" +
-                $"PatchType is {PatchType}\n" +
-                $"PatchTargetMethods count is {PatchTargetMethods?.Count() ?? 0}{(PatchTargetMethods == null ? " (null)" : "")}");
+            if (showDebuggingMessage)
+            {
+                AdofaiTweaks.Logger.Log(
+                    string.Format(
+                    "Patch {0} is invalid! - Specific criteria check:\n" +
+                    "Metadata.MinVersion <= GCNS.releaseNumber ({1} <= {2}) is {3}{4}\n" +
+                    "Metadata.MaxVersion <= GCNS.releaseNumber ({5} <= {2}) is {6}{7}\n" +
+                    "ClassType is {8}\n" +
+                    "PatchType is {9}\n" +
+                    "PatchTargetMethods count is {10}{11}\n" +
+                    "Patch target method name is {12}" +
+                    "",
+                    // Parameters
+                    Metadata.PatchId,
+                    Metadata.MinVersion,
+                    AdofaiTweaks.ReleaseNumber,
+                    Metadata.MinVersion <= AdofaiTweaks.ReleaseNumber || Metadata.MinVersion == -1,
+                    Metadata.MinVersion == -1 ? " (-1)" : "",
+                    Metadata.MaxVersion,
+                    Metadata.MaxVersion >= AdofaiTweaks.ReleaseNumber || Metadata.MaxVersion == -1,
+                    Metadata.MaxVersion == -1 ? " (-1)" : "",
+                    ClassType,
+                    PatchType,
+                    PatchTargetMethods?.Count() ?? 0,
+                    PatchTargetMethods == null ? " (null)" : "",
+                    Metadata.MethodName));
             }
 #endif
             return false;
         }
 
         /// <summary>
-        /// Patches this patch.
+        /// Patch contents in this patch instance.
         /// </summary>
         internal void Patch() {
             if (!IsEnabled) {
                 foreach (MethodInfo method in PatchTargetMethods) {
-                    MethodInfo prefixMethodInfo = AccessTools.Method(PatchType, "Prefix"),
-                        postfixMethodInfo = AccessTools.Method(PatchType, "Postfix");
+                    List<HarmonyMethod> hardcodedMethods = new List<HarmonyMethod>();
 
-                    HarmonyMethod prefixMethod = null,
-                        postfixMethod = null;
-
-                    if (prefixMethodInfo != null) {
-                        prefixMethod = new HarmonyMethod(prefixMethodInfo);
-                    }
-
-                    if (postfixMethodInfo != null) {
-                        postfixMethod = new HarmonyMethod(postfixMethodInfo);
+                    foreach (string methodName in HardcodedMethodNames)
+                    {
+                        MethodInfo patchMethod = AccessTools.Method(PatchType, methodName);
+                        hardcodedMethods.Add(patchMethod == null ? null : new HarmonyMethod(patchMethod));
                     }
 
                     Harmony.Patch(
                         method,
-                        prefixMethod,
-                        postfixMethod);
+                        hardcodedMethods[0],
+                        hardcodedMethods[1],
+                        hardcodedMethods[2],
+                        hardcodedMethods[3]);
                 }
 
                 IsEnabled = true;
@@ -106,7 +121,7 @@ namespace AdofaiTweaks.Core
         }
 
         /// <summary>
-        /// Unpatches this patch.
+        /// Unpatch contents in this patch instance.
         /// </summary>
         internal void Unpatch() {
             if (IsEnabled) {

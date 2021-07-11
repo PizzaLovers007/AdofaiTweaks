@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using AdofaiTweaks.Core.Attributes;
 using DG.Tweening;
@@ -20,8 +21,8 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
 
         private static bool invokedFailAction = false;
         private static HitMargin latestHitMargin;
-        // private static double lastAngle;
         private static bool hideMarginText = false;
+        private static bool skipSwitchChosen = false;
 
         private static scrController Controller {
             get {
@@ -75,25 +76,11 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                                                 latestHitMargin,
                                                 position,
                                                 (float)(Controller.chosenplanet.targetExitAngle - Controller.chosenplanet.angle));
-                                            // hideMarginText = true;
 
-                                            /* Hint: ScrubAdjacent?
-                                             * TODO: Find a different way to do this instead of throwing an exception.
-                                             */
-
-                                            /*
-                                            int seqID = Controller.currFloor.seqID - 1;
-                                            scrFloor scrFloor = scrLevelMaker.instance.listFloors[seqID];
-                                            Controller.chosenplanet.other.currfloor = scrFloor;
-                                            Controller.currentSeqID = seqID;
-                                            Controller.chosenplanet.other.transform.position = scrFloor.transform.position;
-                                            AdofaiTweaks.Logger.Log($"Last angle applied: {Controller.chosenplanet.angle} -> {lastAngle}");
-                                            AdofaiTweaks.Logger.Log($"Last snapped: {AccessTools.Field(typeof(scrPlanet), "snappedLastAngle").GetValue(Controller.chosenplanet)}");
-                                            Controller.chosenplanet.angle = (double)AccessTools.Field(typeof(scrPlanet), "snappedLastAngle").GetValue(Controller.chosenplanet);
-                                            */
+                                            skipSwitchChosen = true;
 
                                             // force stop while in scrPlanet.SwitchChosen method
-                                            throw new Exception("Intentional Exception fired by RestrictJudgment Tweak (don't use noregister if you don't want this error log spam)");
+                                            // throw new Exception("Intentional Exception fired by RestrictJudgment Tweak (don't use noregister if you don't want this error log spam)");
                                         }
                                     }
 
@@ -152,16 +139,6 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             }
         }
 
-        /*[HarmonyPatch(typeof(scrController), "Hit")]
-        private static class ControllerHitPatch
-        {
-            public static void Prefix(scrController __instance)
-            {
-                lastAngle = __instance.chosenplanet.angle;
-                AdofaiTweaks.Logger.Log($"Last angle set: {lastAngle}");
-            }
-        }*/
-
         [HarmonyPatch(typeof(scrController), "ShowHitText")]
         private static class ControllerShowHitTextPatch
         {
@@ -172,6 +149,78 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                     return hideMarginText = false;
                 }
                 return true;
+            }
+        }
+
+        private static class SwitchChosenSkipPatches
+        {
+            private static bool floorHasConditionalChange = false;
+            private static List<ffxPlusBase> floorPerfectEffects = new List<ffxPlusBase>();
+            private static List<ffxPlusBase> floorHitEffects = new List<ffxPlusBase>();
+            private static List<ffxPlusBase> floorBarelyEffects = new List<ffxPlusBase>();
+            private static List<ffxPlusBase> floorMissEffects = new List<ffxPlusBase>();
+            private static List<ffxPlusBase> floorLossEffects = new List<ffxPlusBase>();
+
+            [HarmonyPatch(typeof(scrController), "ClearMisses")]
+            private static class ControllerClearMissesPatch
+            {
+                public static bool Prefix(scrController __instance) {
+                    AdofaiTweaks.Logger.Log($"{(skipSwitchChosen ? "" : "not ")}skipping the ClearMisses method!");
+                    if (skipSwitchChosen) {
+                        scrFloor floor = __instance.currFloor.nextfloor;
+                        floorHasConditionalChange = floor.hasConditionalChange;
+
+                        floorPerfectEffects = floor.perfectEffects;
+                        floorHitEffects = floor.hitEffects;
+                        floorBarelyEffects = floor.barelyEffects;
+                        floorMissEffects = floor.missEffects;
+                        floorLossEffects = floor.lossEffects;
+
+                        floor.perfectEffects = new List<ffxPlusBase>();
+                        floor.hitEffects = new List<ffxPlusBase>();
+                        floor.barelyEffects = new List<ffxPlusBase>();
+                        floor.missEffects = new List<ffxPlusBase>();
+                        floor.lossEffects = new List<ffxPlusBase>();
+
+                        hideMarginText = true;
+
+                        return floor.hasConditionalChange = false;
+                    }
+
+                    return true;
+                }
+            }
+
+            [HarmonyPatch(typeof(scrPlanet), "MoveToNextFloor")]
+            private static class PlanetMoveToNextFloorPatch
+            {
+                public static bool Prefix() {
+                    AdofaiTweaks.Logger.Log($"{(skipSwitchChosen ? "" : "not ")}skipping the MoveToNextFloor method!");
+                    return !skipSwitchChosen;
+                }
+            }
+
+            [HarmonyPatch(typeof(scrPlanet), "SwitchChosen")]
+            private static class PlanetSwitchChosenPatch
+            {
+                public static void Postfix(ref scrPlanet __result)
+                {
+                    AdofaiTweaks.Logger.Log($"{(skipSwitchChosen ? "" : "not ")}skipping the SwitchChosen method!");
+                    if (skipSwitchChosen) {
+                        __result = __result.other;
+
+                        scrFloor floor = __result.controller.currFloor.nextfloor;
+                        floor.hasConditionalChange = floorHasConditionalChange;
+
+                        floor.perfectEffects = floorPerfectEffects;
+                        floor.hitEffects = floorHitEffects;
+                        floor.barelyEffects = floorBarelyEffects;
+                        floor.missEffects = floorMissEffects;
+                        floor.lossEffects = floorLossEffects;
+
+                        skipSwitchChosen = false;
+                    }
+                }
             }
         }
     }

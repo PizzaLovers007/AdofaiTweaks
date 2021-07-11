@@ -96,7 +96,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
         [TweakPatch(
             "PlanetColorPatches.RainbowModeBeforeControllerRefactor",
-            "scrLevelSelect",
+            "scrController",
             "RainbowMode",
             maxVersion: 74)]
         private static class RainbowModeBeforeControllerRefactorPatch
@@ -111,7 +111,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
         [TweakPatch(
             "PlanetColorPatches.RainbowModeAfterControllerRefactor",
-            "scrLevelSelect",
+            "scnLevelSelect",
             "RainbowMode",
             minVersion: 75)]
         private static class RainbowModeAfterControllerRefactorPatch
@@ -126,7 +126,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
         [TweakPatch(
             "PlanetColorPatches.EnbyModeBeforeControllerRefactor",
-            "scrLevelSelect",
+            "scrController",
             "EnbyMode",
             maxVersion: 74)]
         private static class EnbyModeBeforeControllerRefactorPatch
@@ -139,7 +139,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
         [TweakPatch(
             "PlanetColorPatches.EnbyModeAfterControllerRefactor",
-            "scrLevelSelect",
+            "scnLevelSelect",
             "EnbyMode",
             minVersion: 75)]
         private static class EnbyModeAfterControllerRefactorPatch
@@ -152,7 +152,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
         [TweakPatch(
             "PlanetColorPatches.TransModeBeforeControllerRefactor",
-            "scrLevelSelect",
+            "scrController",
             "TransMode",
             maxVersion: 74)]
         private static class TransModeBeforeControllerRefactorPatch
@@ -165,7 +165,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
         [TweakPatch(
             "PlanetColorPatches.TransModeAfterControllerRefactor",
-            "scrLevelSelect",
+            "scnLevelSelect",
             "TransMode",
             minVersion: 75)]
         private static class TransModeAfterControllerRefactorPatch
