@@ -63,10 +63,10 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                                 default:
                                     void CancelRegister()
                                     {
-                                        if (Controller.currFloor)
+                                        if (Controller.currFloor?.nextfloor)
                                         {
-                                            Controller.currFloor.bottomglow.enabled = false;
-                                            Controller.currFloor.topglow.enabled = false;
+                                            Controller.currFloor.nextfloor.bottomglow.enabled = false;
+                                            Controller.currFloor.nextfloor.topglow.enabled = false;
                                             Controller.OnDamage();
 
                                             Vector3 position = Controller.chosenplanet.other.transform.position;
