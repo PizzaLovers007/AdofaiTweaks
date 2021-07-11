@@ -49,8 +49,8 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_ACTION));
             for (int i = 0; i < TOTAL_ACTIONS; i++) {
                 if (GUILayout.Toggle(
-                    Settings.RestrictJudgmentAction == (RestrictJudgmentAction)i,
-                    ((RestrictJudgmentAction)i).ToString()) &&
+                        Settings.RestrictJudgmentAction == (RestrictJudgmentAction)i,
+                        TweakStrings.Get("RESTRICT_JUDGMENTS_I_RESTRICT_ACTION." + ((RestrictJudgmentAction)i).ToString())) &&
                         Settings.RestrictJudgmentAction != (RestrictJudgmentAction)i) {
                     Settings.RestrictJudgmentAction = (RestrictJudgmentAction)i;
                 }
