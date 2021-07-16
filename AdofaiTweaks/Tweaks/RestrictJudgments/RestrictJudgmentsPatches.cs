@@ -165,7 +165,6 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             private static class ControllerClearMissesPatch
             {
                 public static bool Prefix(scrController __instance) {
-                    AdofaiTweaks.Logger.Log($"{(skipSwitchChosen ? "" : "not ")}skipping the ClearMisses method!");
                     if (skipSwitchChosen) {
                         scrFloor floor = __instance.currFloor.nextfloor;
                         floorHasConditionalChange = floor.hasConditionalChange;
@@ -195,7 +194,6 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             private static class PlanetMoveToNextFloorPatch
             {
                 public static bool Prefix() {
-                    AdofaiTweaks.Logger.Log($"{(skipSwitchChosen ? "" : "not ")}skipping the MoveToNextFloor method!");
                     return !skipSwitchChosen;
                 }
             }
@@ -205,7 +203,6 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             {
                 public static void Postfix(ref scrPlanet __result)
                 {
-                    AdofaiTweaks.Logger.Log($"{(skipSwitchChosen ? "" : "not ")}skipping the SwitchChosen method!");
                     if (skipSwitchChosen) {
                         __result = __result.other;
 
