@@ -32,6 +32,7 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 * Polski (Provided by crispy)
 * Français (Provided by Woopie 2)
 * Tiếng Việt (Provided by Gesomaru)
+* 中文（简体） (Provided by Gunbuster)
 
 ## Images
 
