@@ -138,40 +138,16 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     int floor = evnt.floor;
                     GameObject gameObject = floors[floor].gameObject;
 
-                    ffxSetHitsound[] ffxSetHitsounds = gameObject.GetComponents<ffxSetHitsound>();
+                    ffxSetHitsound[] ffxSetHitsounds = gameObject.GetComponentsInChildren<ffxSetHitsound>();
 
-                    foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds) {
-                        Settings.UpdateVolume(ffxSetHitsound);
+                    if (ffxSetHitsounds != null) {
+                        foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds)
+                        {
+                            Settings.UpdateVolume(ffxSetHitsound);
+                        }
                     }
                 }
             }
         }
-
-#if DEBUG
-
-        [TweakPatch(
-            "MiscellaneousPatches.TestPatch",
-            "scnEditor",
-            "Play")]
-        private static class TestPatch
-        {
-            public static void Prefix() {
-                // Do nothing
-            }
-        }
-
-        [TweakPatch(
-            "MiscellaneousPatch.TestPatchInvalid",
-            "scnEditor",
-            "Play",
-            maxVersion: 0)]
-        private static class TestPatchInvalid
-        {
-            public static void Prefix() {
-                // Do nothing
-            }
-        }
-
-#endif
     }
 }

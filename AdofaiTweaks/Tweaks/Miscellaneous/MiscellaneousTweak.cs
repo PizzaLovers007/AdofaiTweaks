@@ -76,13 +76,11 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                         Settings.HitsoundForceVolume,
                         TweakStrings.Get(TranslationKeys.Miscellaneous.HITSOUND_FORCE_VOLUME));
 
-#if DEBUG
                 // Ignore first value checkbox
                 Settings.HitsoundIgnoreStartingValue =
                     GUILayout.Toggle(
                         Settings.HitsoundIgnoreStartingValue,
                         TweakStrings.Get(TranslationKeys.Miscellaneous.HITSOUND_IGNORE_STARTING_VALUE));
-#endif
 
                 MoreGUILayout.EndIndent();
             }
