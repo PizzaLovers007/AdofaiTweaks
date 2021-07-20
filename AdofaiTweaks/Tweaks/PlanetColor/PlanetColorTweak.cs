@@ -209,8 +209,8 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
             // Migrate the old values
             Settings.RedBody.PlainColor = Settings.Color1;
-            Settings.RedTail.PlainColor = Settings.Color2;
-            Settings.BlueBody.PlainColor = Settings.TailColor1;
+            Settings.RedTail.PlainColor = Settings.TailColor1;
+            Settings.BlueBody.PlainColor = Settings.Color2;
             Settings.BlueTail.PlainColor = Settings.TailColor2;
 
             // Reset to value

@@ -7,28 +7,27 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
     /// <summary>
     /// Settings for the Planet Color tweak.
     /// </summary>
-    // TODO Create a data migration script
     public class PlanetColorSettings : TweakSettings
     {
         /// <summary>
         /// Planet 1's body color data.
         /// </summary>
-        public ObjectColor RedBody { get; set; }
+        public ObjectColor RedBody { get; set; } = new ObjectColor();
 
         /// <summary>
         /// Planet 1's tail color data.
         /// </summary>
-        public ObjectColor RedTail { get; set; }
+        public ObjectColor RedTail { get; set; } = new ObjectColor();
 
         /// <summary>
         /// Planet 2's body color data.
         /// </summary>
-        public ObjectColor BlueBody { get; set; }
+        public ObjectColor BlueBody { get; set; } = new ObjectColor();
 
         /// <summary>
         /// Planet 2's tail color data.
         /// </summary>
-        public ObjectColor BlueTail { get; set; }
+        public ObjectColor BlueTail { get; set; } = new ObjectColor();
 
         // DEPRECATED Old code required to migrate data
 
