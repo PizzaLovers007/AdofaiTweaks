@@ -1,4 +1,6 @@
-﻿using AdofaiTweaks.Core;
+﻿using System.Collections;
+using System.Collections.Generic;
+using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
 using UnityEngine;
@@ -33,6 +35,8 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         [SyncTweakSettings]
         private PlanetColorSettings Settings { get; set; }
 
+        private readonly List<PlanetColorType> ALL_PLANET_COLOR_TYPES = new List<PlanetColorType>((IEnumerable<PlanetColorType>)System.Enum.GetValues(typeof(PlanetColorType)));
+
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
             Color newBody, newTail;
@@ -53,34 +57,60 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             GUILayout.EndHorizontal();
             MoreGUILayout.BeginIndent();
 
+            GUILayout.Label("[CHANGE ME] Coloring Type:");
+            MoreGUILayout.BeginIndent();
+            for (int i = 0; i < ALL_PLANET_COLOR_TYPES.Count; i++) {
+                bool colorEquals = Settings.Red.Body.ColorType.Equals(ALL_PLANET_COLOR_TYPES[i]);
+                if (colorEquals != GUILayout.Toggle(colorEquals, $"{ALL_PLANET_COLOR_TYPES[i]}", GUILayout.MaxWidth(100f))) {
+                    Settings.Red.Body.ColorType = ALL_PLANET_COLOR_TYPES[i];
+                }
+            }
+            MoreGUILayout.EndIndent();
+
+            switch (Settings.Red.Body.ColorType)
+            {
+                case PlanetColorType.Plain:
+                    break;
+                case PlanetColorType.Gradient:
+                    break;
+                case PlanetColorType.RandomGradient:
+                    break;
+                case PlanetColorType.Random:
+                    break;
+            }
+
             // Planet 1 RGB sliders
             (newBody, newTail) =
-                MoreGUILayout.ColorRgbSlidersPair(Settings.Color1, Settings.TailColor1);
-            if (Settings.Color1 != newBody) {
-                Settings.Color1 = newBody;
+                MoreGUILayout.ColorRgbSlidersPair(Settings.Red.Body.PlainColor, Settings.Red.Tail.PlainColor);
+            if (Settings.Red.Body.PlainColor != newBody)
+            {
+                Settings.Red.Body.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (Settings.TailColor1 != newTail) {
-                Settings.TailColor1 = newTail;
+            if (Settings.Red.Tail.PlainColor != newTail)
+            {
+                Settings.Red.Tail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
 
             // Planet 1 Hex
             (newHex, newTailHex) =
                 MoreGUILayout.NamedTextFieldPair(
-                    "Hex:", "Hex:", Settings.Color1Hex, Settings.TailColor1Hex, 100f, 40f);
-            if (newHex != Settings.Color1Hex
-                && ColorUtility.TryParseHtmlString($"#{newHex}", out newBody)) {
-                Settings.Color1 = newBody;
+                    "Hex:", "Hex:", Settings.Red.Body.PlainColorHex, Settings.Red.Tail.PlainColorHex, 100f, 40f);
+            if (newHex != Settings.Red.Body.PlainColorHex
+                && ColorUtility.TryParseHtmlString($"#{newHex}", out newBody))
+            {
+                Settings.Red.Body.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (newTailHex != Settings.TailColor1Hex
-                && ColorUtility.TryParseHtmlString($"#{newTailHex}", out newTail)) {
-                Settings.TailColor1 = newTail;
+            if (newTailHex != Settings.Red.Tail.PlainColorHex
+                && ColorUtility.TryParseHtmlString($"#{newTailHex}", out newTail))
+            {
+                Settings.Red.Tail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
-            Settings.Color1Hex = newHex;
-            Settings.TailColor1Hex = newTailHex;
+            Settings.Red.Body.PlainColorHex = newHex;
+            Settings.Red.Tail.PlainColorHex = newTailHex;
 
             MoreGUILayout.EndIndent();
 
@@ -105,32 +135,32 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
             // Planet 2 RGB sliders
             (newBody, newTail) =
-                MoreGUILayout.ColorRgbSlidersPair(Settings.Color2, Settings.TailColor2);
-            if (Settings.Color2 != newBody) {
-                Settings.Color2 = newBody;
+                MoreGUILayout.ColorRgbSlidersPair(Settings.Blue.Body.PlainColor, Settings.Blue.Tail.PlainColor);
+            if (Settings.Blue.Body.PlainColor != newBody) {
+                Settings.Blue.Body.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (Settings.TailColor2 != newTail) {
-                Settings.TailColor2 = newTail;
+            if (Settings.Blue.Tail.PlainColor != newTail) {
+                Settings.Blue.Tail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
 
             // Planet 2 Hex
             (newHex, newTailHex) =
                 MoreGUILayout.NamedTextFieldPair(
-                    "Hex:", "Hex:", Settings.Color2Hex, Settings.TailColor2Hex, 100f, 40f);
-            if (newHex != Settings.Color2Hex
+                    "Hex:", "Hex:", Settings.Blue.Body.PlainColorHex, Settings.Blue.Tail.PlainColorHex, 100f, 40f);
+            if (newHex != Settings.Blue.Body.PlainColorHex
                 && ColorUtility.TryParseHtmlString($"#{newHex}", out newBody)) {
-                Settings.Color2 = newBody;
+                Settings.Blue.Body.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (newTailHex != Settings.TailColor2Hex
+            if (newTailHex != Settings.Blue.Tail.PlainColorHex
                 && ColorUtility.TryParseHtmlString($"#{newTailHex}", out newTail)) {
-                Settings.TailColor2 = newTail;
+                Settings.Blue.Tail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
-            Settings.Color2Hex = newHex;
-            Settings.TailColor2Hex = newTailHex;
+            Settings.Blue.Body.PlainColorHex = newHex;
+            Settings.Blue.Tail.PlainColorHex = newTailHex;
 
             MoreGUILayout.EndIndent();
 
@@ -146,6 +176,11 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         public override void OnUnpatch() {
             UpdatePlanetColors();
         }
+
+        /*private IEnumerator UpdateGradientPlanetColors()
+        {
+            //
+        }*/
 
         private void UpdatePlanetColors() {
             if (RedPlanet != null) {
