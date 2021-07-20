@@ -87,6 +87,8 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     Settings.UpdateVolume();
                 }
 
+#if DEBUG
+                // TODO Finish working on start set bpm
                 if (Settings.IsEnabled && Settings.SetBpmOnStart) {
                     float oldBpm = conductor.bpm, // original bpm
                         newBpm = Settings.Bpm; // new bpm to replace
@@ -127,6 +129,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
 
                     conductor.StartCoroutine("DesyncFix");
                 }
+#endif
             }
         }
 
