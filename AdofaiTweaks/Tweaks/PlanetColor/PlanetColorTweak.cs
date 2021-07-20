@@ -60,14 +60,14 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             GUILayout.Label("[CHANGE ME] Coloring Type:");
             MoreGUILayout.BeginIndent();
             for (int i = 0; i < ALL_PLANET_COLOR_TYPES.Count; i++) {
-                bool colorEquals = Settings.Red.Body.ColorType.Equals(ALL_PLANET_COLOR_TYPES[i]);
+                bool colorEquals = Settings.RedBody.ColorType.Equals(ALL_PLANET_COLOR_TYPES[i]);
                 if (colorEquals != GUILayout.Toggle(colorEquals, $"{ALL_PLANET_COLOR_TYPES[i]}", GUILayout.MaxWidth(100f))) {
-                    Settings.Red.Body.ColorType = ALL_PLANET_COLOR_TYPES[i];
+                    Settings.RedBody.ColorType = ALL_PLANET_COLOR_TYPES[i];
                 }
             }
             MoreGUILayout.EndIndent();
 
-            switch (Settings.Red.Body.ColorType)
+            switch (Settings.RedBody.ColorType)
             {
                 case PlanetColorType.Plain:
                     break;
@@ -81,36 +81,36 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
             // Planet 1 RGB sliders
             (newBody, newTail) =
-                MoreGUILayout.ColorRgbSlidersPair(Settings.Red.Body.PlainColor, Settings.Red.Tail.PlainColor);
-            if (Settings.Red.Body.PlainColor != newBody)
+                MoreGUILayout.ColorRgbSlidersPair(Settings.RedBody.PlainColor, Settings.RedTail.PlainColor);
+            if (Settings.RedBody.PlainColor != newBody)
             {
-                Settings.Red.Body.PlainColor = newBody;
+                Settings.RedBody.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (Settings.Red.Tail.PlainColor != newTail)
+            if (Settings.RedTail.PlainColor != newTail)
             {
-                Settings.Red.Tail.PlainColor = newTail;
+                Settings.RedTail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
 
             // Planet 1 Hex
             (newHex, newTailHex) =
                 MoreGUILayout.NamedTextFieldPair(
-                    "Hex:", "Hex:", Settings.Red.Body.PlainColorHex, Settings.Red.Tail.PlainColorHex, 100f, 40f);
-            if (newHex != Settings.Red.Body.PlainColorHex
+                    "Hex:", "Hex:", Settings.RedBody.PlainColorHex, Settings.RedTail.PlainColorHex, 100f, 40f);
+            if (newHex != Settings.RedBody.PlainColorHex
                 && ColorUtility.TryParseHtmlString($"#{newHex}", out newBody))
             {
-                Settings.Red.Body.PlainColor = newBody;
+                Settings.RedBody.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (newTailHex != Settings.Red.Tail.PlainColorHex
+            if (newTailHex != Settings.RedTail.PlainColorHex
                 && ColorUtility.TryParseHtmlString($"#{newTailHex}", out newTail))
             {
-                Settings.Red.Tail.PlainColor = newTail;
+                Settings.RedTail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
-            Settings.Red.Body.PlainColorHex = newHex;
-            Settings.Red.Tail.PlainColorHex = newTailHex;
+            Settings.RedBody.PlainColorHex = newHex;
+            Settings.RedTail.PlainColorHex = newTailHex;
 
             MoreGUILayout.EndIndent();
 
@@ -135,36 +135,42 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
             // Planet 2 RGB sliders
             (newBody, newTail) =
-                MoreGUILayout.ColorRgbSlidersPair(Settings.Blue.Body.PlainColor, Settings.Blue.Tail.PlainColor);
-            if (Settings.Blue.Body.PlainColor != newBody) {
-                Settings.Blue.Body.PlainColor = newBody;
+                MoreGUILayout.ColorRgbSlidersPair(Settings.BlueBody.PlainColor, Settings.BlueTail.PlainColor);
+            if (Settings.BlueBody.PlainColor != newBody) {
+                Settings.BlueBody.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (Settings.Blue.Tail.PlainColor != newTail) {
-                Settings.Blue.Tail.PlainColor = newTail;
+            if (Settings.BlueTail.PlainColor != newTail) {
+                Settings.BlueTail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
 
             // Planet 2 Hex
             (newHex, newTailHex) =
                 MoreGUILayout.NamedTextFieldPair(
-                    "Hex:", "Hex:", Settings.Blue.Body.PlainColorHex, Settings.Blue.Tail.PlainColorHex, 100f, 40f);
-            if (newHex != Settings.Blue.Body.PlainColorHex
+                    "Hex:", "Hex:", Settings.BlueBody.PlainColorHex, Settings.BlueTail.PlainColorHex, 100f, 40f);
+            if (newHex != Settings.BlueBody.PlainColorHex
                 && ColorUtility.TryParseHtmlString($"#{newHex}", out newBody)) {
-                Settings.Blue.Body.PlainColor = newBody;
+                Settings.BlueBody.PlainColor = newBody;
                 UpdatePlanetColors();
             }
-            if (newTailHex != Settings.Blue.Tail.PlainColorHex
+            if (newTailHex != Settings.BlueTail.PlainColorHex
                 && ColorUtility.TryParseHtmlString($"#{newTailHex}", out newTail)) {
-                Settings.Blue.Tail.PlainColor = newTail;
+                Settings.BlueTail.PlainColor = newTail;
                 UpdatePlanetColors();
             }
-            Settings.Blue.Body.PlainColorHex = newHex;
-            Settings.Blue.Tail.PlainColorHex = newTailHex;
+            Settings.BlueBody.PlainColorHex = newHex;
+            Settings.BlueTail.PlainColorHex = newTailHex;
 
             MoreGUILayout.EndIndent();
 
             MoreGUILayout.EndIndent();
+        }
+
+        /// <inheritdoc/>
+        public override void OnEnable()
+        {
+            MigrateOldSettings();
         }
 
         /// <inheritdoc/>
@@ -177,11 +183,6 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             UpdatePlanetColors();
         }
 
-        /*private IEnumerator UpdateGradientPlanetColors()
-        {
-            //
-        }*/
-
         private void UpdatePlanetColors() {
             if (RedPlanet != null) {
                 RedPlanet.LoadPlanetColor();
@@ -190,5 +191,38 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
                 BluePlanet.LoadPlanetColor();
             }
         }
+
+        /// <summary>
+        /// Migrates old PlanetColor settings to a new structured settings if there are
+        /// settings to migrate.
+        /// TODO: Delete this after a few releases.
+        /// </summary>
+        private void MigrateOldSettings()
+        {
+            // Check if there's anything to migrate
+            if (Settings.Color1 == Color.black &&
+                Settings.Color2 == Color.black &&
+                Settings.TailColor1 == Color.black &&
+                Settings.TailColor2 == Color.black) {
+                return;
+            }
+
+            // Migrate the old values
+            Settings.RedBody.PlainColor = Settings.Color1;
+            Settings.RedTail.PlainColor = Settings.Color2;
+            Settings.BlueBody.PlainColor = Settings.TailColor1;
+            Settings.BlueTail.PlainColor = Settings.TailColor2;
+
+            // Reset to value
+            Settings.Color1 =
+                Settings.Color2 =
+                Settings.TailColor1 =
+                Settings.TailColor2 = Color.black;
+        }
+
+        /*private IEnumerator UpdateGradientPlanetColors()
+        {
+            //
+        }*/
     }
 }

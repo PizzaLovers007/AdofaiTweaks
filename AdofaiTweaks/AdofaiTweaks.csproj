@@ -186,6 +186,8 @@
     <Compile Include="Tweaks\HideUiElements\HideUiElementsTweak.cs" />
     <Compile Include="Tweaks\KeyLimiter\KeyLimiterPatches.cs" />
     <Compile Include="Tweaks\KeyLimiter\KeyLimiterSettings.cs" />
+    <Compile Include="Tweaks\PlanetColor\ObjectColor.cs" />
+    <Compile Include="Tweaks\PlanetColor\PlanetColorType.cs" />
     <Compile Include="Tweaks\PlanetColor\PlanetColorPatches.cs" />
     <Compile Include="Tweaks\PlanetColor\PlanetColorSettings.cs" />
     <Compile Include="Tweaks\PlanetColor\PlanetColorTweak.cs" />

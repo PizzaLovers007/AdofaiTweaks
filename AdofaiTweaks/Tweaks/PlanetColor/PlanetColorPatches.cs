@@ -19,9 +19,9 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
                 if (__instance.isRed) {
-                    color = Settings.Red.Body.PlainColor;
+                    color = Settings.RedBody.PlainColor;
                 } else {
-                    color = Settings.Blue.Body.PlainColor;
+                    color = Settings.BlueBody.PlainColor;
                 }
             }
         }
@@ -31,9 +31,9 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
                 if (__instance.isRed) {
-                    color = Settings.Red.Body.PlainColor;
+                    color = Settings.RedBody.PlainColor;
                 } else {
-                    color = Settings.Blue.Body.PlainColor;
+                    color = Settings.BlueBody.PlainColor;
                 }
             }
         }
@@ -43,9 +43,9 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
                 if (__instance.isRed) {
-                    color = Settings.Red.Tail.PlainColor;
+                    color = Settings.RedTail.PlainColor;
                 } else {
-                    color = Settings.Blue.Tail.PlainColor;
+                    color = Settings.BlueTail.PlainColor;
                 }
             }
         }
@@ -55,9 +55,9 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         {
             public static void Prefix(scrPlanet __instance, ref Color color) {
                 if (__instance.isRed) {
-                    color = Settings.Red.Body.PlainColor;
+                    color = Settings.RedBody.PlainColor;
                 } else {
-                    color = Settings.Blue.Body.PlainColor;
+                    color = Settings.BlueBody.PlainColor;
                 }
             }
         }
@@ -84,8 +84,8 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             public static void Prefix() {
                 originalColor1 = Persistence.GetPlayerColor(true);
                 originalColor2 = Persistence.GetPlayerColor(false);
-                Persistence.SetPlayerColor(Settings.Red.Body.PlainColor, true);
-                Persistence.SetPlayerColor(Settings.Blue.Body.PlainColor, false);
+                Persistence.SetPlayerColor(Settings.RedBody.PlainColor, true);
+                Persistence.SetPlayerColor(Settings.BlueBody.PlainColor, false);
             }
 
             public static void Postfix() {
