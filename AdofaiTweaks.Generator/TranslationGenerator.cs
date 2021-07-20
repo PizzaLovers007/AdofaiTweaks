@@ -37,6 +37,12 @@ namespace AdofaiTweaks.Generator
                         },
                     });
                     foreach (DataTable table in dataSet.Tables) {
+                        // Skip the dashboard sheet as it is just used for
+                        // translators to know what needs to be translated
+                        if (table.TableName == "DASHBOARD") {
+                            continue;
+                        }
+
                         collection.InsertBulk(ReadTweakStrings(table));
                     }
                 }
@@ -76,6 +82,12 @@ namespace AdofaiTweaks.Generator
                     },
                 });
                 foreach (DataTable table in dataSet.Tables) {
+                    // Skip the dashboard sheet as it is just used for
+                    // translators to know what needs to be translated
+                    if (table.TableName == "DASHBOARD") {
+                        continue;
+                    }
+
                     string tweakName = table.TableName;
                     string tweakNameUpperCamel = PascalToUpperCamel(table.TableName);
                     sb.Append("public class ").Append(tweakName).Append(" { ");
