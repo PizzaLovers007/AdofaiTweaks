@@ -28,7 +28,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         /// </summary>
         public ObjectColor BlueTail { get; set; } = new ObjectColor();
 
-        // DEPRECATED Old code required to migrate data
+        //! Old code required to migrate data
 
         /// <summary>
         /// The color of planet 1's body.
