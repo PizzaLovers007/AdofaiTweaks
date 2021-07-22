@@ -71,6 +71,9 @@
     <Reference Include="LiteDB, Version=5.0.10.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
       <HintPath>..\packages\LiteDB.5.0.10\lib\net45\LiteDB.dll</HintPath>
     </Reference>
+    <Reference Include="MelonLoader">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\MelonLoader\MelonLoader.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="RDTools">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\RDTools.dll</HintPath>
