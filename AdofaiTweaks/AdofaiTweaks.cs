@@ -15,13 +15,8 @@ namespace AdofaiTweaks
     /// <summary>
     /// The main runner of the AdofaiTweaks mod.
     /// </summary>
-    public static class AdofaiTweaks
+    public class AdofaiTweaks : MelonMod
     {
-        /// <summary>
-        /// UMM's logger instance.
-        /// </summary>
-        public static MelonLogger Logger { get; private set; }
-
         /// <summary>
         /// Whether the tweak is enabled.
         /// </summary>
@@ -36,18 +31,20 @@ namespace AdofaiTweaks
         /// GlobalSettings instance.
         /// </summary>
         [SyncTweakSettings]
-        public static GlobalSettings GlobalSettings { get; set; }
+        public GlobalSettings GlobalSettings { get; set; }
 
-        private static List<Type> allTweakTypes;
-        private static readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
+        private List<Type> allTweakTypes;
+        private readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
 
-        private static SettingsSynchronizer synchronizer;
+        private SettingsSynchronizer synchronizer;
+
+        private bool didStart;
 
         /// <summary>
         /// Runs the initial setup of AdofaiTweaks.
         /// </summary>
-        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
-        internal static void Setup(UnityModManager.ModEntry modEntry) {
+        public override void OnApplicationStart() {
+            MelonLogger.Msg("OnApplicationStart");
             allTweakTypes =
                 AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(a => a.GetTypes())
@@ -56,42 +53,46 @@ namespace AdofaiTweaks
                     .OrderBy(t => t.GetCustomAttribute<RegisterTweakAttribute>().Priority)
                     .ToList();
 
-            Logger = modEntry.Logger;
             synchronizer = new SettingsSynchronizer();
 
-            synchronizer.Load(modEntry);
+            synchronizer.Load();
 
             // Register global settings
             synchronizer.Register(typeof(TweakStrings));
-            synchronizer.Register(typeof(AdofaiTweaks));
             synchronizer.Register(typeof(TweakRunner));
-
-            modEntry.OnToggle = OnToggle;
-            modEntry.OnGUI = OnGUI;
-            modEntry.OnHideGUI = OnHideGUI;
-            modEntry.OnSaveGUI = OnSaveGUI;
-            modEntry.OnUpdate = OnUpdate;
+            synchronizer.Register(this);
 
 #if DEBUG
-            modEntry.HasUpdate = false;
-            modEntry.Info.DisplayName += " <color=#a7a7a7><i>[Debug Build]</i></color>";
-
-            MelonMod m;
-            m.Location
-                m.Info.
+            // TODO: Show some sort of debug message in the in-game settings.
 #endif
+            // TODO: Hook up OnSaveGUI and OnHideGUI
         }
 
         /// <summary>
-        /// Handler for UMM's OnToggle event.
+        /// Handler for MelonLoader's OnSceneWasLoaded event.
         /// </summary>
-        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
+        /// <param name="buildindex">The build index of the loaded scene.</param>
+        /// <param name="sceneName">The name of the scene.</param>
+        public override void OnSceneWasLoaded(int buildindex, string sceneName) {
+            // OnApplicationStart is run too early for Unity to create
+            // GameObjects with usable properties, so run the initial enabling
+            // of the mod after the first scene is loaded.
+            if (!didStart) {
+                didStart = true;
+                // TODO: Load whether mod is enabled/disabled from settings
+                OnToggle(true);
+            }
+        }
+
+        /// <summary>
+        /// Handler for MelonLoader's OnToggle event.
+        /// </summary>
         /// <param name="value">
         /// <c>true</c> if the mod is enabled, or <c>false</c> if the mod is
         /// disabled.
         /// </param>
         /// <returns><c>true</c>.</returns>
-        private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value) {
+        private bool OnToggle(bool value) {
             IsEnabled = value;
             if (value) {
                 StartTweaks();
@@ -99,7 +100,7 @@ namespace AdofaiTweaks
                 StopTweaks();
 
                 // Save all settings
-                synchronizer.Save(modEntry);
+                synchronizer.Save();
             }
             return true;
         }
@@ -107,7 +108,7 @@ namespace AdofaiTweaks
         /// <summary>
         /// Starts all tweak runners.
         /// </summary>
-        private static void StartTweaks() {
+        private void StartTweaks() {
             HashSet<string> tweakIds = new HashSet<string>();
 
             // Create runners for all the tweaks
@@ -145,7 +146,7 @@ namespace AdofaiTweaks
         /// <summary>
         /// Stops all tweak runners.
         /// </summary>
-        private static void StopTweaks() {
+        private void StopTweaks() {
             // Stop all runners
             foreach (TweakRunner runner in tweakRunners) {
                 runner.Stop();
@@ -158,11 +159,12 @@ namespace AdofaiTweaks
         }
 
         /// <summary>
-        /// Handler for UMM's OnGUI event. Displays the language chooser and
-        /// every tweak's settings GUI.
+        /// Handler for MelonLoader's OnGUI event. Displays the language chooser
+        /// and every tweak's settings GUI.
         /// </summary>
-        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
-        private static void OnGUI(UnityModManager.ModEntry modEntry) {
+        public override void OnGUI() {
+            // TODO: Don't always show the GUI
+
             // Set some default GUI settings for better layouts
             if (GlobalSettings.Language.IsSymbolLanguage()) {
                 GUI.skin.button.font = TweakAssets.SymbolLangNormalFont;
@@ -249,35 +251,28 @@ namespace AdofaiTweaks
         }
 
         /// <summary>
-        /// Handler for UMM's OnHideGUI event.
+        /// Handler for MelonLoader's OnHideGUI event.
         /// </summary>
-        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
-        private static void OnHideGUI(UnityModManager.ModEntry modEntry) {
+        private void OnHideGUI() {
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnHideGUI();
             }
-            synchronizer.Save(modEntry);
+            synchronizer.Save();
         }
 
         /// <summary>
-        /// Handler for UMM's OnSaveGUI event.
+        /// Handler for MelonLoader's OnSaveGUI event.
         /// </summary>
-        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
-        private static void OnSaveGUI(UnityModManager.ModEntry modEntry) {
-            synchronizer.Save(modEntry);
+        private void OnSaveGUI() {
+            synchronizer.Save();
         }
 
         /// <summary>
-        /// Handler for UMM's OnUpdate event.
+        /// Handler for MelonLoader's OnUpdate event.
         /// </summary>
-        /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
-        /// <param name="deltaTime">
-        /// The amount of time that has passed since the previous frame in
-        /// seconds.
-        /// </param>
-        private static void OnUpdate(UnityModManager.ModEntry modEntry, float deltaTime) {
+        public override void OnUpdate() {
             foreach (TweakRunner runner in tweakRunners) {
-                runner.OnUpdate(deltaTime);
+                runner.OnUpdate(Time.deltaTime);
             }
         }
     }

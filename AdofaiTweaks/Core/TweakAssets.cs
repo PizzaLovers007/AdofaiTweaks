@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using MelonLoader;
 using UnityEngine;
 
 namespace AdofaiTweaks.Core
@@ -49,7 +50,8 @@ namespace AdofaiTweaks.Core
         static TweakAssets() {
             assets =
                 AssetBundle.LoadFromFile(
-                    Path.Combine("Mods", "AdofaiTweaks", "adofai_tweaks.assets"));
+                    Path.Combine(
+                        MelonHandler.ModsDirectory, "AdofaiTweaks", "adofai_tweaks.assets"));
             SymbolLangNormalFont = assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
             KoreanBoldFont = assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
             HandSprite = assets.LoadAsset<Sprite>("Assets/Hand.png");

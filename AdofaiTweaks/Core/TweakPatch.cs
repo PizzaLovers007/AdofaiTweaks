@@ -20,15 +20,15 @@ namespace AdofaiTweaks.Core
         /// <param name="metadata">Attribute of the tweak's patch.</param>
         /// <param name="harmony">Harmony class to apply patch.</param>
         /// <param name="assembly">Assembly to find class from.</param>
-        internal TweakPatch(Type patchType, TweakPatchAttribute metadata, Harmony harmony, Assembly assembly = null) {
+        internal TweakPatch(Type patchType, TweakPatchAttribute metadata, HarmonyLib.Harmony harmony, Assembly assembly = null) {
             PatchType = patchType;
             Metadata = metadata;
-            Harmony = harmony;
+            HarmonyInstance = harmony;
             ClassType = (assembly ?? typeof(ADOBase).Assembly).GetType(Metadata.ClassName);
             PatchTargetMethods = ClassType?.GetMethods(AccessTools.all).Where(m => m.Name.Equals(Metadata.MethodName));
         }
 
-        private Harmony Harmony { get; set; }
+        private HarmonyLib.Harmony HarmonyInstance { get; set; }
         private Type ClassType { get; set; }
         private Type PatchType { get; set; }
         private IEnumerable<MethodInfo> PatchTargetMethods { get; set; }
@@ -65,7 +65,7 @@ namespace AdofaiTweaks.Core
 #if DEBUG
             if (showDebuggingMessage)
             {
-                AdofaiTweaks.Logger.Log(
+                MelonLogger.Msg(
                     string.Format(
                     "Patch {0} is invalid! - Specific criteria check:\n" +
                     "Metadata.MinVersion <= GCNS.releaseNumber ({1} <= {2}) is {3}{4}\n" +
@@ -102,18 +102,18 @@ namespace AdofaiTweaks.Core
                 foreach (MethodInfo method in PatchTargetMethods) {
                     List<HarmonyMethod> hardcodedMethods = new List<HarmonyMethod>();
 
-                    foreach (string methodName in HardcodedMethodNames)
-                    {
+                    foreach (string methodName in HardcodedMethodNames) {
                         MethodInfo patchMethod = AccessTools.Method(PatchType, methodName);
                         hardcodedMethods.Add(patchMethod == null ? null : new HarmonyMethod(patchMethod));
                     }
 
-                    Harmony.Patch(
+                    HarmonyInstance.Patch(
                         method,
                         hardcodedMethods[0],
                         hardcodedMethods[1],
                         hardcodedMethods[2],
-                        hardcodedMethods[3]);
+                        hardcodedMethods[3],
+                        null);
                 }
 
                 IsEnabled = true;
@@ -127,7 +127,7 @@ namespace AdofaiTweaks.Core
             if (IsEnabled) {
                 foreach (MethodInfo original in PatchTargetMethods) {
                     foreach (MethodInfo patch in PatchType.GetMethods()) {
-                        Harmony.Unpatch(original, patch);
+                        HarmonyInstance.Unpatch(original, patch);
                     }
                 }
 

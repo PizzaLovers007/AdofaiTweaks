@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
-using UnityModManagerNet;
+using MelonLoader;
 
 namespace AdofaiTweaks.Core
 {
     /// <summary>
     /// The base settings object used to store data related to the tweak.
     /// </summary>
-    public class TweakSettings : UnityModManager.ModSettings
+    public class TweakSettings
     {
         /// <summary>
         /// Whether the tweak is enabled.
@@ -16,37 +16,65 @@ namespace AdofaiTweaks.Core
         public bool IsEnabled { get; set; }
 
         /// <summary>
-        /// Whether the tweak's settings are expanded in the UMM in-game menu.
+        /// Whether the tweak's settings are expanded in the in-game menu.
         /// </summary>
         public bool IsExpanded { get; set; }
 
         /// <summary>
         /// Gets the path to the file that holds this object's data.
         /// </summary>
-        /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
         /// <returns>
         /// The path to the file that holds this object's data.
         /// </returns>
-        public override string GetPath(UnityModManager.ModEntry modEntry) {
-            return Path.Combine(modEntry.Path, GetType().Name + ".xml");
+        public string GetPath() {
+            return Path.Combine(
+                MelonHandler.ModsDirectory,
+                "AdofaiTweaks",
+                GetType().Name + ".xml");
         }
 
         /// <summary>
         /// Saves the settings data to the file at the path returned from
-        /// <see cref="GetPath(UnityModManager.ModEntry)"/>.
+        /// <see cref="GetPath()"/>.
         /// </summary>
-        /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
-        public override void Save(UnityModManager.ModEntry modEntry) {
-            var filepath = GetPath(modEntry);
+        public void Save() {
+            var filepath = GetPath();
             try {
                 using (var writer = new StreamWriter(filepath)) {
                     var serializer = new XmlSerializer(GetType());
                     serializer.Serialize(writer, this);
                 }
             } catch (Exception e) {
-                modEntry.Logger.Error($"Can't save {filepath}.");
-                modEntry.Logger.LogException(e);
+                MelonLogger.Error($"Can't save {filepath}.");
+                MelonLogger.Error(e.ToString());
             }
+        }
+
+        /// <summary>
+        /// Loads the settings data from the file at the path returned from
+        /// <see cref="GetPath()"/>.
+        /// </summary>
+        /// <typeparam name="T">The settings type to cast to.</typeparam>
+        /// <returns>
+        /// An instance of <c>T</c> based on the settings data.
+        /// </returns>
+        public static T Load<T>() where T : TweakSettings, new() {
+            var t = new T();
+            var filepath = t.GetPath();
+            if (File.Exists(filepath)) {
+                try {
+                    using (var stream = File.OpenRead(filepath)) {
+                        var serializer = new XmlSerializer(typeof(T));
+                        var result = (T)serializer.Deserialize(stream);
+                        return result;
+                    }
+                } catch (Exception e) {
+                    MelonLogger.Error($"Can't read {filepath}.");
+                    MelonLogger.Error(e.ToString());
+                }
+            }
+
+            return t;
         }
     }
 }

@@ -14,7 +14,7 @@ cp ../AdofaiTweaks.Translation/bin/Release/AdofaiTweaks.Translation.dll AdofaiTw
 cp ../AdofaiTweaks.Generator/bin/Release/TweakStrings.db AdofaiTweaks
 cp ../AdofaiTweaks.Generator/bin/Release/AdofaiTweaks.Strings.dll AdofaiTweaks
 tar -a -c -f AdofaiTweaks-%version%.zip AdofaiTweaks
-mv AdofaiTweaks-%version%.zip ..
+mv AdofaiTweaks-UMM-%version%.zip ..
 cd ..
 rm -rf tmp
 pause

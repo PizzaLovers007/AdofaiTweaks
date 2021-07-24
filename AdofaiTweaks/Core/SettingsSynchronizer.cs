@@ -40,25 +40,22 @@ namespace AdofaiTweaks.Core
         /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
         public void Load() {
             tweakSettingsDictionary.Clear();
-            MethodInfo loadMethod =
-                typeof(UnityModManager.ModSettings).GetMethod(
-                    nameof(UnityModManager.ModSettings.Load),
-                    AccessTools.all,
-                    null,
-                    new Type[] { typeof(UnityModManager.ModEntry) },
-                    null);
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
                 if (!type.IsSubclassOf(typeof(TweakSettings))) {
                     continue;
                 }
-                modEntry.Logger.Log(string.Format("Loading: {0}", type.FullName));
-                MethodInfo genericLoadMethod = loadMethod.MakeGenericMethod(type);
+                MelonLogger.Msg(string.Format("Loading: {0}", type.FullName));
+                MethodInfo genericLoadMethod =
+                    AccessTools.Method(
+                        typeof(TweakSettings),
+                        nameof(TweakSettings.Load),
+                        generics: new Type[] { type });
                 try {
                     tweakSettingsDictionary[type] =
                         (TweakSettings)genericLoadMethod.Invoke(
-                            null, new object[] { modEntry });
+                            null, new object[] { });
                 } catch (Exception e) {
-                    AdofaiTweaks.Logger.Error(
+                    MelonLogger.Error(
                         string.Format(
                             "Failed to read settings for {0}: {1}.", type.FullName, e));
                     ConstructorInfo constructor = type.GetConstructor(null);
@@ -73,10 +70,10 @@ namespace AdofaiTweaks.Core
         /// files.
         /// </summary>
         /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
-        public void Save(UnityModManager.ModEntry modEntry) {
+        public void Save() {
             foreach (Type type in tweakSettingsDictionary.Keys) {
-                modEntry.Logger.Log("Saving: " + type.FullName);
-                tweakSettingsDictionary[type].Save(modEntry);
+                MelonLogger.Msg("Saving: " + type.FullName);
+                tweakSettingsDictionary[type].Save();
             }
         }
 
@@ -186,7 +183,7 @@ namespace AdofaiTweaks.Core
                 try {
                     prop.SetValue(obj, tweakSettingsDictionary[prop.GetUnderlyingType()]);
                 } catch (Exception e) {
-                    AdofaiTweaks.Logger.Error(GenerateMessage(type, obj, prop, e));
+                    MelonLogger.Error(GenerateMessage(type, obj, prop, e));
                 }
             }
         }

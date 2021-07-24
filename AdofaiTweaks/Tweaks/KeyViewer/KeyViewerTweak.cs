@@ -4,6 +4,7 @@ using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
 using AdofaiTweaks.Tweaks.KeyLimiter;
+using MelonLoader;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.KeyViewer

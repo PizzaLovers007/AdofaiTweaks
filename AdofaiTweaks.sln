@@ -11,10 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CODEOWNERS = CODEOWNERS
 		Info.json = Info.json
 		LICENSE.md = LICENSE.md
-		make_release.bat = make_release.bat
+		melon_make_release.bat = melon_make_release.bat
 		README.md = README.md
 		Repository.json = Repository.json
 		StyleCop.ruleset = StyleCop.ruleset
+		umm_make_release.bat = umm_make_release.bat
 		VERSION.txt = VERSION.txt
 	EndProjectSection
 EndProject

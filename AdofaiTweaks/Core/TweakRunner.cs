@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Translation;
 using HarmonyLib;
+using MelonLoader;
 using UnityEngine;
 
 namespace AdofaiTweaks.Core
@@ -38,7 +38,7 @@ namespace AdofaiTweaks.Core
         private IList<TweakPatch> TweakPatches { get; set; } = new List<TweakPatch>();
         private IList<TweakPatch> ValidTweakPatches { get; set; } = new List<TweakPatch>();
 
-        private readonly Harmony harmony;
+        private readonly HarmonyLib.Harmony harmony;
         private bool ShowDebuggingDetails = false;
 
         [SyncTweakSettings]
@@ -56,19 +56,24 @@ namespace AdofaiTweaks.Core
             TweakMetadata =
                 Attribute.GetCustomAttribute(tweak.GetType(), typeof(RegisterTweakAttribute))
                     as RegisterTweakAttribute;
-            harmony = new Harmony("adofai_tweaks." + TweakMetadata.Id);
+            harmony = new HarmonyLib.Harmony("adofai_tweaks." + TweakMetadata.Id);
 
             // Setup TweakPatch list
             foreach (Type type in TweakMetadata.PatchesType.GetNestedTypes(AccessTools.all)) {
-                TweakPatchAttribute attr = type.GetCustomAttributes(false).OfType<TweakPatchAttribute>()?.FirstOrDefault();
+                TweakPatchAttribute attr =
+                    type.GetCustomAttributes(false).OfType<TweakPatchAttribute>()?.FirstOrDefault();
                 if (attr != null) {
                     TweakPatch tweakPatch = new TweakPatch(type, attr, harmony);
 
                     // Find a ID-duplicating patch and ignore the current patch
                     // if found one
-                    TweakPatch duplicatePatch = TweakPatches.FirstOrDefault(p => p.Metadata.PatchId.Equals(attr.PatchId));
+                    TweakPatch duplicatePatch =
+                        TweakPatches.FirstOrDefault(p => p.Metadata.PatchId.Equals(attr.PatchId));
                     if (duplicatePatch != null) {
-                        AdofaiTweaks.Logger.Log($"Patch with the ID of '{duplicatePatch.Metadata.PatchId}' is already registered. Please check if you have two patches with the same ID.");
+                        MelonLogger.Msg(
+                            $"Patch with the ID of '{duplicatePatch.Metadata.PatchId}' is " +
+                            "already registered. Please check if you have two patches with the " +
+                            "same ID.");
                     } else {
                         if (tweakPatch?.IsValidPatch(true) ?? false) {
                             ValidTweakPatches.Add(tweakPatch);
@@ -79,8 +84,7 @@ namespace AdofaiTweaks.Core
             }
         }
 
-        private Type[] GetAllNestedTypes(Type type)
-        {
+        private Type[] GetAllNestedTypes(Type type) {
             return GetAllNestedTypes(type.GetNestedTypes(AccessTools.all));
         }
 
@@ -231,18 +235,20 @@ namespace AdofaiTweaks.Core
 
         private void OnDebugGUI() {
             GUILayout.Space(12f);
-            if (ShowDebuggingDetails =
-            GUILayout.Toggle(ShowDebuggingDetails, "<color=#a7a7a7><i>Show debugging details</i></color>")) {
+            ShowDebuggingDetails =
+                GUILayout.Toggle(
+                    ShowDebuggingDetails, "<color=#a7a7a7><i>Show debugging details</i></color>");
+            if (ShowDebuggingDetails) {
                 GUILayout.Space(12f);
                 GUILayout.Label("<color=#a7a7a7><i>List of patches</i></color>");
 
                 MoreGUILayout.BeginIndent();
                 foreach (TweakPatch patch in TweakPatches) {
-                    if (patch.IsEnabled !=
-                        GUILayout.Toggle(
-                            patch.IsEnabled,
-                            $"<color=#a7a7a7><i>{(patch.IsEnabled ? "En" : "Dis")}abled | " +
-                            $"{(patch.IsValidPatch() ? "" : "Invalid ")}Patch [{patch.Metadata.PatchId}]</i></color>")
+                    string toggleText =
+                        $"<color=#a7a7a7><i>{(patch.IsEnabled ? "En" : "Dis")}abled | " +
+                        $"{(patch.IsValidPatch() ? "" : "Invalid ")}Patch " +
+                        $"[{patch.Metadata.PatchId}]</i></color>";
+                    if (patch.IsEnabled != GUILayout.Toggle(patch.IsEnabled, toggleText)
                         && patch.IsValidPatch()) {
                         if (patch.IsEnabled) {
                             patch.Unpatch();
