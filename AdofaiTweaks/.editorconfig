@@ -4,3 +4,26 @@ end_of_line = crlf
 
 # Default severity for all analyzer diagnostics
 dotnet_analyzer_diagnostic.severity = none
+dotnet_diagnostic.SA1600.severity=warning
+dotnet_diagnostic.SA1601.severity=warning
+dotnet_diagnostic.SA1602.severity=warning
+dotnet_diagnostic.SA1604.severity=warning
+dotnet_diagnostic.SA1605.severity=warning
+dotnet_diagnostic.SA1606.severity=warning
+dotnet_diagnostic.SA1607.severity=warning
+dotnet_diagnostic.SA1610.severity=warning
+dotnet_diagnostic.SA1611.severity=warning
+dotnet_diagnostic.SA1612.severity=warning
+dotnet_diagnostic.SA1613.severity=warning
+dotnet_diagnostic.SA1614.severity=warning
+dotnet_diagnostic.SA1615.severity=warning
+dotnet_diagnostic.SA1616.severity=warning
+dotnet_diagnostic.SA1617.severity=warning
+dotnet_diagnostic.SA1618.severity=warning
+dotnet_diagnostic.SA1620.severity=warning
+dotnet_diagnostic.SA1621.severity=warning
+dotnet_diagnostic.SA1622.severity=warning
+dotnet_diagnostic.SA1648.severity=silent
+dotnet_diagnostic.SA1608.severity=warning
+dotnet_diagnostic.SA1627.severity=warning
+dotnet_diagnostic.SA1629.severity=warning

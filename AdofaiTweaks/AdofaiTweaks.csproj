@@ -146,9 +146,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
-    <Reference Include="UnityModManager">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -193,7 +190,6 @@
     <Compile Include="Tweaks\PlanetColor\PlanetColorTweak.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacityPatches.cs" />
     <Compile Include="Tweaks\KeyLimiter\KeyLimiterTweak.cs" />
-    <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Tweak.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacitySettings.cs" />
@@ -225,8 +221,6 @@
   <ItemGroup>
     <Content Include="AdofaiTweaks.Strings.dll" />
     <Content Include="AdofaiTweaks.Translation.dll" />
-    <Content Include="Assembly-CSharp-firstpass.dll" />
-    <Content Include="Assembly-CSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

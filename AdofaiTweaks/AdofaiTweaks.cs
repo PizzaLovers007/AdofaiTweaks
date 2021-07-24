@@ -8,7 +8,7 @@ using AdofaiTweaks.Strings;
 using AdofaiTweaks.Translation;
 using HarmonyLib;
 using UnityEngine;
-using UnityModManagerNet;
+using MelonLoader;
 
 namespace AdofaiTweaks
 {
@@ -20,7 +20,7 @@ namespace AdofaiTweaks
         /// <summary>
         /// UMM's logger instance.
         /// </summary>
-        public static UnityModManager.ModEntry.ModLogger Logger { get; private set; }
+        public static MelonLogger Logger { get; private set; }
 
         /// <summary>
         /// Whether the tweak is enabled.
@@ -75,6 +75,10 @@ namespace AdofaiTweaks
 #if DEBUG
             modEntry.HasUpdate = false;
             modEntry.Info.DisplayName += " <color=#a7a7a7><i>[Debug Build]</i></color>";
+
+            MelonMod m;
+            m.Location
+                m.Info.
 #endif
         }
 

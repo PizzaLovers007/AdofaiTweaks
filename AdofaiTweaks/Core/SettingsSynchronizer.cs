@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
-using UnityModManagerNet;
+using MelonLoader;
 
 namespace AdofaiTweaks.Core
 {
@@ -38,7 +38,7 @@ namespace AdofaiTweaks.Core
         /// saved settings files.
         /// </summary>
         /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
-        public void Load(UnityModManager.ModEntry modEntry) {
+        public void Load() {
             tweakSettingsDictionary.Clear();
             MethodInfo loadMethod =
                 typeof(UnityModManager.ModSettings).GetMethod(
