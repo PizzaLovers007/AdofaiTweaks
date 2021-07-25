@@ -9,6 +9,7 @@ mkdir AdofaiTweaks
 cp ../Info.json AdofaiTweaks
 cp ../UnityProject/Assets/AssetBundles/adofai_tweaks.assets AdofaiTweaks
 cp ../AdofaiTweaks/bin/Release/AdofaiTweaks.dll AdofaiTweaks
+cp ../AdofaiTweaks/bin/Release/DotNetZip.dll AdofaiTweaks
 cp ../AdofaiTweaks/bin/Release/LiteDB.dll AdofaiTweaks
 cp ../AdofaiTweaks.Translation/bin/Release/AdofaiTweaks.Translation.dll AdofaiTweaks
 cp ../AdofaiTweaks.Generator/bin/Release/TweakStrings.db AdofaiTweaks

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Ionic.Zip;
 using MelonLoader;
 using UnityEngine;
 
@@ -48,17 +49,58 @@ namespace AdofaiTweaks.Core
         private static readonly AssetBundle assets;
 
         static TweakAssets() {
-            assets =
-                AssetBundle.LoadFromFile(
-                    Path.Combine(
-                        MelonHandler.ModsDirectory, "AdofaiTweaks", "adofai_tweaks.assets"));
-            SymbolLangNormalFont = assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
-            KoreanBoldFont = assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
-            HandSprite = assets.LoadAsset<Sprite>("Assets/Hand.png");
-            MeterSprite = assets.LoadAsset<Sprite>("Assets/Meter.png");
-            TickSprite = assets.LoadAsset<Sprite>("Assets/Tick.png");
-            KeyOutlineSprite = assets.LoadAsset<Sprite>("Assets/KeyOutline.png");
-            KeyBackgroundSprite = assets.LoadAsset<Sprite>("Assets/KeyBackground.png");
+            Stream uabStream = OpenFile("adofai_tweaks.assets");
+            if (uabStream == null) {
+                MelonLogger.Error("Could not read UAB!");
+                return;
+            }
+            using (uabStream) {
+                assets = AssetBundle.LoadFromStream(OpenFile("adofai_tweaks.assets"));
+                SymbolLangNormalFont = assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
+                KoreanBoldFont = assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
+                HandSprite = assets.LoadAsset<Sprite>("Assets/Hand.png");
+                MeterSprite = assets.LoadAsset<Sprite>("Assets/Meter.png");
+                TickSprite = assets.LoadAsset<Sprite>("Assets/Tick.png");
+                KeyOutlineSprite = assets.LoadAsset<Sprite>("Assets/KeyOutline.png");
+                KeyBackgroundSprite = assets.LoadAsset<Sprite>("Assets/KeyBackground.png");
+            }
+        }
+
+        /// <summary>
+        /// Opens a <see cref="Stream"/> to an asset file in the mod zip file.
+        /// Logs an error if there was an issue finding/opening the asset.
+        /// </summary>
+        /// <param name="assetFilename">
+        /// The filename of the asset to open.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/> to the asset file, or <c>null</c> if there
+        /// was an error opening the file.
+        /// </returns>
+        public static Stream OpenFile(string assetFilename) {
+            string[] matchedZips =
+                Directory.GetFiles(
+                    MelonHandler.ModsDirectory, $"AdofaiTweaks*.zip");
+            if (matchedZips.Length == 0) {
+                MelonLogger.Error("Unable to find mod zip file.");
+                return null;
+            } else if (matchedZips.Length > 1) {
+                MelonLogger.Error("Multiple copies of the mod zip file were found. Please only have one downloaded version at a time.");
+                return null;
+            }
+
+            using (ZipFile zipFile = ZipFile.Read(matchedZips[0])) {
+                if (zipFile.ContainsEntry(assetFilename)) {
+                    using (Stream zipStream = zipFile[assetFilename].OpenReader()) {
+                        MemoryStream byteStream = new MemoryStream();
+                        zipStream.CopyTo(byteStream);
+                        return byteStream;
+                    }
+                }
+            }
+
+            MelonLogger.Error($"Unable to find asset '{assetFilename}' in mod zip file.");
+            return null;
         }
     }
 }

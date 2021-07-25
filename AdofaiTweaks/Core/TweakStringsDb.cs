@@ -2,6 +2,7 @@
 using System.IO;
 using AdofaiTweaks.Translation;
 using LiteDB;
+using MelonLoader;
 
 namespace AdofaiTweaks.Core
 {
@@ -29,8 +30,13 @@ namespace AdofaiTweaks.Core
         private readonly Dictionary<LanguageEnum, Dictionary<string, TweakString>> cache;
 
         private void LoadFromDb(LanguageEnum language) {
-            string dbPath = Path.Combine("Mods", "AdofaiTweaks", "TweakStrings.db");
-            using (var db = new LiteDatabase(dbPath)) {
+            Stream dbStream = TweakAssets.OpenFile("TweakStrings.db");
+            if (dbStream == null) {
+                MelonLogger.Error("Could not read tweak strings DB!");
+                return;
+            }
+            using (dbStream)
+            using (var db = new LiteDatabase(dbStream)) {
                 var collection = db.GetCollection<TweakString>();
                 var results = collection.Query()
                     .Where(ts => ts.Language == language)
@@ -57,8 +63,7 @@ namespace AdofaiTweaks.Core
                 LoadFromDb(language);
             }
             Dictionary<string, TweakString> dict = cache[language];
-            if (!dict.ContainsKey(key))
-            {
+            if (!dict.ContainsKey(key)) {
                 return $"no such key {key}";
             }
             if (string.IsNullOrEmpty(dict[key].Content)) {
