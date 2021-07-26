@@ -33,6 +33,7 @@ namespace AdofaiTweaks.Core
             Stream dbStream = TweakAssets.OpenFile("TweakStrings.db");
             if (dbStream == null) {
                 MelonLogger.Error("Could not read tweak strings DB!");
+                cache[language] = new Dictionary<string, TweakString>();
                 return;
             }
             using (dbStream)

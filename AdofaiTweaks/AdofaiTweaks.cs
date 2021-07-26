@@ -20,7 +20,10 @@ namespace AdofaiTweaks
         /// <summary>
         /// Whether the tweak is enabled.
         /// </summary>
-        public static bool IsEnabled { get; private set; }
+        public static bool IsEnabled {
+            get => GlobalSettings.IsEnabled;
+            set => GlobalSettings.IsEnabled = value;
+        }
 
         /// <summary>
         /// The game's release number.
@@ -31,7 +34,7 @@ namespace AdofaiTweaks
         /// GlobalSettings instance.
         /// </summary>
         [SyncTweakSettings]
-        public GlobalSettings GlobalSettings { get; set; }
+        public static GlobalSettings GlobalSettings { get; set; }
 
         private List<Type> allTweakTypes;
         private readonly List<TweakRunner> tweakRunners = new List<TweakRunner>();
@@ -39,6 +42,7 @@ namespace AdofaiTweaks
         private SettingsSynchronizer synchronizer;
 
         private bool didStart;
+        private bool showGui;
 
         /// <summary>
         /// Runs the initial setup of AdofaiTweaks.
@@ -55,17 +59,14 @@ namespace AdofaiTweaks
 
             synchronizer = new SettingsSynchronizer();
 
-            synchronizer.Load();
-
             // Register global settings
+            synchronizer.Register(typeof(AdofaiTweaks));
             synchronizer.Register(typeof(TweakStrings));
             synchronizer.Register(typeof(TweakRunner));
-            synchronizer.Register(this);
 
-#if DEBUG
-            // TODO: Show some sort of debug message in the in-game settings.
-#endif
-            // TODO: Hook up OnSaveGUI and OnHideGUI
+            // Load global settings immediately
+            synchronizer.Load();
+            synchronizer.Sync();
         }
 
         /// <summary>
@@ -79,30 +80,80 @@ namespace AdofaiTweaks
             // of the mod after the first scene is loaded.
             if (!didStart) {
                 didStart = true;
-                // TODO: Load whether mod is enabled/disabled from settings
-                OnToggle(true);
+                if (IsEnabled) {
+                    StartTweaks();
+                }
             }
         }
 
         /// <summary>
-        /// Handler for MelonLoader's OnToggle event.
+        /// Handler for MelonLoader's OnGUI event. Displays the language chooser
+        /// and every tweak's settings GUI.
         /// </summary>
-        /// <param name="value">
-        /// <c>true</c> if the mod is enabled, or <c>false</c> if the mod is
-        /// disabled.
-        /// </param>
-        /// <returns><c>true</c>.</returns>
-        private bool OnToggle(bool value) {
-            IsEnabled = value;
-            if (value) {
-                StartTweaks();
-            } else {
-                StopTweaks();
-
-                // Save all settings
-                synchronizer.Save();
+        public override void OnGUI() {
+            if (!showGui) {
+                return;
             }
-            return true;
+
+            // Set some default GUI settings for better layouts
+            if (GlobalSettings.Language.IsSymbolLanguage()) {
+                GUI.skin.button.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.label.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.textArea.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.textField.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.toggle.font = TweakAssets.SymbolLangNormalFont;
+                GUI.skin.button.fontSize = 15;
+                GUI.skin.label.fontSize = 15;
+                GUI.skin.textArea.fontSize = 15;
+                GUI.skin.textField.fontSize = 15;
+                GUI.skin.toggle.fontSize = 15;
+            }
+            GUI.skin.toggle = new GUIStyle(GUI.skin.toggle) {
+                margin = new RectOffset(0, 4, 6, 6),
+            };
+            GUI.skin.label.wordWrap = false;
+
+#if DEBUG
+            GUILayout.Space(4);
+            GUILayout.Label("AdofaiTweaks DEBUG ENABLED");
+#endif
+
+            GUILayout.Space(16);
+            bool newIsEnabled = GUILayout.Toggle(IsEnabled, "Enable AdofaiTweaks");
+            GUILayout.Space(16);
+
+            if (newIsEnabled != IsEnabled) {
+                IsEnabled = newIsEnabled;
+                if (IsEnabled) {
+                    StartTweaks();
+                } else {
+                    StopTweaks();
+                }
+            }
+
+            if (IsEnabled) {
+                ShowSettings();
+            }
+
+            // Reset GUI settings to defaults
+            GUI.skin.button.font = null;
+            GUI.skin.label.font = null;
+            GUI.skin.textArea.font = null;
+            GUI.skin.textField.font = null;
+            GUI.skin.toggle.font = null;
+            GUI.skin.button.fontSize = 0;
+            GUI.skin.label.fontSize = 0;
+            GUI.skin.textArea.fontSize = 0;
+            GUI.skin.textField.fontSize = 0;
+            GUI.skin.toggle.fontSize = 0;
+
+#if DEBUG
+            GUILayout.Label(
+                $"<color=#a7a7a7><i>This build is a debug build.\n" +
+                $"Game Version: r{ReleaseNumber}\n" +
+                $"Build Date: {GCNS.buildDate}\n" +
+                $"Current Scene: {ADOBase.sceneName}</i></color>");
+#endif
         }
 
         /// <summary>
@@ -156,35 +207,12 @@ namespace AdofaiTweaks
 
             // Clear out all runners
             tweakRunners.Clear();
+
+            // Save all settings
+            synchronizer.Save();
         }
 
-        /// <summary>
-        /// Handler for MelonLoader's OnGUI event. Displays the language chooser
-        /// and every tweak's settings GUI.
-        /// </summary>
-        public override void OnGUI() {
-            // TODO: Don't always show the GUI
-
-            // Set some default GUI settings for better layouts
-            if (GlobalSettings.Language.IsSymbolLanguage()) {
-                GUI.skin.button.font = TweakAssets.SymbolLangNormalFont;
-                GUI.skin.label.font = TweakAssets.SymbolLangNormalFont;
-                GUI.skin.textArea.font = TweakAssets.SymbolLangNormalFont;
-                GUI.skin.textField.font = TweakAssets.SymbolLangNormalFont;
-                GUI.skin.toggle.font = TweakAssets.SymbolLangNormalFont;
-                GUI.skin.button.fontSize = 15;
-                GUI.skin.label.fontSize = 15;
-                GUI.skin.textArea.fontSize = 15;
-                GUI.skin.textField.fontSize = 15;
-                GUI.skin.toggle.fontSize = 15;
-            }
-            GUI.skin.toggle = new GUIStyle(GUI.skin.toggle) {
-                margin = new RectOffset(0, 4, 6, 6),
-            };
-            GUI.skin.label.wordWrap = false;
-
-            GUILayout.Space(4);
-
+        private void ShowSettings() {
             // Language chooser
             GUILayout.BeginHorizontal();
             GUILayout.Space(4);
@@ -232,39 +260,6 @@ namespace AdofaiTweaks
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnGUI();
             }
-
-            // Reset GUI settings to defaults
-            GUI.skin.button.font = null;
-            GUI.skin.label.font = null;
-            GUI.skin.textArea.font = null;
-            GUI.skin.textField.font = null;
-            GUI.skin.toggle.font = null;
-            GUI.skin.button.fontSize = 0;
-            GUI.skin.label.fontSize = 0;
-            GUI.skin.textArea.fontSize = 0;
-            GUI.skin.textField.fontSize = 0;
-            GUI.skin.toggle.fontSize = 0;
-
-#if DEBUG
-            GUILayout.Label($"<color=#a7a7a7><i>This build is a debug build.\nGame Version: r{ReleaseNumber}\nBuild Date: {GCNS.buildDate}\nCurrent Scene: {ADOBase.sceneName}</i></color>");
-#endif
-        }
-
-        /// <summary>
-        /// Handler for MelonLoader's OnHideGUI event.
-        /// </summary>
-        private void OnHideGUI() {
-            foreach (TweakRunner runner in tweakRunners) {
-                runner.OnHideGUI();
-            }
-            synchronizer.Save();
-        }
-
-        /// <summary>
-        /// Handler for MelonLoader's OnSaveGUI event.
-        /// </summary>
-        private void OnSaveGUI() {
-            synchronizer.Save();
         }
 
         /// <summary>
@@ -274,6 +269,27 @@ namespace AdofaiTweaks
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnUpdate(Time.deltaTime);
             }
+            if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+                && Input.GetKeyDown(KeyCode.F10)) {
+                showGui = !showGui;
+                if (!showGui) {
+                    OnHideGUI();
+                }
+            }
+        }
+
+        private void OnHideGUI() {
+            foreach (TweakRunner runner in tweakRunners) {
+                runner.OnHideGUI();
+            }
+            synchronizer.Save();
+        }
+
+        /// <summary>
+        /// Handler for MelonLoader's OnPreferencesSaved event.
+        /// </summary>
+        public override void OnPreferencesSaved() {
+            synchronizer.Save();
         }
     }
 }
