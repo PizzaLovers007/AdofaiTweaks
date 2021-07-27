@@ -64,9 +64,8 @@ namespace AdofaiTweaks.Core
             }
 
 #if DEBUG
-            if (showDebuggingMessage)
-            {
-                MelonLogger.Msg(
+            if (showDebuggingMessage) {
+                MelonLoader.MelonLogger.Msg(
                     string.Format(
                     "Patch {0} is invalid! - Specific criteria check:\n" +
                     "Metadata.MinVersion <= GCNS.releaseNumber ({1} <= {2}) is {3}{4}\n" +
