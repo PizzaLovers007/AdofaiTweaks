@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
+using MelonLoader;
 
 namespace AdofaiTweaks.Core
 {
