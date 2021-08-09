@@ -37,7 +37,6 @@ namespace AdofaiTweaks.Core
         /// Loads an instance of every <see cref="TweakSettings"/> type from the
         /// saved settings files.
         /// </summary>
-        /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
         public void Load() {
             tweakSettingsDictionary.Clear();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes()) {
@@ -49,7 +48,7 @@ namespace AdofaiTweaks.Core
                     AccessTools.Method(
                         typeof(TweakSettings),
                         nameof(TweakSettings.Load),
-                        generics: new Type[] { type });
+                        generics: new[] { type });
                 try {
                     tweakSettingsDictionary[type] =
                         (TweakSettings)genericLoadMethod.Invoke(
@@ -69,7 +68,6 @@ namespace AdofaiTweaks.Core
         /// Saves every <see cref="TweakSettings"/> instance to their respective
         /// files.
         /// </summary>
-        /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
         public void Save() {
             foreach (Type type in tweakSettingsDictionary.Keys) {
                 MelonLogger.Msg("Saving: " + type.FullName);

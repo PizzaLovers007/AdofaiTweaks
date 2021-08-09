@@ -23,10 +23,10 @@ namespace AdofaiTweaks.Core
         /// <param name="assembly">Assembly to find class from.</param>
         internal TweakPatch(Type patchType, TweakPatchAttribute metadata, HarmonyLib.Harmony harmony, Assembly assembly = null) {
             PatchType = patchType;
-            Metadata = metadata;
+            PatchMetadata = metadata;
             HarmonyInstance = harmony;
-            ClassType = (assembly ?? typeof(ADOBase).Assembly).GetType(Metadata.ClassName);
-            PatchTargetMethods = ClassType?.GetMethods(AccessTools.all).Where(m => m.Name.Equals(Metadata.MethodName));
+            ClassType = (assembly ?? typeof(ADOBase).Assembly).GetType(PatchMetadata.ClassName);
+            PatchTargetMethods = ClassType?.GetMethods(AccessTools.all).Where(m => m.Name.Equals(PatchMetadata.MethodName));
         }
 
         private HarmonyLib.Harmony HarmonyInstance { get; set; }
@@ -38,7 +38,7 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Tweak's patch metadata (attribute data).
         /// </summary>
-        internal TweakPatchAttribute Metadata { get; set; }
+        internal TweakPatchAttribute PatchMetadata { get; set; }
 
         /// <summary>
         /// Whether the patch is patched (enabled).
@@ -48,49 +48,18 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Checks whether the patch is valid for current game's version.
         /// </summary>
-        /// <param name="showDebuggingMessage">
-        /// Whether to show debugging message in logs.
-        /// </param>
         /// <returns>
         /// Patch's current availability in <see cref="bool"/>.
         /// </returns>
-        internal bool IsValidPatch(bool showDebuggingMessage = false) {
-            if ((Metadata.MinVersion <= AdofaiTweaks.ReleaseNumber || Metadata.MinVersion == -1) &&
-                (Metadata.MaxVersion >= AdofaiTweaks.ReleaseNumber || Metadata.MaxVersion == -1) &&
+        internal bool IsValidPatch() {
+            if ((PatchMetadata.MinVersion <= AdofaiTweaks.ReleaseNumber || PatchMetadata.MinVersion == -1) &&
+                (PatchMetadata.MaxVersion >= AdofaiTweaks.ReleaseNumber || PatchMetadata.MaxVersion == -1) &&
                 ClassType != null &&
                 PatchType != null &&
                 (PatchTargetMethods?.Count() ?? 0) != 0) {
                 return true;
             }
 
-#if DEBUG
-            if (showDebuggingMessage) {
-                MelonLoader.MelonLogger.Msg(
-                    string.Format(
-                    "Patch {0} is invalid! - Specific criteria check:\n" +
-                    "Metadata.MinVersion <= GCNS.releaseNumber ({1} <= {2}) is {3}{4}\n" +
-                    "Metadata.MaxVersion <= GCNS.releaseNumber ({5} <= {2}) is {6}{7}\n" +
-                    "ClassType is {8}\n" +
-                    "PatchType is {9}\n" +
-                    "PatchTargetMethods count is {10}{11}\n" +
-                    "Patch target method name is {12}" +
-                    "",
-                    // Parameters
-                    Metadata.PatchId,
-                    Metadata.MinVersion,
-                    AdofaiTweaks.ReleaseNumber,
-                    Metadata.MinVersion <= AdofaiTweaks.ReleaseNumber || Metadata.MinVersion == -1,
-                    Metadata.MinVersion == -1 ? " (-1)" : "",
-                    Metadata.MaxVersion,
-                    Metadata.MaxVersion >= AdofaiTweaks.ReleaseNumber || Metadata.MaxVersion == -1,
-                    Metadata.MaxVersion == -1 ? " (-1)" : "",
-                    ClassType,
-                    PatchType,
-                    PatchTargetMethods?.Count() ?? 0,
-                    PatchTargetMethods == null ? " (null)" : "",
-                    Metadata.MethodName));
-            }
-#endif
             return false;
         }
 
@@ -134,5 +103,34 @@ namespace AdofaiTweaks.Core
                 IsEnabled = false;
             }
         }
+
+#if DEBUG
+        private void PrintPatchDetails()
+        {
+            MelonLogger.Msg(
+                    string.Format(
+                    "Patch {0} details:\n" +
+                    "Metadata.MinVersion <= GCNS.releaseNumber ({1} <= {2}) is {3}{4}\n" +
+                    "Metadata.MaxVersion <= GCNS.releaseNumber ({5} <= {2}) is {6}{7}\n" +
+                    "ClassType is {8}\n" +
+                    "PatchType is {9}\n" +
+                    "PatchTargetMethods count is {10}{11}\n" +
+                    "Patch target method name is {12}",
+                    // Parameters
+                    PatchMetadata.PatchId,
+                    PatchMetadata.MinVersion,
+                    AdofaiTweaks.ReleaseNumber,
+                    PatchMetadata.MinVersion <= AdofaiTweaks.ReleaseNumber || PatchMetadata.MinVersion == -1,
+                    PatchMetadata.MinVersion == -1 ? " (-1)" : "",
+                    PatchMetadata.MaxVersion,
+                    PatchMetadata.MaxVersion >= AdofaiTweaks.ReleaseNumber || PatchMetadata.MaxVersion == -1,
+                    PatchMetadata.MaxVersion == -1 ? " (-1)" : "",
+                    ClassType,
+                    PatchType,
+                    PatchTargetMethods?.Count() ?? 0,
+                    PatchTargetMethods == null ? " (null)" : "",
+                    PatchMetadata.MethodName));
+        }
     }
+#endif
 }

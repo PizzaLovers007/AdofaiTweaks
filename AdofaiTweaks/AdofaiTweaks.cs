@@ -48,7 +48,6 @@ namespace AdofaiTweaks
         /// Runs the initial setup of AdofaiTweaks.
         /// </summary>
         public override void OnApplicationStart() {
-            MelonLogger.Msg("OnApplicationStart");
             allTweakTypes =
                 AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(a => a.GetTypes())
@@ -235,6 +234,8 @@ namespace AdofaiTweaks
                 if (language == GlobalSettings.Language) {
                     if (language.IsSymbolLanguage()) {
                         style.font = TweakAssets.KoreanBoldFont;
+                        // TODO: the Korean font size is way bigger than
+                        // TODO: English font size, so find a way to normalize it.
                         style.fontSize = 15;
                     } else {
                         style.fontStyle = FontStyle.Bold;

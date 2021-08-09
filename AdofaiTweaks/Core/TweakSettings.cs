@@ -66,6 +66,7 @@ namespace AdofaiTweaks.Core
                     using (var stream = File.OpenRead(filepath)) {
                         var serializer = new XmlSerializer(typeof(T));
                         var result = (T)serializer.Deserialize(stream);
+
                         return result;
                     }
                 } catch (Exception e) {

@@ -66,16 +66,15 @@ namespace AdofaiTweaks.Core
                     TweakPatch tweakPatch = new TweakPatch(type, attr, harmony);
 
                     // Find a ID-duplicating patch and ignore the current patch
-                    // if found one
                     TweakPatch duplicatePatch =
-                        TweakPatches.FirstOrDefault(p => p.Metadata.PatchId.Equals(attr.PatchId));
+                        TweakPatches.FirstOrDefault(p => p.PatchMetadata.PatchId.Equals(attr.PatchId));
                     if (duplicatePatch != null) {
                         MelonLogger.Msg(
-                            $"Patch with the ID of '{duplicatePatch.Metadata.PatchId}' is " +
+                            $"Patch with the ID of '{duplicatePatch.PatchMetadata.PatchId}' is " +
                             "already registered. Please check if you have two patches with the " +
                             "same ID.");
                     } else {
-                        if (tweakPatch?.IsValidPatch(true) ?? false) {
+                        if (tweakPatch.IsValidPatch()) {
                             ValidTweakPatches.Add(tweakPatch);
                         }
                         TweakPatches.Add(tweakPatch);
@@ -135,7 +134,7 @@ namespace AdofaiTweaks.Core
         }
 
         /// <summary>
-        /// Handler for adding this tweak's settings GUI to UMM's settings GUI.
+        /// Handler for adding this tweak's settings GUI to ADOLib's settings GUI.
         /// </summary>
         internal void OnGUI() {
             // Draw header
@@ -203,7 +202,7 @@ namespace AdofaiTweaks.Core
         }
 
         /// <summary>
-        /// Handler for when UMM's settings GUI is hidden.
+        /// Handler for when ADOLib's settings GUI is hidden.
         /// </summary>
         internal void OnHideGUI() {
             if (Settings.IsEnabled) {
@@ -212,7 +211,7 @@ namespace AdofaiTweaks.Core
         }
 
         /// <summary>
-        /// Handler for UMM's update event.
+        /// Handler for ADOLib's update event.
         /// </summary>
         /// <param name="deltaTime">
         /// The amount of time that has passed since the previous frame in
@@ -233,6 +232,7 @@ namespace AdofaiTweaks.Core
             }
         }
 
+#if DEBUG
         private void OnDebugGUI() {
             GUILayout.Space(12f);
             ShowDebuggingDetails =
@@ -247,7 +247,7 @@ namespace AdofaiTweaks.Core
                     string toggleText =
                         $"<color=#a7a7a7><i>{(patch.IsEnabled ? "En" : "Dis")}abled | " +
                         $"{(patch.IsValidPatch() ? "" : "Invalid ")}Patch " +
-                        $"[{patch.Metadata.PatchId}]</i></color>";
+                        $"[{patch.PatchMetadata.PatchId}]</i></color>";
                     if (patch.IsEnabled != GUILayout.Toggle(patch.IsEnabled, toggleText)
                         && patch.IsValidPatch()) {
                         if (patch.IsEnabled) {
@@ -260,5 +260,6 @@ namespace AdofaiTweaks.Core
                 MoreGUILayout.EndIndent();
             }
         }
+#endif
     }
 }
