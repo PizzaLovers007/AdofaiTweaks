@@ -63,19 +63,33 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                                 default:
                                     void CancelRegister()
                                     {
-                                        if (Controller.currFloor?.nextfloor)
+                                        var nextfloor = Controller.currFloor?.nextfloor;
+                                        if (nextfloor)
                                         {
-                                            Controller.currFloor.nextfloor.bottomglow.enabled = false;
-                                            Controller.currFloor.nextfloor.topglow.enabled = false;
+                                            if (nextfloor.bottomglow)
+                                            {
+                                                nextfloor.bottomglow.enabled = false;
+                                            }
+
+                                            if (nextfloor.topglow)
+                                            {
+                                                nextfloor.topglow.enabled = false;
+                                            }
+
+                                            AdofaiTweaks.Logger.Log("glow done");
                                             Controller.OnDamage();
 
+                                            AdofaiTweaks.Logger.Log("ondmg");
                                             Vector3 position = Controller.chosenplanet.other.transform.position;
+                                            AdofaiTweaks.Logger.Log("getpos");
                                             position.y += 1f;
+                                            AdofaiTweaks.Logger.Log("setpos");
 
                                             Controller.ShowHitText(
                                                 latestHitMargin,
                                                 position,
                                                 (float)(Controller.chosenplanet.targetExitAngle - Controller.chosenplanet.angle));
+                                            AdofaiTweaks.Logger.Log("showtext");
 
                                             skipSwitchChosen = true;
 
