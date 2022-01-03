@@ -57,7 +57,13 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 }
 
                 // Limit keys pressed
-                __result = Mathf.Min(__instance.pseudoMultipress ? 3 : 1, keysPressed);
+                bool pseudoMultipress = false;
+                if (typeof(scrController).GetField("pseudoMultipress").GetValue(__instance) is bool castedPseudoMultipress)
+                {
+                    pseudoMultipress = castedPseudoMultipress;
+                }
+
+                __result = Mathf.Min(pseudoMultipress ? 3 : 1, keysPressed);
 
                 return false;
             }
