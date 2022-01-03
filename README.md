@@ -5,7 +5,7 @@
 General tweaks for the rhythm game
 [A Dance of Fire and Ice](https://store.steampowered.com/app/977950/A_Dance_of_Fire_and_Ice/).
 
-Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
+Join the ADOFAI.gg community discord! https://discord.gg/TKdpbUUfUa
 
 ## Available Tweaks
 
@@ -32,6 +32,7 @@ Join the ADOFAI modding discord! https://discord.gg/67pdbVbEWx
 * Polski (Provided by crispy)
 * Français (Provided by Woopie 2)
 * Tiếng Việt (Provided by Gesomaru)
+* 中文（简体） (Provided by Gunbuster)
 
 ## Images
 
