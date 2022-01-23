@@ -35,6 +35,38 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         {
             private static readonly MethodInfo FAIL_ACTION_METHOD =
                 AccessTools.Method(typeof(scrController), "FailAction");
+
+            // Cancel hit registering
+            private static void CancelRegister()
+            {
+                var nextfloor = Controller.currFloor?.nextfloor;
+                if (nextfloor)
+                {
+                    // Disable glow for sprite floors
+                    if (nextfloor.bottomglow)
+                    {
+                        nextfloor.bottomglow.enabled = false;
+                    }
+
+                    if (nextfloor.topglow)
+                    {
+                        nextfloor.topglow.enabled = false;
+                    }
+
+                    Controller.OnDamage();
+
+                    Vector3 position = Controller.chosenplanet.other.transform.position;
+                    position.y += 1f;
+
+                    Controller.ShowHitText(
+                        latestHitMargin,
+                        position,
+                        (float)(Controller.chosenplanet.targetExitAngle - Controller.chosenplanet.angle));
+
+                    skipSwitchChosen = true;
+                }
+            }
+
             public static void Postfix(ref HitMargin hit)
             {
                 if (Settings.RestrictJudgments[(int)hit])
@@ -57,37 +89,16 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                         case RestrictJudgmentAction.NoRegister:
                             switch (hit)
                             {
+                                // Those judgements are not registered as a successful hit
                                 case HitMargin.TooEarly:
                                 case HitMargin.TooLate:
                                     break;
                                 default:
-                                    void CancelRegister()
-                                    {
-                                        if (Controller.currFloor?.nextfloor)
-                                        {
-                                            Controller.currFloor.nextfloor.bottomglow.enabled = false;
-                                            Controller.currFloor.nextfloor.topglow.enabled = false;
-                                            Controller.OnDamage();
-
-                                            Vector3 position = Controller.chosenplanet.other.transform.position;
-                                            position.y += 1f;
-
-                                            Controller.ShowHitText(
-                                                latestHitMargin,
-                                                position,
-                                                (float)(Controller.chosenplanet.targetExitAngle - Controller.chosenplanet.angle));
-
-                                            skipSwitchChosen = true;
-
-                                            // force stop while in scrPlanet.SwitchChosen method
-                                            // throw new Exception("Intentional Exception fired by RestrictJudgment Tweak (don't use noregister if you don't want this error log spam)");
-                                        }
-                                    }
-
                                     if (GCS.perfectOnlyMode)
                                     {
                                         switch (hit)
                                         {
+                                            // Those judgements are also not registered as a successful hit on perfectOnlyMode
                                             case HitMargin.VeryEarly:
                                             case HitMargin.VeryLate:
                                                 break;
@@ -104,7 +115,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                             }
                             break;
                         case RestrictJudgmentAction.InstantRestart:
-                            Controller.printe("killing all tweens (adofaitweaks invoked)");
+                            Controller.printe("AdofaiTweaks MOD> killing all tweens");
                             DOTween.KillAll();
 
                             if (Controller.isEditingLevel)

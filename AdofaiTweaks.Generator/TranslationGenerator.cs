@@ -92,8 +92,7 @@ namespace AdofaiTweaks.Generator
                     string tweakNameUpperCamel = PascalToUpperCamel(table.TableName);
                     sb.Append("public class ").Append(tweakName).Append(" { ");
                     foreach (DataRow row in table.Select()) {
-                        string shortKey = row["KEY"] as string;
-                        shortKey = shortKey.ToUpper();
+                        string shortKey = (row["KEY"] as string).ToUpper();
                         if (shortKey.StartsWith("I_")) {
                             // Ignore key if we don't want to generate code for
                             // it
