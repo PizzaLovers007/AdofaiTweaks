@@ -35,7 +35,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             KeyCode.Mouse4,
             KeyCode.Mouse5,
             KeyCode.Mouse6,
-            KeyCode.Escape,
         };
 
         [SyncTweakSettings]
