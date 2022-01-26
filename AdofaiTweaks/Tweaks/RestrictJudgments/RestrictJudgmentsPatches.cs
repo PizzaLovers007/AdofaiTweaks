@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
+using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using DG.Tweening;
 using HarmonyLib;
@@ -37,19 +36,15 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                 AccessTools.Method(typeof(scrController), "FailAction");
 
             // Cancel hit registering
-            private static void CancelRegister()
-            {
+            private static void CancelRegister() {
                 var nextfloor = Controller.currFloor?.nextfloor;
-                if (nextfloor)
-                {
+                if (nextfloor) {
                     // Disable glow for sprite floors
-                    if (nextfloor.bottomglow)
-                    {
+                    if (nextfloor.bottomglow) {
                         nextfloor.bottomglow.enabled = false;
                     }
 
-                    if (nextfloor.topglow)
-                    {
+                    if (nextfloor.topglow) {
                         nextfloor.topglow.enabled = false;
                     }
 
@@ -67,67 +62,55 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                 }
             }
 
-            public static void Postfix(ref HitMargin hit)
-            {
-                if (Settings.RestrictJudgments[(int)hit])
-                {
+            public static void Postfix(ref HitMargin hit) {
+                if (Settings.RestrictJudgments[(int)hit]) {
                     latestHitMargin = hit;
 
-                    switch (Settings.RestrictJudgmentAction)
-                    {
+                    switch (Settings.RestrictJudgmentAction) {
                         case RestrictJudgmentAction.KillPlayer:
-                            if (!invokedFailAction)
-                            {
-                                invokedFailAction = true;
+                        if (!invokedFailAction) {
+                            invokedFailAction = true;
 
-                                // 72+ => 2 arguments, 71- => 1 argument
-                                FAIL_ACTION_METHOD.Invoke(
-                                    Controller,
-                                    AdofaiTweaks.ReleaseNumber > 71 ? new object[] { true, false } : new object[] { true });
-                            }
-                            break;
+                            // 72+ => 2 arguments, 71- => 1 argument
+                            FAIL_ACTION_METHOD.Invoke(
+                                Controller,
+                                AdofaiTweaks.ReleaseNumber > 71 ? new object[] { true, false } : new object[] { true });
+                        }
+                        break;
                         case RestrictJudgmentAction.NoRegister:
-                            switch (hit)
-                            {
-                                // Those judgements are not registered as a successful hit
-                                case HitMargin.TooEarly:
-                                case HitMargin.TooLate:
+                        switch (hit) {
+                            // Those judgements are not registered as a successful hit
+                            case HitMargin.TooEarly:
+                            case HitMargin.TooLate:
+                            break;
+                            default:
+                            if (GCS.perfectOnlyMode) {
+                                switch (hit) {
+                                    // Those judgements are also not registered as a successful hit on perfectOnlyMode
+                                    case HitMargin.VeryEarly:
+                                    case HitMargin.VeryLate:
                                     break;
-                                default:
-                                    if (GCS.perfectOnlyMode)
-                                    {
-                                        switch (hit)
-                                        {
-                                            // Those judgements are also not registered as a successful hit on perfectOnlyMode
-                                            case HitMargin.VeryEarly:
-                                            case HitMargin.VeryLate:
-                                                break;
-                                            default:
-                                                CancelRegister();
-                                                break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        CancelRegister();
-                                    }
+                                    default:
+                                    CancelRegister();
                                     break;
+                                }
+                            } else {
+                                CancelRegister();
                             }
                             break;
+                        }
+                        break;
                         case RestrictJudgmentAction.InstantRestart:
-                            Controller.printe("AdofaiTweaks MOD> killing all tweens");
-                            DOTween.KillAll();
+                        Controller.printe("AdofaiTweaks MOD> killing all tweens");
+                        DOTween.KillAll();
 
-                            if (Controller.isEditingLevel)
-                            {
-                                hideMarginText = true;
-                                Controller.StartCoroutine("ResetCustomLevel");
-                            }
-                            else
-                            {
-                                SceneManager.LoadScene(ADOBase.sceneName);
-                            }
-                            break;
+                        if (Controller.isEditingLevel) {
+                            hideMarginText = true;
+                            Controller.StartCoroutine("ResetCustomLevel");
+                        } else {
+                            SceneManager.LoadScene(ADOBase.sceneName);
+                        }
+                        break;
                     }
                 }
             }
@@ -144,7 +127,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                     Text text = (Text)field.GetValue(__instance);
                     text.text =
                         Settings.CustomDeathString.Replace(
-                            "{judgment}", RDString.Get("HitMargin." + latestHitMargin.ToString()));
+                            "{judgment}", TweakStrings.GetRDString("HitMargin." + latestHitMargin.ToString()));
                     field.SetValue(__instance, text);
                 }
             }
@@ -153,10 +136,8 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         [HarmonyPatch(typeof(scrController), "ShowHitText")]
         private static class ControllerShowHitTextPatch
         {
-            public static bool Prefix()
-            {
-                if (hideMarginText)
-                {
+            public static bool Prefix() {
+                if (hideMarginText) {
                     return hideMarginText = false;
                 }
                 return true;
@@ -214,8 +195,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             [HarmonyPatch(typeof(scrPlanet), "SwitchChosen")]
             private static class PlanetSwitchChosenPatch
             {
-                public static void Postfix(ref scrPlanet __result)
-                {
+                public static void Postfix(ref scrPlanet __result) {
                     AdofaiTweaks.Logger.Log($"{(skipSwitchChosen ? "" : "not ")}skipping the SwitchChosen method!");
                     if (skipSwitchChosen) {
                         __result = __result.other;

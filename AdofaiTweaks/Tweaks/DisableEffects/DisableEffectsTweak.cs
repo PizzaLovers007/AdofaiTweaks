@@ -43,16 +43,13 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                     TweakStrings.Get(
                         TranslationKeys.DisableEffects.FILTER,
                         RDString.GetEnumValue(Filter.Grayscale),
-                        RDString.GetEnumValue(Filter.Arcade))))
-            {
+                        RDString.GetEnumValue(Filter.Arcade)))) {
                 // Exclude specific filter from being disabled
-                if (GUILayout.Button(TweakStrings.Get(TranslationKeys.DisableEffects.EXCLUDE_FILTER_LIST, Settings.FilterExcludeList.Count)))
-                {
+                if (GUILayout.Button(TweakStrings.Get(TranslationKeys.DisableEffects.EXCLUDE_FILTER_LIST, Settings.FilterExcludeList.Count))) {
                     DisplayList = !DisplayList;
                 }
 
-                if (DisplayList)
-                {
+                if (DisplayList) {
                     GUILayout.EndHorizontal();
 
                     GUILayout.Space(10f);
@@ -63,11 +60,9 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
 
                     scrollPosition = GUILayout.BeginScrollView(
                         scrollPosition, GUILayout.Height(140f));
-                    foreach (Filter f in Enum.GetValues(typeof(Filter)))
-                    {
+                    foreach (Filter f in Enum.GetValues(typeof(Filter))) {
                         bool flag = GUILayout.Toggle(FilterExcludeDict[f], RDString.GetEnumValue(f));
-                        if (FilterExcludeDict[f] != flag)
-                        {
+                        if (FilterExcludeDict[f] != flag) {
                             FilterExcludeDict[f] = flag;
                             UpdateExcludeList();
                         }
@@ -96,7 +91,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                     Settings.DisableHallOfMirrors,
                     TweakStrings.Get(
                         TranslationKeys.DisableEffects.HALL_OF_MIRRORS,
-                        RDString.Get("editor." + LevelEventType.HallOfMirrors)));
+                        TweakStrings.GetRDString("editor." + LevelEventType.HallOfMirrors)));
 
             // Screen shake
             Settings.DisableScreenShake =
@@ -122,21 +117,17 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         }
 
         /// <inheritdoc/>
-        public override void OnEnable()
-        {
+        public override void OnEnable() {
             FilterExcludeDict = new Dictionary<Filter, bool>();
 
-            foreach (Filter f in Enum.GetValues(typeof(Filter)))
-            {
+            foreach (Filter f in Enum.GetValues(typeof(Filter))) {
                 FilterExcludeDict.Add(f, Settings.FilterExcludeList.Contains(f));
             }
         }
 
-        private void UpdateExcludeList()
-        {
+        private void UpdateExcludeList() {
             List<Filter> result = new List<Filter>();
-            foreach (KeyValuePair<Filter, bool> p in FilterExcludeDict.Where(p => p.Value))
-            {
+            foreach (KeyValuePair<Filter, bool> p in FilterExcludeDict.Where(p => p.Value)) {
                 result.Add(p.Key);
             }
             Settings.FilterExcludeList = result;
