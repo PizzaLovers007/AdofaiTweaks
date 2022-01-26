@@ -128,7 +128,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
                     Settings.HidePerfects,
                     TweakStrings.Get(
                         TranslationKeys.JudgmentVisuals.HIDE_PERFECTS,
-                        RDString.Get("HitMargin." + HitMargin.Perfect)));
+                        TweakStrings.GetRDString("HitMargin." + HitMargin.Perfect)));
         }
 
         /// <inheritdoc/>

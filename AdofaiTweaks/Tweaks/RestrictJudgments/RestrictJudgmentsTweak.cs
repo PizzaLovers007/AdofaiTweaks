@@ -39,7 +39,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                     Settings.RestrictJudgments[i],
                     TweakStrings.Get(
                         TranslationKeys.RestrictJudgments.RESTRICT,
-                        RDString.Get("HitMargin." + (HitMargin)i)));
+                        TweakStrings.GetRDString("HitMargin." + (HitMargin)i)));
             }
             MoreGUILayout.EndIndent();
 
