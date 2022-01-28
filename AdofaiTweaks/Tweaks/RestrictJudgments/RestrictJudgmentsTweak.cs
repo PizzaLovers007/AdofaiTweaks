@@ -24,8 +24,11 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             HitMargin.VeryLate,
             HitMargin.TooLate,
         };
-        private static readonly RestrictJudgmentAction[] RESTRICT_ACTIONS =
-            (RestrictJudgmentAction[])Enum.GetValues(typeof(RestrictJudgmentAction));
+
+        private static readonly RestrictJudgmentAction[] RESTRICT_ACTIONS = {
+            RestrictJudgmentAction.KillPlayer,
+            RestrictJudgmentAction.InstantRestart,
+        };
 
         /// <inheritdoc/>
         public override string Name =>
@@ -40,39 +43,38 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
 
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
-            GUILayout.Label("Currently broken :( please disable this tweak");
-            //// select judgment
-            //GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_HEADER));
-            //MoreGUILayout.BeginIndent();
-            //foreach (HitMargin margin in JUDGMENTS_TO_RESTRICT) {
-            //    Settings.RestrictJudgments[(int)margin] =
-            //        GUILayout.Toggle(
-            //            Settings.RestrictJudgments[(int)margin],
-            //            TweakStrings.Get(
-            //                TranslationKeys.RestrictJudgments.RESTRICT,
-            //                TweakStrings.GetRDString("HitMargin." + margin)));
-            //}
-            //MoreGUILayout.EndIndent();
+            // select judgment
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_HEADER));
+            MoreGUILayout.BeginIndent();
+            foreach (HitMargin margin in JUDGMENTS_TO_RESTRICT) {
+                Settings.RestrictJudgments[(int)margin] =
+                    GUILayout.Toggle(
+                        Settings.RestrictJudgments[(int)margin],
+                        TweakStrings.Get(
+                            TranslationKeys.RestrictJudgments.RESTRICT,
+                            TweakStrings.GetRDString("HitMargin." + margin)));
+            }
+            MoreGUILayout.EndIndent();
 
-            //// select restriction method
-            //GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_HEADER));
-            //MoreGUILayout.BeginIndent();
-            //GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_ACTION));
-            //foreach (RestrictJudgmentAction action in RESTRICT_ACTIONS) {
-            //    if (GUILayout.Toggle(
-            //            Settings.RestrictJudgmentAction == action,
-            //            TweakStrings.Get("RESTRICT_JUDGMENTS_I_RESTRICT_ACTION." + action))
-            //        && Settings.RestrictJudgmentAction != action) {
-            //        Settings.RestrictJudgmentAction = action;
-            //    }
-            //}
+            // select restriction method
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_HEADER));
+            MoreGUILayout.BeginIndent();
+            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_ACTION));
+            foreach (RestrictJudgmentAction action in RESTRICT_ACTIONS) {
+                if (GUILayout.Toggle(
+                        Settings.RestrictJudgmentAction == action,
+                        TweakStrings.Get("RESTRICT_JUDGMENTS_I_RESTRICT_ACTION." + action))
+                    && Settings.RestrictJudgmentAction != action) {
+                    Settings.RestrictJudgmentAction = action;
+                }
+            }
 
-            //// set custom death message
-            //if (Settings.RestrictJudgmentAction == RestrictJudgmentAction.KillPlayer) {
-            //    GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_DEATH));
-            //    Settings.CustomDeathString = GUILayout.TextField(Settings.CustomDeathString);
-            //}
-            //MoreGUILayout.EndIndent();
+            // set custom death message
+            if (Settings.RestrictJudgmentAction == RestrictJudgmentAction.KillPlayer) {
+                GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_DEATH));
+                Settings.CustomDeathString = GUILayout.TextField(Settings.CustomDeathString);
+            }
+            MoreGUILayout.EndIndent();
         }
 
         /// <inheritdoc/>
