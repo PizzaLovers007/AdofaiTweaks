@@ -15,6 +15,18 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         patchesType: typeof(RestrictJudgmentsPatches))]
     internal class RestrictJudgmentsTweak : Tweak
     {
+        private static readonly HitMargin[] JUDGMENTS_TO_RESTRICT = {
+            HitMargin.TooEarly,
+            HitMargin.VeryEarly,
+            HitMargin.EarlyPerfect,
+            HitMargin.Perfect,
+            HitMargin.LatePerfect,
+            HitMargin.VeryLate,
+            HitMargin.TooLate,
+        };
+        private static readonly RestrictJudgmentAction[] RESTRICT_ACTIONS =
+            (RestrictJudgmentAction[])Enum.GetValues(typeof(RestrictJudgmentAction));
+
         /// <inheritdoc/>
         public override string Name =>
             TweakStrings.Get(TranslationKeys.RestrictJudgments.NAME);
@@ -26,52 +38,52 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         [SyncTweakSettings]
         private RestrictJudgmentsSettings Settings { get; set; }
 
-        private readonly int TOTAL_JUDGMENTS = Enum.GetNames(typeof(HitMargin)).Length;
-        private readonly int TOTAL_ACTIONS = Enum.GetNames(typeof(RestrictJudgmentAction)).Length;
-
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
-            // select judgment
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_HEADER));
-            MoreGUILayout.BeginIndent();
-            for (int i = 0; i < TOTAL_JUDGMENTS; i++) {
-                Settings.RestrictJudgments[i] = GUILayout.Toggle(
-                    Settings.RestrictJudgments[i],
-                    TweakStrings.Get(
-                        TranslationKeys.RestrictJudgments.RESTRICT,
-                        TweakStrings.GetRDString("HitMargin." + (HitMargin)i)));
-            }
-            MoreGUILayout.EndIndent();
+            GUILayout.Label("Currently broken :(");
+            //// select judgment
+            //GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_HEADER));
+            //MoreGUILayout.BeginIndent();
+            //foreach (HitMargin margin in JUDGMENTS_TO_RESTRICT) {
+            //    Settings.RestrictJudgments[(int)margin] =
+            //        GUILayout.Toggle(
+            //            Settings.RestrictJudgments[(int)margin],
+            //            TweakStrings.Get(
+            //                TranslationKeys.RestrictJudgments.RESTRICT,
+            //                TweakStrings.GetRDString("HitMargin." + margin)));
+            //}
+            //MoreGUILayout.EndIndent();
 
-            // select restriction method
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_HEADER));
-            MoreGUILayout.BeginIndent();
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_ACTION));
-            for (int i = 0; i < TOTAL_ACTIONS; i++) {
-                if (GUILayout.Toggle(
-                        Settings.RestrictJudgmentAction == (RestrictJudgmentAction)i,
-                        TweakStrings.Get("RESTRICT_JUDGMENTS_I_RESTRICT_ACTION." + ((RestrictJudgmentAction)i).ToString())) &&
-                        Settings.RestrictJudgmentAction != (RestrictJudgmentAction)i) {
-                    Settings.RestrictJudgmentAction = (RestrictJudgmentAction)i;
-                }
-            }
+            //// select restriction method
+            //GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_HEADER));
+            //MoreGUILayout.BeginIndent();
+            //GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_ACTION));
+            //foreach (RestrictJudgmentAction action in RESTRICT_ACTIONS) {
+            //    if (GUILayout.Toggle(
+            //            Settings.RestrictJudgmentAction == action,
+            //            TweakStrings.Get("RESTRICT_JUDGMENTS_I_RESTRICT_ACTION." + action))
+            //        && Settings.RestrictJudgmentAction != action) {
+            //        Settings.RestrictJudgmentAction = action;
+            //    }
+            //}
 
-            // set custom death message
-            if (Settings.RestrictJudgmentAction == RestrictJudgmentAction.KillPlayer) {
-                GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_DEATH));
-                Settings.CustomDeathString = GUILayout.TextField(Settings.CustomDeathString);
-            }
-            MoreGUILayout.EndIndent();
+            //// set custom death message
+            //if (Settings.RestrictJudgmentAction == RestrictJudgmentAction.KillPlayer) {
+            //    GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.CUSTOM_DEATH));
+            //    Settings.CustomDeathString = GUILayout.TextField(Settings.CustomDeathString);
+            //}
+            //MoreGUILayout.EndIndent();
         }
 
         /// <inheritdoc/>
         public override void OnEnable() {
+            int numJudgmentTypes = Enum.GetValues(typeof(HitMargin)).Length;
             if (Settings.RestrictJudgments == null) {
-                Settings.RestrictJudgments = new bool[TOTAL_JUDGMENTS];
-            } else if (Settings.RestrictJudgments.Length != TOTAL_JUDGMENTS) {
+                Settings.RestrictJudgments = new bool[numJudgmentTypes];
+            } else if (Settings.RestrictJudgments.Length != numJudgmentTypes) {
                 // Judgments were added/removed, migrate to new settings
-                bool[] migratedJudgments = new bool[TOTAL_JUDGMENTS];
-                int len = Math.Min(TOTAL_JUDGMENTS, Settings.RestrictJudgments.Length);
+                bool[] migratedJudgments = new bool[numJudgmentTypes];
+                int len = Math.Min(numJudgmentTypes, Settings.RestrictJudgments.Length);
                 for (int i = 0; i < len; i++) {
                     migratedJudgments[i] = Settings.RestrictJudgments[i];
                 }
