@@ -40,7 +40,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
 
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
-            GUILayout.Label("Currently broken :(");
+            GUILayout.Label("Currently broken :( please disable this tweak");
             //// select judgment
             //GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictJudgments.RESTRICT_HEADER));
             //MoreGUILayout.BeginIndent();
