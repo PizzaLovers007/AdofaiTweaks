@@ -19,9 +19,9 @@ Join the ADOFAI.gg community discord! https://discord.gg/TKdpbUUfUa
 * **Planet Color** - Sets the color of the planets and their tail individually.
 * **Planet Opacity** - Sets the opacity of the planets individually.
 * **Restrict Judgments** - Changes behavior of certain judgments.
-    * Kill player
-    * Instantly restart the level
-    * Do not register as a hit
+    * Kill player on restricted judgment
+    * Instantly restart the level on restricted judgment
+    * Do not register restricted judgment on hit
 * **Miscellaneous**
     * Disable screen flip in "Glitch" filter
     * Disable editor zoom in/out when in gameplay
