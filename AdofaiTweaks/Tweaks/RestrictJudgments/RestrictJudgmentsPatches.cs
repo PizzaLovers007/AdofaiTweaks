@@ -21,7 +21,8 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         private static bool invokedFailAction = false;
         private static HitMargin latestHitMargin;
         private static bool hideMarginText = false;
-        private static bool shouldFailFast = false;
+        private static bool shouldFailPlayer = false;
+        private static bool shouldInstantRestart = false;
 
         private static scrController Controller {
             get {
@@ -30,43 +31,62 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         }
 
         [TweakPatch(
-            "RestrictJudgments.GetHitMarginWithRestrictions",
+            "RestrictJudgments.IsValidHitWithRestrictions",
             "scrMisc",
-            "GetHitMargin",
+            "IsValidHit",
             MinVersion = 80)]
-        private static class GetHitMarginWithRestrictions
+        private static class IsValidHitWithRestrictionsPatch
         {
-            public static void Postfix(ref HitMargin __result) {
+            public static void Postfix(ref bool __result, HitMargin margin) {
                 // Skip extra checks if the hit margin isn't restricted or if
                 // not in gameplay
-                if (!Settings.RestrictJudgments[(int)__result] || !Controller.gameworld) {
+                if (!Settings.RestrictJudgments[(int)margin] || !Controller.gameworld) {
                     return;
                 }
 
+                __result = false;
+
                 switch (Settings.RestrictJudgmentAction) {
                     case RestrictJudgmentAction.KillPlayer:
-                    if (!invokedFailAction) {
-                        invokedFailAction = !Controller.noFail;
-                        latestHitMargin = __result;
-
-                        // Fail with an "overload", text is changed later
-                        Controller.FailAction(true);
-                    }
-                    break;
-
-                    case RestrictJudgmentAction.NoRegister:
+                    shouldFailPlayer = true;
+                    latestHitMargin = margin;
                     break;
 
                     case RestrictJudgmentAction.InstantRestart:
-                    __result = HitMargin.TooEarly;
+                    shouldFailPlayer = true;
+                    shouldInstantRestart = true;
+                    break;
+
+                    case RestrictJudgmentAction.NoRegister:
+                    // Just don't do anything
+                    break;
+                }
+            }
+        }
+
+        [TweakPatch(
+            "RestrictJudgments.SwitchChosenInstantRestartTrigger",
+            "scrPlanet",
+            "SwitchChosen",
+            MinVersion = 80)]
+        private static class SwitchChosenInstantRestartTriggerPatch
+        {
+            public static void Postfix() {
+                if (!shouldFailPlayer) {
+                    return;
+                }
+                shouldFailPlayer = false;
+
+                if (shouldInstantRestart) {
                     // Force instantExplode fast fail even if no-fail is on
                     bool origNoFail = Controller.noFail;
                     Controller.noFail = false;
-                    shouldFailFast = true;
                     Controller.instantExplode = true;
                     Controller.FailAction();
                     Controller.noFail = origNoFail;
-                    break;
+                } else {
+                    // Fail with an "overload", text is changed later
+                    Controller.FailAction(true);
                 }
             }
         }
@@ -76,14 +96,14 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             "scrController",
             "Fail2_Update",
             MinVersion = 80)]
-        private static class Fail2_UpdateFast
+        private static class Fail2_UpdateFastPatch
         {
             public static bool Prefix(scrController __instance) {
-                if (!shouldFailFast) {
+                if (!shouldInstantRestart) {
                     return true;
                 }
 
-                shouldFailFast = false;
+                shouldInstantRestart = false;
                 Controller.instantExplode = false;
                 if (scnEditor.instance != null) {
                     __instance.StartCoroutine(__instance.ResetCustomLevel());
@@ -94,7 +114,11 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             }
         }
 
-        [HarmonyPatch(typeof(scrCountdown), "ShowOverload")]
+        [TweakPatch(
+            "RestrictJudgments.CountdownShowOverload",
+            "scrCountdown",
+            "ShowOverload",
+            MinVersion = 80)]
         private static class CountdownShowOverloadPatch
         {
             public static void Postfix(scrCountdown __instance) {
@@ -112,7 +136,11 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             }
         }
 
-        [HarmonyPatch(typeof(scrController), "ShowHitText")]
+        [TweakPatch(
+            "RestrictJudgments.ControllerShowHitText",
+            "scrController",
+            "ShowHitText",
+            MinVersion = 80)]
         private static class ControllerShowHitTextPatch
         {
             public static bool Prefix() {

@@ -28,6 +28,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
         private static readonly RestrictJudgmentAction[] RESTRICT_ACTIONS = {
             RestrictJudgmentAction.KillPlayer,
             RestrictJudgmentAction.InstantRestart,
+            RestrictJudgmentAction.NoRegister,
         };
 
         /// <inheritdoc/>
