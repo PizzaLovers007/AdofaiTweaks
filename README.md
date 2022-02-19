@@ -18,7 +18,10 @@ Join the ADOFAI.gg community discord! https://discord.gg/TKdpbUUfUa
 * **Key Viewer** - Shows a key viewer for registered keys.
 * **Planet Color** - Sets the color of the planets and their tail individually.
 * **Planet Opacity** - Sets the opacity of the planets individually.
-* **Restrict Judgments** - Kills the player on certain judgments.
+* **Restrict Judgments** - Changes behavior of certain judgments.
+    * Kill player
+    * Instantly restart the level
+    * Do not register as a hit
 * **Miscellaneous**
     * Disable screen flip in "Glitch" filter
     * Disable editor zoom in/out when in gameplay
