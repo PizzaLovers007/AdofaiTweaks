@@ -13,21 +13,26 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         [SyncTweakSettings]
         private static DisableEffectsSettings Settings { get; set; }
 
-        [HarmonyPatch(typeof(ffxSetFilterPlus), "SetFilter")]
+        [TweakPatch(
+            "DisableEffects.SetFilterAlwaysFalse",
+            "ffxSetFilterPlus",
+            "SetFilter")]
         private static class SetFilterAlwaysFalsePatch
         {
             public static void Prefix(ffxSetFilterPlus __instance, ref bool fEnable) {
                 if (!Settings.DisableFilter) {
                     return;
                 }
-                if (!Settings.FilterExcludeList.Contains(__instance.filter))
-                {
+                if (!Settings.FilterExcludeList.Contains(__instance.filter)) {
                     fEnable = false;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(scrController), "WaitForStartCo")]
+        [TweakPatch(
+            "DisableEffects.ControllerDisableStartVfx",
+            "scrController",
+            "WaitForStartCo")]
         private static class ControllerDisableStartVfxPatch
         {
             public static void Postfix(scrController __instance) {
@@ -40,7 +45,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxBloomPlus), "SetBloom")]
+        [TweakPatch(
+            "DisableEffects.SetBloomAlwaysFalse",
+            "ffxBloomPlus",
+            "SetBloom")]
         private static class SetBloomAlwaysFalsePatch
         {
             public static void Prefix(ref bool bEnable) {
@@ -51,7 +59,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxFlashPlus), "StartEffect")]
+        [TweakPatch(
+            "DisableEffects.FlashStartEffectAlwaysClear",
+            "ffxFlashPlus",
+            "StartEffect")]
         private static class FlashStartEffectAlwaysClearPatch
         {
             public static void Prefix(ffxFlashPlus __instance) {
@@ -63,7 +74,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxFlashPlus), "ScrubToTime")]
+        [TweakPatch(
+            "DisableEffects.FlashScrubToTimeAlwaysClear",
+            "ffxFlashPlus",
+            "ScrubToTime",
+            MaxVersion = 82)]
         private static class FlashScrubToTimeAlwaysClearPatch
         {
             public static void Prefix(ffxFlashPlus __instance) {
@@ -75,7 +90,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxHallOfMirrorsPlus), "StartEffect")]
+        [TweakPatch(
+            "DisableEffects.HomStartEffectAlwaysDisabled",
+            "ffxHallOfMirrorsPlus",
+            "StartEffect")]
         private static class HomStartEffectAlwaysDisabledPatch
         {
             public static void Postfix(ffxHallOfMirrorsPlus __instance) {
@@ -86,7 +104,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxHallOfMirrorsPlus), "ScrubToTime")]
+        [TweakPatch(
+            "DisableEffects.HomScrubToTimeAlwaysDisabled",
+            "ffxHallOfMirrorsPlus",
+            "ScrubToTime",
+            MaxVersion = 82)]
         private static class HomScrubToTimeAlwaysDisabledPatch
         {
             public static void Postfix(ffxHallOfMirrorsPlus __instance) {
@@ -97,7 +119,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxShakeScreenPlus), "StartEffect")]
+        [TweakPatch(
+            "DisableEffects.ShakeScreenStartEffectAlwaysDisabled",
+            "ffxShakeScreenPlus",
+            "StartEffect")]
         private static class ShakeScreenStartEffectAlwaysDisabledPatch
         {
             public static bool Prefix() {
@@ -105,7 +130,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxShakeScreenPlus), "ScrubToTime")]
+        [TweakPatch(
+            "DisableEffects.ShakeScreenScrubToTimeAlwaysDisabled",
+            "ffxShakeScreenPlus",
+            "ScrubToTime",
+            MaxVersion = 82)]
         private static class ShakeScreenScrubToTimeAlwaysDisabledPatch
         {
             public static bool Prefix() {
@@ -113,7 +142,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxMoveFloorPlus), "StartEffect")]
+        [TweakPatch(
+            "DisableEffects.MoveFloorStartEffectLimitRange",
+            "ffxMoveFloorPlus",
+            "StartEffect")]
         private static class MoveFloorStartEffectLimitRangePatch
         {
             private static int origStart;
@@ -145,7 +177,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
             }
         }
 
-        [HarmonyPatch(typeof(ffxMoveFloorPlus), "ScrubToTime")]
+        [TweakPatch(
+            "DisableEffects.MoveFloorScrubToTimeLimitRange",
+            "ffxMoveFloorPlus",
+            "ScrubToTime",
+            MaxVersion = 82)]
         private static class MoveFloorScrubToTimeLimitRangePatch
         {
             private static int origStart;
