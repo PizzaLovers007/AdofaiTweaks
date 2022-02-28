@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
 using UnityEngine;
@@ -10,8 +12,18 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
     /// </summary>
     internal static class DisableEffectsPatches
     {
+        private static FieldInfo filterToCompFieldInfo;
+
         [SyncTweakSettings]
         private static DisableEffectsSettings Settings { get; set; }
+
+        static DisableEffectsPatches() {
+            if (AdofaiTweaks.ReleaseNumber <= 82) {
+                filterToCompFieldInfo = AccessTools.Field(typeof(scrController), "filterToComp");
+            } else {
+                filterToCompFieldInfo = AccessTools.Field(typeof(scrVfxPlus), "filterToComp");
+            }
+        }
 
         [TweakPatch(
             "DisableEffects.SetFilterAlwaysFalse",
@@ -39,7 +51,12 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
                 if (!Settings.DisableFilter) {
                     return;
                 }
-                foreach (MonoBehaviour behavior in __instance.filterToComp.Values) {
+                Dictionary<Filter, MonoBehaviour> filterToComp =
+                    (AdofaiTweaks.ReleaseNumber <= 82
+                        ? filterToCompFieldInfo.GetValue(__instance)
+                        : filterToCompFieldInfo.GetValue(scrVfxPlus.instance))
+                    as Dictionary<Filter, MonoBehaviour>;
+                foreach (MonoBehaviour behavior in filterToComp.Values) {
                     behavior.enabled = false;
                 }
             }
