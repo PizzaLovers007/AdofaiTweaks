@@ -141,15 +141,15 @@ Build the tweak using `Ctrl + Shift + B`, then copy the `AdofaiTweaks.dll` file 
 
 Once you have copied the file over, open ADOFAI and press `Ctrl + F10` to look at the settings. You should see it in the list of tweaks disabled.
 
-![log_planet_settings_disabled](.\log_planet_settings_disabled.png)
+![log_planet_settings_disabled](log_planet_settings_disabled.png)
 
 Enabling it will show the "Write log..." toggle, which you should enable as well.
 
-![log_planet_settings_enabled](.\log_planet_settings_enabled.png)
+![log_planet_settings_enabled](log_planet_settings_enabled.png)
 
 Then, close the menu and move around a bit. Open the menu back up to look at the logs, and you should see new log messages stating which planet you just switched to when moving.
 
-![log_planet_logs](.\log_planet_logs.png)
+![log_planet_logs](log_planet_logs.png)
 
 ## Conclusion
 
@@ -157,4 +157,4 @@ If you've made it to the end of this quick start guide, congratulations, you've 
 
 There are a lot of things to consider when developing a tweak including translations, Unity objects, searching for the right methods to patch, and more. I'll be adding more pages to this wiki explaining some of the features I've added that you can utilize when creating your tweaks.
 
-If you would like more assistance with developing your tweak (or any other mods in general), feel free to join the [ADOFAI Modding Discord](https://discord.gg/YfVKH4WtvP)! I and several other mod creators are active there and are willing to help you out.
+If you would like more assistance with developing your tweak (or any other mods in general), feel free to join the [ADOFAI.gg community discord](https://discord.gg/TKdpbUUfUa)! I and several other mod creators are active there and are willing to help you out.
