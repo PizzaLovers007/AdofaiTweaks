@@ -2,7 +2,7 @@
 
 This page will describe the general flow of tweak execution as well as provide some examples on how each of the lifecycle methods can be used.
 
-![tweak_lifecycle](./tweak_lifecycle.png)
+![tweak_lifecycle](tweak_lifecycle.png)
 
 ## Lifecycle methods
 
