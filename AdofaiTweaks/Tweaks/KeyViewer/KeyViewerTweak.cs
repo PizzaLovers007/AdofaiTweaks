@@ -125,6 +125,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 Settings.CurrentProfile.Name += " Copy";
                 keyViewer.Profile = Settings.CurrentProfile;
             }
+
             if (Settings.Profiles.Count > 1
                 && GUILayout.Button(
                     TweakStrings.Get(TranslationKeys.KeyViewer.DELETE))) {
@@ -181,6 +182,12 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 if (GUILayout.Button(TweakStrings.Get(TranslationKeys.KeyViewer.CHANGE_KEYS))) {
                     Settings.IsListening = true;
                 }
+            }
+
+            if (GUILayout.Button(
+                    TweakStrings.Get(TranslationKeys.KeyViewer.CLEAR_KEY_COUNT)))
+            {
+                keyViewer.ClearCounts();
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();

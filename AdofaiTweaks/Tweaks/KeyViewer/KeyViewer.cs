@@ -350,5 +350,14 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         private static string TweenIdForKeyCode(KeyCode code) {
             return $"adofai_tweaks.key_viewer.{code}";
         }
+
+        public void ClearCounts()
+        {
+            foreach (KeyCode key in keyCounts.Keys)
+            {
+                keyCounts[key] = 0;
+                keyCountTexts[key].text = "0";
+            }
+        }
     }
 }
