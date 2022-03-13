@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AdofaiTweaks.Core;
 using DG.Tweening;
 using UnityEngine;
@@ -349,7 +350,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         public void ClearCounts()
         {
-            foreach (KeyCode key in keyCounts.Keys)
+            foreach (KeyCode key in keyCounts.Keys.ToList())
             {
                 keyCounts[key] = 0;
                 keyCountTexts[key].text = "0";
