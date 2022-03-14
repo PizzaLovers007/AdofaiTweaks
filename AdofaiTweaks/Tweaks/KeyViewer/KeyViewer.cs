@@ -74,6 +74,9 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         private const float EASE_DURATION = 0.1f;
         private const float SHRINK_FACTOR = 0.9f;
+        private const float KEY_WIDTH = 100;
+        private const int KEY_FONT_SIZE = (int)(KEY_WIDTH * 3 / 4);
+        private const int KEY_COUNT_FONT_SIZE = (int)(KEY_WIDTH / 2);
 
         private static readonly Dictionary<KeyCode, int> keyCounts = new Dictionary<KeyCode, int>();
 
@@ -182,10 +185,9 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         /// </summary>
         public void UpdateLayout() {
             int count = keyOutlineImages.Keys.Count;
-            float keyWidth = 100;
             float keyHeight = Profile.ShowKeyPressTotal ? 150 : 100;
             float spacing = 10;
-            float width = count * keyWidth + (count - 1) * spacing;
+            float width = count * KEY_WIDTH + (count - 1) * spacing;
             Vector2 pos = new Vector2(Profile.KeyViewerXPos, Profile.KeyViewerYPos);
 
             keysRectTransform.anchorMin = pos;
@@ -203,29 +205,29 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 bgImage.rectTransform.anchorMin = Vector2.zero;
                 bgImage.rectTransform.anchorMax = Vector2.zero;
                 bgImage.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                bgImage.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight);
+                bgImage.rectTransform.sizeDelta = new Vector2(KEY_WIDTH, keyHeight);
                 bgImage.rectTransform.anchoredPosition =
-                    new Vector2(x + keyWidth / 2, keyHeight / 2);
+                    new Vector2(x + KEY_WIDTH / 2, keyHeight / 2);
 
                 Image outlineImage = keyOutlineImages[code];
                 outlineImage.rectTransform.anchorMin = Vector2.zero;
                 outlineImage.rectTransform.anchorMax = Vector2.zero;
                 outlineImage.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                outlineImage.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight);
+                outlineImage.rectTransform.sizeDelta = new Vector2(KEY_WIDTH, keyHeight);
                 outlineImage.rectTransform.anchoredPosition =
-                    new Vector2(x + keyWidth / 2, keyHeight / 2);
+                    new Vector2(x + KEY_WIDTH / 2, keyHeight / 2);
 
                 float heightOffset = Profile.ShowKeyPressTotal ? 0 : keyHeight / 20f;
                 Text text = keyTexts[code];
                 text.rectTransform.anchorMin = Vector2.zero;
                 text.rectTransform.anchorMax = Vector2.zero;
                 text.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                text.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight * 1.03f);
+                text.rectTransform.sizeDelta = new Vector2(KEY_WIDTH, keyHeight * 1.03f);
                 text.rectTransform.anchoredPosition =
                     new Vector2(
-                        x + keyWidth / 2,
+                        x + KEY_WIDTH / 2,
                         keyHeight / 2 + heightOffset);
-                text.fontSize = Mathf.RoundToInt(keyWidth * 3 / 4);
+                text.fontSize = KEY_FONT_SIZE;
                 text.alignment =
                     Profile.ShowKeyPressTotal ? TextAnchor.UpperCenter : TextAnchor.MiddleCenter;
 
@@ -233,12 +235,12 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 countText.rectTransform.anchorMin = Vector2.zero;
                 countText.rectTransform.anchorMax = Vector2.zero;
                 countText.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                countText.rectTransform.sizeDelta = new Vector2(keyWidth, keyHeight * 0.8f);
+                countText.rectTransform.sizeDelta = new Vector2(KEY_WIDTH, keyHeight * 0.8f);
                 countText.rectTransform.anchoredPosition =
                     new Vector2(
-                        x + keyWidth / 2,
-                        keyHeight / 2);
-                countText.fontSize = Mathf.RoundToInt(keyWidth / 2);
+                        x + KEY_WIDTH / 2,
+                        keyHeight / 2f);
+                countText.fontSize = KEY_COUNT_FONT_SIZE;
                 countText.gameObject.SetActive(Profile.ShowKeyPressTotal);
 
                 // Press/release state
@@ -260,7 +262,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 text.rectTransform.localScale = scale;
                 countText.rectTransform.localScale = scale;
 
-                x += keyWidth + spacing;
+                x += KEY_WIDTH + spacing;
             }
         }
 
@@ -290,6 +292,8 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
                 if (state[code]) {
                     keyCounts[code]++;
                     countText.text = keyCounts[code] + "";
+                    int adjustedFontSize = KEY_COUNT_FONT_SIZE * 4 / countText.text.Length;
+                    countText.fontSize = Mathf.Min(KEY_COUNT_FONT_SIZE, adjustedFontSize);
                 }
 
                 // Calculate the new color/size
