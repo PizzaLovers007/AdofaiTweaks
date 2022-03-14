@@ -348,6 +348,9 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             return $"adofai_tweaks.key_viewer.{code}";
         }
 
+        /// <summary>
+        /// Clears the current key counts
+        /// </summary>
         public void ClearCounts()
         {
             foreach (KeyCode key in keyCounts.Keys.ToList())
