@@ -356,7 +356,10 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             foreach (KeyCode key in keyCounts.Keys.ToList())
             {
                 keyCounts[key] = 0;
-                keyCountTexts[key].text = "0";
+                if (keyCountTexts.ContainsKey(key))
+                {
+                    keyCountTexts[key].text = "0";
+                }
             }
         }
     }
