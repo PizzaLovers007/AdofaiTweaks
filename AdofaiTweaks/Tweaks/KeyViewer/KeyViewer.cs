@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AdofaiTweaks.Core;
 using DG.Tweening;
 using UnityEngine;
@@ -349,6 +350,21 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         private static string TweenIdForKeyCode(KeyCode code) {
             return $"adofai_tweaks.key_viewer.{code}";
+        }
+
+        /// <summary>
+        /// Clears the current key counts
+        /// </summary>
+        public void ClearCounts()
+        {
+            foreach (KeyCode key in keyCounts.Keys.ToList())
+            {
+                keyCounts[key] = 0;
+                if (keyCountTexts.ContainsKey(key))
+                {
+                    keyCountTexts[key].text = "0";
+                }
+            }
         }
     }
 }
