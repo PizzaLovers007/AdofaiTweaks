@@ -4,7 +4,7 @@ Unity Asset Bundles are extremely useful for importing images, sounds, fonts, or
 
 ## Setting up a Unity project
 
-You **must** use Unity 2019.3.0f6 (or any 2019.3.x equivalent).
+You **must** use Unity 2021.2.8f1 (or any 2021.2.x equivalent). Note that the images use version 2019.3.0f6, but the steps should be about the same.
 
 ### 1. Create a new empty project
 
