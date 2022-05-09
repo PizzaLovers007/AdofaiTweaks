@@ -60,7 +60,7 @@ namespace AdofaiTweaks.Core
             float newB = NamedSlider("B:", oldB, 0, 255, 300f, 1, 40f);
             float newA = NamedSlider("A:", oldA, 0, 255, 300f, 1, 40f);
             if (oldR != newR || oldG != newG || oldB != newB || oldA != newA) {
-                return new Color(newR / 255, newR / 255, newR / 255, newA / 255);
+                return new Color(newR / 255, newG / 255, newB / 255, newA / 255);
             }
             return color;
         }
