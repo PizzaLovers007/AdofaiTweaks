@@ -9,6 +9,16 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
     /// </summary>
     public class PlanetColorSettings : TweakSettings
     {
+        /// <summary>
+        /// Whether the custom coloring for planet 1 is enabled.
+        /// </summary>
+        public bool Color1Enabled { get; set; }
+
+        /// <summary>
+        /// Whether the custom coloring for planet 1 is enabled.
+        /// </summary>
+        public bool Color2Enabled { get; set; }
+
         private Color _color1;
 
         /// <summary>
@@ -90,6 +100,8 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         /// class with some default colors.
         /// </summary>
         public PlanetColorSettings() {
+            Color1Enabled = true;
+            Color2Enabled = true;
             Color1 = Color.white;
             Color2 = Color.white;
             TailColor1 = Color.white;
