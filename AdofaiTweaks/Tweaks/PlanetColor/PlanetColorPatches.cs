@@ -70,6 +70,18 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             }
         }
 
+        [HarmonyPatch(typeof(scrPlanet), "SetFaceColor")]
+        private static class SetFaceColorPatch
+        {
+            public static void Prefix(scrPlanet __instance, ref Color color) {
+                if (IsRedPlanet(__instance) && Settings.Color1Enabled) {
+                    color = Settings.Color1;
+                } else if (IsBluePlanet(__instance) && Settings.Color2Enabled) {
+                    color = Settings.Color2;
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(scrPlanet), "SetColor")]
         private static class SetColorPatch
         {

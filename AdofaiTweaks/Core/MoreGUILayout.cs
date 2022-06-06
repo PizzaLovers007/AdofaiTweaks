@@ -340,6 +340,36 @@ namespace AdofaiTweaks.Core
         }
 
         /// <summary>
+        /// Displays two labels that are horizontally adjacent.
+        /// </summary>
+        /// <param name="text1">The text for the left label.</param>
+        /// <param name="text2">The text for the right label.</param>
+        /// <param name="textWidth">
+        /// The width of the texts. By default will expand to fit the text's
+        /// width.
+        /// </param>
+        public static void LabelPair(string text1, string text2, float textWidth = 0) {
+            GUILayout.BeginHorizontal();
+            if (textWidth == 0) {
+                GUILayout.Label(text1);
+                GUILayout.Space(4f);
+            } else {
+                GUILayout.Label(text1, GUILayout.Width(textWidth));
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(8f);
+            if (textWidth == 0) {
+                GUILayout.Label(text2);
+                GUILayout.Space(4f);
+            } else {
+                GUILayout.Label(text2, GUILayout.Width(textWidth));
+            }
+            GUILayout.FlexibleSpace();
+            GUILayout.Space(20f);
+            GUILayout.EndHorizontal();
+        }
+
+        /// <summary>
         /// Displays a generic list of items where only one can be selected. The
         /// lists can be reordered via up and down buttons to the left of the
         /// items.

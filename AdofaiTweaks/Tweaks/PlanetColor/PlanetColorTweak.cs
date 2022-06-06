@@ -50,16 +50,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             if (Settings.Color1Enabled) {
                 MoreGUILayout.BeginIndent();
 
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(
-                    TweakStrings.Get(TranslationKeys.PlanetColor.BODY), GUILayout.Width(200f));
-                GUILayout.FlexibleSpace();
-                GUILayout.Space(8f);
-                GUILayout.Label(
-                    TweakStrings.Get(TranslationKeys.PlanetColor.TAIL), GUILayout.Width(200f));
-                GUILayout.FlexibleSpace();
-                GUILayout.Space(20f);
-                GUILayout.EndHorizontal();
+                MoreGUILayout.LabelPair(
+                    TweakStrings.Get(TranslationKeys.PlanetColor.BODY),
+                    TweakStrings.Get(TranslationKeys.PlanetColor.TAIL),
+                    200f);
                 MoreGUILayout.BeginIndent();
 
                 // Planet 1 RGB sliders
@@ -110,16 +104,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             if (Settings.Color2Enabled) {
                 MoreGUILayout.BeginIndent();
 
-                GUILayout.BeginHorizontal();
-                GUILayout.Label(
-                    TweakStrings.Get(TranslationKeys.PlanetColor.BODY), GUILayout.Width(200f));
-                GUILayout.FlexibleSpace();
-                GUILayout.Space(8f);
-                GUILayout.Label(
-                    TweakStrings.Get(TranslationKeys.PlanetColor.TAIL), GUILayout.Width(200f));
-                GUILayout.FlexibleSpace();
-                GUILayout.Space(20f);
-                GUILayout.EndHorizontal();
+                MoreGUILayout.LabelPair(
+                    TweakStrings.Get(TranslationKeys.PlanetColor.BODY),
+                    TweakStrings.Get(TranslationKeys.PlanetColor.TAIL),
+                    200f);
                 MoreGUILayout.BeginIndent();
 
                 // Planet 2 RGB sliders

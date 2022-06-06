@@ -189,6 +189,7 @@
     <Compile Include="Tweaks\PlanetColor\PlanetColorPatches.cs" />
     <Compile Include="Tweaks\PlanetColor\PlanetColorSettings.cs" />
     <Compile Include="Tweaks\PlanetColor\PlanetColorTweak.cs" />
+    <Compile Include="Tweaks\PlanetOpacity\PlanetOpacityProfile.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacityPatches.cs" />
     <Compile Include="Tweaks\KeyLimiter\KeyLimiterTweak.cs" />
     <Compile Include="Startup.cs" />
