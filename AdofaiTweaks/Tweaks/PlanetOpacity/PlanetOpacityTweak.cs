@@ -22,43 +22,102 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         public override string Description =>
             TweakStrings.Get(TranslationKeys.PlanetOpacity.DESCRIPTION);
 
-        private scrPlanet RedPlanet { get => Object.FindObjectOfType<scrController>()?.redPlanet; }
-        private scrPlanet BluePlanet { get => Object.FindObjectOfType<scrController>()?.bluePlanet; }
+        private scrPlanet RedPlanet { get => scrController.instance?.redPlanet; }
+        private scrPlanet BluePlanet { get => scrController.instance?.bluePlanet; }
 
         [SyncTweakSettings]
         private PlanetOpacitySettings Settings { get; set; }
 
         /// <inheritdoc/>
+        public override void OnEnable() {
+            MigrateOldSettings();
+        }
+
+        private void MigrateOldSettings() {
+            if (Settings.SettingsOpacity1 != PlanetOpacitySettings.MIGRATED_VALUE) {
+                Settings.PlanetOpacity1.Body = Settings.SettingsOpacity1;
+                Settings.PlanetOpacity1.Tail = Settings.SettingsOpacity1;
+                Settings.PlanetOpacity1.Ring = Settings.SettingsOpacity1;
+                Settings.SettingsOpacity1 = PlanetOpacitySettings.MIGRATED_VALUE;
+            }
+            if (Settings.SettingsOpacity2 != PlanetOpacitySettings.MIGRATED_VALUE) {
+                Settings.PlanetOpacity2.Body = Settings.SettingsOpacity2;
+                Settings.PlanetOpacity2.Tail = Settings.SettingsOpacity2;
+                Settings.PlanetOpacity2.Ring = Settings.SettingsOpacity2;
+                Settings.SettingsOpacity2 = PlanetOpacitySettings.MIGRATED_VALUE;
+            }
+        }
+
+        /// <inheritdoc/>
         public override void OnSettingsGUI() {
-            float newOpacity;
+            GUILayout.BeginHorizontal();
+            MoreGUILayout.LabelPair(
+                TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_ONE),
+                TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_TWO),
+                200f);
+            GUILayout.EndHorizontal();
 
-            newOpacity =
-                MoreGUILayout.NamedSlider(
-                    TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_ONE),
-                    Settings.SettingsOpacity1,
+            MoreGUILayout.BeginIndent();
+
+            float newOpacity1, newOpacity2;
+            (newOpacity1, newOpacity2) =
+                MoreGUILayout.NamedSliderPair(
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.BODY),
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.BODY),
+                    Settings.PlanetOpacity1.Body,
+                    Settings.PlanetOpacity2.Body,
                     0f,
                     100f,
-                    200f,
+                    150f,
                     roundNearest: 1,
+                    labelWidth: 50f,
                     valueFormat: "{0}%");
-            if (newOpacity != Settings.SettingsOpacity1) {
-                Settings.SettingsOpacity1 = newOpacity;
+            if (newOpacity1 != Settings.PlanetOpacity1.Body
+                || newOpacity2 != Settings.PlanetOpacity2.Body) {
+                Settings.PlanetOpacity1.Body = newOpacity1;
+                Settings.PlanetOpacity2.Body = newOpacity2;
                 UpdatePlanetColors();
             }
 
-            newOpacity =
-                MoreGUILayout.NamedSlider(
-                    TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_TWO),
-                    Settings.SettingsOpacity2,
+            (newOpacity1, newOpacity2) =
+                MoreGUILayout.NamedSliderPair(
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.TAIL),
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.TAIL),
+                    Settings.PlanetOpacity1.Tail,
+                    Settings.PlanetOpacity2.Tail,
                     0f,
                     100f,
-                    200f,
+                    150f,
                     roundNearest: 1,
+                    labelWidth: 50f,
                     valueFormat: "{0}%");
-            if (newOpacity != Settings.SettingsOpacity2) {
-                Settings.SettingsOpacity2 = newOpacity;
+            if (newOpacity1 != Settings.PlanetOpacity1.Tail
+                || newOpacity2 != Settings.PlanetOpacity2.Tail) {
+                Settings.PlanetOpacity1.Tail = newOpacity1;
+                Settings.PlanetOpacity2.Tail = newOpacity2;
                 UpdatePlanetColors();
             }
+
+            (newOpacity1, newOpacity2) =
+                MoreGUILayout.NamedSliderPair(
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.RING),
+                    TweakStrings.Get(TranslationKeys.PlanetOpacity.RING),
+                    Settings.PlanetOpacity1.Ring,
+                    Settings.PlanetOpacity2.Ring,
+                    0f,
+                    100f,
+                    150f,
+                    roundNearest: 1,
+                    labelWidth: 50f,
+                    valueFormat: "{0}%");
+            if (newOpacity1 != Settings.PlanetOpacity1.Ring
+                || newOpacity2 != Settings.PlanetOpacity2.Ring) {
+                Settings.PlanetOpacity1.Ring = newOpacity1;
+                Settings.PlanetOpacity2.Ring = newOpacity2;
+                UpdatePlanetColors();
+            }
+
+            MoreGUILayout.EndIndent();
         }
 
         /// <inheritdoc/>
