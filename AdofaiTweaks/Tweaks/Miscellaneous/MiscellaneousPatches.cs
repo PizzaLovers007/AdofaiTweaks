@@ -43,25 +43,40 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 ___TimeX -= Time.deltaTime;
             }
         }
-
+        
         [HarmonyPatch(typeof(scnEditor), "Update")]
         private static class EditorUpdatePatch
         {
-            private static bool scrollEventInside;
+            private static float originalScrollValue;
 
-            public static void Prefix(scnEditor __instance) {
-                scrollEventInside = ScrollEvent.inside;
+            public static void Prefix() {
                 if (!Settings.DisableEditorZoom) {
                     return;
                 }
-                if (!__instance.isLevelEditor || __instance.controller.paused) {
+                if (!scnEditor.instance.playMode)
+                {
                     return;
                 }
-                ScrollEvent.inside = true;
+                var mouseScrollDelta = Input.mouseScrollDelta;
+                if (Mathf.Abs(mouseScrollDelta.y) > 0.05f)
+                {
+                    originalScrollValue = scrCamera.instance.userSizeMultiplier;
+                }
             }
 
             public static void Postfix() {
-                ScrollEvent.inside = scrollEventInside;
+                if (!Settings.DisableEditorZoom) {
+                    return;
+                }
+                if (!scnEditor.instance.playMode)
+                {
+                    return;
+                }
+                var mouseScrollDelta = Input.mouseScrollDelta;
+                if (Mathf.Abs(mouseScrollDelta.y) > 0.05f)
+                {
+                    scrCamera.instance.userSizeMultiplier = originalScrollValue;
+                }
             }
         }
 
