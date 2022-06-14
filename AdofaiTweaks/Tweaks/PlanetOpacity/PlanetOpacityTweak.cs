@@ -70,7 +70,7 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
                     100f,
                     150f,
                     roundNearest: 1,
-                    labelWidth: 50f,
+                    labelWidth: 80f,
                     valueFormat: "{0}%");
             if (newOpacity1 != Settings.PlanetOpacity1.Body
                 || newOpacity2 != Settings.PlanetOpacity2.Body) {
@@ -89,7 +89,7 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
                     100f,
                     150f,
                     roundNearest: 1,
-                    labelWidth: 50f,
+                    labelWidth: 80f,
                     valueFormat: "{0}%");
             if (newOpacity1 != Settings.PlanetOpacity1.Tail
                 || newOpacity2 != Settings.PlanetOpacity2.Tail) {
@@ -108,7 +108,7 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
                     100f,
                     150f,
                     roundNearest: 1,
-                    labelWidth: 50f,
+                    labelWidth: 80f,
                     valueFormat: "{0}%");
             if (newOpacity1 != Settings.PlanetOpacity1.Ring
                 || newOpacity2 != Settings.PlanetOpacity2.Ring) {
