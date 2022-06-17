@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
@@ -86,6 +86,7 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                     Controller.noFail = origNoFail;
                 } else {
                     // Fail with an "overload", text is changed later
+                    invokedFailAction = true;
                     Controller.FailAction(true);
                 }
             }
@@ -121,14 +122,11 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
             MinVersion = 80)]
         private static class CountdownShowOverloadPatch
         {
-            public static void Postfix(scrCountdown __instance) {
+            public static void Postfix(scrCountdown __instance, Text ___text) {
                 AdofaiTweaks.Logger.Log("ShowOverload!");
                 if (invokedFailAction) {
                     invokedFailAction = false;
-
-                    FieldInfo field = AccessTools.Field(typeof(scrCountdown), "text");
-                    Text text = (Text)field.GetValue(__instance);
-                    text.text =
+                    ___text.text =
                         Settings.CustomDeathString.Replace(
                             "{judgment}",
                             TweakStrings.GetRDString("HitMargin." + latestHitMargin.ToString()));
