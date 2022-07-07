@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using System.Reflection;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
+using HarmonyLib;
 using Steamworks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,6 +29,9 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
 
         [SyncTweakSettings]
         private HideUiElementsSettings Settings { get; set; }
+
+        private PropertyInfo isEditingLevelProperty =
+            AccessTools.Property(typeof(ADOBase), "isEditingLevel");
 
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
@@ -113,10 +118,12 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
 
             RDC.noHud = hideEverything;
 
-            scnEditor editor = Object.FindObjectOfType<scnEditor>();
-            if (scrController.instance.isEditingLevel) {
-                if (editor?.ottoCanvas.gameObject.activeSelf == hideOtto) {
-                    editor.ottoCanvas.gameObject.SetActive(!hideOtto);
+            bool isEditingLevel = (bool)isEditingLevelProperty.GetValue(
+                AdofaiTweaks.ReleaseNumber >= 94 ? null : scnEditor.instance);
+
+            if (isEditingLevel) {
+                if (scnEditor.instance?.ottoCanvas.gameObject.activeSelf == hideOtto) {
+                    scnEditor.instance.ottoCanvas.gameObject.SetActive(!hideOtto);
                 }
             } else {
                 uiController.difficultyImage.enabled = !hideOtto;

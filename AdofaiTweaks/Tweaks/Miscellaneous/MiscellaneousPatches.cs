@@ -43,7 +43,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 ___TimeX -= Time.deltaTime;
             }
         }
-        
+
         [HarmonyPatch(typeof(scnEditor), "Update")]
         private static class EditorUpdatePatch
         {
@@ -53,13 +53,11 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 if (!Settings.DisableEditorZoom) {
                     return;
                 }
-                if (!scnEditor.instance.playMode)
-                {
+                if (!scnEditor.instance.playMode) {
                     return;
                 }
                 var mouseScrollDelta = Input.mouseScrollDelta;
-                if (Mathf.Abs(mouseScrollDelta.y) > 0.05f)
-                {
+                if (Mathf.Abs(mouseScrollDelta.y) > 0.05f) {
                     originalScrollValue = scrCamera.instance.userSizeMultiplier;
                 }
             }
@@ -68,13 +66,11 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 if (!Settings.DisableEditorZoom) {
                     return;
                 }
-                if (!scnEditor.instance.playMode)
-                {
+                if (!scnEditor.instance.playMode) {
                     return;
                 }
                 var mouseScrollDelta = Input.mouseScrollDelta;
-                if (Mathf.Abs(mouseScrollDelta.y) > 0.05f)
-                {
+                if (Mathf.Abs(mouseScrollDelta.y) > 0.05f) {
                     scrCamera.instance.userSizeMultiplier = originalScrollValue;
                 }
             }
@@ -83,21 +79,15 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         [HarmonyPatch(typeof(CustomLevel), "Play")]
         private static class CustomLevelPlayPatch
         {
-            private static scrConductor conductor;
-
-            public static void IncreaseInputOffset(int offset)
-            {
+            public static void IncreaseInputOffset(int offset) {
                 scrConductor.currentPreset.inputOffset += offset;
             }
 
-            public static void IncreaseVisualOffset(int offset)
-            {
+            public static void IncreaseVisualOffset(int offset) {
                 scrConductor.visualOffset += offset;
             }
 
             public static void Postfix(CustomLevel __instance, ref int seqID) {
-                conductor = __instance.conductor;
-
                 if (Settings.IsEnabled && Settings.SetHitsoundVolume) {
                     Settings.UpdateVolume();
                 }
@@ -105,7 +95,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
 #if DEBUG
                 // TODO Finish working on start set bpm
                 if (Settings.IsEnabled && Settings.SetBpmOnStart) {
-                    float oldBpm = conductor.bpm, // original bpm
+                    float oldBpm = scrConductor.instance.bpm, // original bpm
                         newBpm = Settings.Bpm; // new bpm to replace
 
                     // floor the player is currently on
@@ -113,17 +103,16 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
 
                     // current floor's angle
                     double angle = (floor.exitangle - floor.entryangle + 360) % 360;
-                    if (angle == 0)
-                    {
+                    if (angle == 0) {
                         angle = 360;
                     }
 
                     // (bpm, angle) => (1000 * angle) / (3 * bpm)
 
                     // bpm has to be bpmConstant when floor.speed is multiplied,
-                    // so dividing floor.speed here
-                    // (this code does not work properly)
-                    // conductor.controller.speed = newBpm / conductor.controller.speed;
+                    // so dividing floor.speed here (this code does not work
+                    // properly) conductor.controller.speed = newBpm /
+                    // conductor.controller.speed;
 
                     // floor's speed should be changed, to set the bpm right
                     float timeCalcBase = (float)angle * 1000,
@@ -142,7 +131,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     conductor.song2.time += timeDiff;
                     */
 
-                    conductor.StartCoroutine("DesyncFix");
+                    scrConductor.instance.StartCoroutine("DesyncFix");
                 }
 #endif
             }
