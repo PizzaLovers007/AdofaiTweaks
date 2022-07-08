@@ -29,7 +29,7 @@ Join the ADOFAI.gg community discord! https://discord.gg/TKdpbUUfUa
 ## Supported Languages
 
 * English
-* 한국어 (Provided by [CrackThrough](https://github.com/CrackThrough))
+* 한국어 (Provided by [CrackThrough](https://github.com/CrackThrough) & [NoBrain0917](https://github.com/NoBrain0917))
 * Español (Provided by
     [Econ](https://www.youtube.com/channel/UCE7Kv2xKmB_pLnBV0VBrNYA))
 * Polski (Provided by crispy)
