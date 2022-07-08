@@ -164,6 +164,7 @@
     <Compile Include="Core\TweakStringsDb.cs" />
     <Compile Include="Core\TweakStrings.cs" />
     <Compile Include="GlobalSettings.cs" />
+    <Compile Include="ModEvents.cs" />
     <Compile Include="Tweaks\DisableEffects\DisableEffectsPatches.cs" />
     <Compile Include="Tweaks\DisableEffects\DisableEffectsSettings.cs" />
     <Compile Include="Tweaks\DisableEffects\DisableEffectsTweak.cs" />

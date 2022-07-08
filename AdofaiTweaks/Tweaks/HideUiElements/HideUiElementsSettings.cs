@@ -50,6 +50,13 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         public void ToggleRecordingMode()
         {
             RecordingMode = !RecordingMode;
+
+            var recordingModeChangeEventHandler =
+                RecordingMode ? ModEvents.OnRecordingModeEnabled : ModEvents.OnRecordingModeDisabled;
+
+            recordingModeChangeEventHandler.Invoke(this, EventArgs.Empty);
+
+            // Update the visibility
             ShowOrHideElements();
         }
 
