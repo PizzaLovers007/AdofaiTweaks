@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using AdofaiTweaks.Core;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.KeyViewer
@@ -10,7 +11,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
     /// Settings for a key viewer profile that controls properties such as
     /// colors and position/size.
     /// </summary>
-    public class KeyViewerProfile
+    public class KeyViewerProfile : TweakSettingsProfile
     {
         /// <summary>
         /// The user-defined name for the profile.
@@ -185,13 +186,6 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         /// Creates a copy of <c>this</c>.
         /// </summary>
         /// <returns>A copy of <c>this</c>.</returns>
-        public KeyViewerProfile Copy() {
-            using (var ms = new MemoryStream()) {
-                var serializer = new XmlSerializer(GetType());
-                serializer.Serialize(ms, this);
-                ms.Position = 0;
-                return (KeyViewerProfile)serializer.Deserialize(ms);
-            }
-        }
+        public KeyViewerProfile Copy() => Copy<KeyViewerProfile>();
     }
 }
