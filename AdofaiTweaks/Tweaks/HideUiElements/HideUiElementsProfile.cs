@@ -38,6 +38,16 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         public bool HideBeta { get; set; }
 
         /// <summary>
+        /// Hides "Congratulations!"/"Pure Perfect!" text and detailed results.
+        /// </summary>
+        public bool HideResult { get; set; }
+
+        /// <summary>
+        /// Hides the hit error meter.
+        /// </summary>
+        public bool HideHitErrorMeter { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HideUiElementsProfile"/> class.
         /// </summary>
         public HideUiElementsProfile() { }

@@ -101,6 +101,20 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                 SelectedProfile.HideBeta = newVal;
                 Settings.ShowOrHideElements();
             }
+
+            newVal = GUILayout.Toggle(
+                SelectedProfile.HideResult, TweakStrings.Get(TranslationKeys.HideUiElements.RESULT_TEXT));
+            if (newVal != SelectedProfile.HideResult) {
+                SelectedProfile.HideResult = newVal;
+                Settings.ShowOrHideElements();
+            }
+
+            newVal = GUILayout.Toggle(
+                SelectedProfile.HideHitErrorMeter, TweakStrings.Get(TranslationKeys.HideUiElements.HIT_ERROR_METER));
+            if (newVal != SelectedProfile.HideHitErrorMeter) {
+                SelectedProfile.HideHitErrorMeter = newVal;
+                Settings.ShowOrHideElements();
+            }
         }
 
         /// <inheritdoc/>

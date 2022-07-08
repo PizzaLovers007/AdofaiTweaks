@@ -80,10 +80,12 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             bool hideOtto = hideEverything || selectedProfile.HideOtto;
             bool hideBeta = hideEverything || selectedProfile.HideBeta;
             bool hideTitle = hideEverything || selectedProfile.HideTitle;
-            hideEverything &= AdofaiTweaks.IsEnabled && IsEnabled;
-            hideOtto &= AdofaiTweaks.IsEnabled && IsEnabled;
-            hideBeta &= AdofaiTweaks.IsEnabled && IsEnabled;
-            hideTitle &= AdofaiTweaks.IsEnabled && IsEnabled;
+
+            var tweakEnabled = AdofaiTweaks.IsEnabled && IsEnabled;
+            hideEverything &= tweakEnabled;
+            hideOtto &= tweakEnabled;
+            hideBeta &= tweakEnabled;
+            hideTitle &= tweakEnabled;
 
             RDC.noHud = hideEverything;
 

@@ -55,6 +55,53 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             }
         }
 
+        [HarmonyPatch(typeof(scrController), "OnLandOnPortal")]
+        private static class HideResultTextPatch
+        {
+            public static void Postfix(scrController __instance)
+            {
+                if (SelectedProfile.HideEverything || SelectedProfile.HideResult)
+                {
+                    __instance.txtCongrats.gameObject.SetActive(false);
+                    __instance.txtResults.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private static class HideHitErrorMeterPatch
+        {
+            private static void HideErrorMeter()
+            {
+                var controller = ADOBase.controller;
+                var errorMeter = controller.errorMeter;
+                if ((SelectedProfile.HideEverything || SelectedProfile.HideHitErrorMeter) &&
+                    errorMeter &&
+                    controller.gameworld &&
+                    errorMeter.gameObject.activeSelf)
+                {
+                    errorMeter.gameObject.SetActive(false);
+                }
+            }
+
+            [HarmonyPatch(typeof(scrController), "paused", MethodType.Setter)]
+            private static class scrControllerHideHitErrorMeterPatch
+            {
+                public static void Postfix() => HideErrorMeter();
+            }
+
+            [HarmonyPatch(typeof(scrPlanet), "MoveToNextFloor")]
+            private static class scrPlanetHideHitErrorMeterPatch
+            {
+                public static void Postfix() => HideErrorMeter();
+            }
+
+            [HarmonyPatch(typeof(TaroCutsceneScript), "DisplayText")]
+            private static class TaroCutsceneScriptHideHitErrorMeterPatch
+            {
+                public static void Postfix() => HideErrorMeter();
+            }
+        }
+
         [HarmonyPatch(typeof(scnEditor), "Update")]
         private static class scnEditorRecordingToggleShortcutPatch
         {
