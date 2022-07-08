@@ -52,7 +52,7 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\UnityModManager\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="AdofaiTweaks.Strings">
-      <HintPath>..\AdofaiTweaks.Generator\bin\Release\AdofaiTweaks.Strings.dll</HintPath>
+      <HintPath>..\AdofaiTweaks.Generator\bin\Debug\AdofaiTweaks.Strings.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -220,8 +220,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AdofaiTweaks.Strings.dll" />
-    <Content Include="AdofaiTweaks.Translation.dll" />
     <Content Include="Assembly-CSharp-firstpass.dll" />
     <Content Include="Assembly-CSharp.dll" />
   </ItemGroup>
