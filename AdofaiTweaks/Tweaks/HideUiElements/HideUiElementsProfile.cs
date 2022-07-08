@@ -48,6 +48,11 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         public bool HideHitErrorMeter { get; set; }
 
         /// <summary>
+        /// Hides the flash on landing last floor.
+        /// </summary>
+        public bool HideLastFloorFlash { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HideUiElementsProfile"/> class.
         /// </summary>
         public HideUiElementsProfile() { }

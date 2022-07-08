@@ -55,20 +55,47 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             }
         }
 
-        [HarmonyPatch(typeof(scrController), "OnLandOnPortal")]
-        private static class HideResultTextPatch
+        private static class HideResultTextAndFlashPatches
         {
-            public static void Postfix(scrController __instance)
+            private static bool shouldIgnoreFlashOnce;
+
+            [HarmonyPatch(typeof(scrController), "OnLandOnPortal")]
+            private static class HideResultTextPatch
             {
-                if (SelectedProfile.HideEverything || SelectedProfile.HideResult)
+                public static void Prefix()
                 {
-                    __instance.txtCongrats.gameObject.SetActive(false);
-                    __instance.txtResults.gameObject.SetActive(false);
+                    if (SelectedProfile.HideEverything || SelectedProfile.HideLastFloorFlash)
+                    {
+                        shouldIgnoreFlashOnce = true;
+                    }
+                }
+
+                public static void Postfix(scrController __instance)
+                {
+                    if (SelectedProfile.HideEverything || SelectedProfile.HideResult)
+                    {
+                        __instance.txtCongrats.gameObject.SetActive(false);
+                        __instance.txtResults.gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            [HarmonyPatch(typeof(scrFlash), "Flash")]
+            private static class HideLastFloorFlashPatch
+            {
+                private static bool Prefix(ref Color _colorStart)
+                {
+                    if (shouldIgnoreFlashOnce && _colorStart == Color.white.WithAlpha(.4f))
+                    {
+                        return shouldIgnoreFlashOnce = false;
+                    }
+
+                    return true;
                 }
             }
         }
 
-        private static class HideHitErrorMeterPatch
+        private static class HideHitErrorMeterPatches
         {
             private static void HideErrorMeter()
             {

@@ -115,6 +115,13 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                 SelectedProfile.HideHitErrorMeter = newVal;
                 Settings.ShowOrHideElements();
             }
+
+            newVal = GUILayout.Toggle(
+                SelectedProfile.HideLastFloorFlash, TweakStrings.Get(TranslationKeys.HideUiElements.LAST_FLOOR_FLASH));
+            if (newVal != SelectedProfile.HideLastFloorFlash) {
+                SelectedProfile.HideLastFloorFlash = newVal;
+                Settings.ShowOrHideElements();
+            }
         }
 
         /// <inheritdoc/>
