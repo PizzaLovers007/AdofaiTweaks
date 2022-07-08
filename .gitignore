@@ -386,6 +386,13 @@ FodyWeavers.xsd
 # Visual Studio cache directory
 .vs/
 
+# Unity project settings
+UnityProject/ProjectSettings/*
+.vsconfig
+
+# Rider cache directory
+.idea/
+
 # Gradle cache directory
 .gradle/
 
