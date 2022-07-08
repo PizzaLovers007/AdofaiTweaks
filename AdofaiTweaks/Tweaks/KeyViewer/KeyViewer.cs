@@ -353,7 +353,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         }
 
         /// <summary>
-        /// Clears the current key counts
+        /// Clears the current key counts.
         /// </summary>
         public void ClearCounts()
         {

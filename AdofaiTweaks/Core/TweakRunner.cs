@@ -39,7 +39,7 @@ namespace AdofaiTweaks.Core
         private IList<TweakPatch> ValidTweakPatches { get; set; } = new List<TweakPatch>();
 
         private readonly Harmony harmony;
-        private bool ShowDebuggingDetails = false;
+        private bool ShowDebuggingDetails;
 
         [SyncTweakSettings]
         private static GlobalSettings GlobalSettings { get; set; }

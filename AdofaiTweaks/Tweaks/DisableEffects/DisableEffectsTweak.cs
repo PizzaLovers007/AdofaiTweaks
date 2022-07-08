@@ -29,7 +29,7 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         private DisableEffectsSettings Settings { get; set; }
 
         private IDictionary<Filter, bool> FilterExcludeDict;
-        private bool DisplayList = false;
+        private bool DisplayList;
 
         private Vector2 scrollPosition;
 

@@ -51,7 +51,7 @@ namespace AdofaiTweaks.Core
                 if (!type.IsSubclassOf(typeof(TweakSettings))) {
                     continue;
                 }
-                modEntry.Logger.Log(string.Format("Loading: {0}", type.FullName));
+                modEntry.Logger.Log($"Loading: {type.FullName}");
                 MethodInfo genericLoadMethod = loadMethod.MakeGenericMethod(type);
                 try {
                     tweakSettingsDictionary[type] =
@@ -59,8 +59,7 @@ namespace AdofaiTweaks.Core
                             null, new object[] { modEntry });
                 } catch (Exception e) {
                     AdofaiTweaks.Logger.Error(
-                        string.Format(
-                            "Failed to read settings for {0}: {1}.", type.FullName, e));
+                        $"Failed to read settings for {type.FullName}: {e}.");
                     ConstructorInfo constructor = type.GetConstructor(null);
                     tweakSettingsDictionary[type] =
                         (TweakSettings)constructor.Invoke(null);
@@ -162,18 +161,14 @@ namespace AdofaiTweaks.Core
         private void Unregister(Type type, object obj) {
             if (!registeredObjects.ContainsKey(type)) {
                 throw new ArgumentException(
-                    string.Format(
-                        "No object of type {0} is registered in SettingsSynchronizer. This is " +
-                        "most likely due to a misconfiguration. Please ensure you are " +
-                        "registering the object correctly.",
-                        type.FullName));
+                    $"No object of type {type.FullName} is registered in SettingsSynchronizer. This is " +
+                    "most likely due to a misconfiguration. Please ensure you are " +
+                    "registering the object correctly.");
             }
             if (registeredObjects[type] != obj) {
                 throw new ArgumentException(
-                    string.Format(
-                        "The registered object of type {0} differs from the object trying to be " +
-                        "unregistered. Please ensure you are unregistering the correct object.",
-                        type.FullName));
+                    $"The registered object of type {type.FullName} differs from the object trying to be " +
+                    "unregistered. Please ensure you are unregistering the correct object.");
             }
             registeredObjects.Remove(type);
         }
@@ -193,7 +188,7 @@ namespace AdofaiTweaks.Core
 
         private string GenerateMessage(
             Type patchType, object obj, PropertyInfo tweakProp, Exception e) {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendFormat(
                 "Unable to update property {0} in object {1} (type is {2}).\n",
                 tweakProp.Name,

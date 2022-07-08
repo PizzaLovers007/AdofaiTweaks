@@ -144,37 +144,37 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         /// Old setting for the hex code for the pressed outline color.
         /// </summary>
         [XmlIgnore]
-        public string PressedOutlineColorHex { get; set; }
+        private string PressedOutlineColorHex { get; set; }
 
         /// <summary>
         /// Old setting for the hex code for the released outline color.
         /// </summary>
         [XmlIgnore]
-        public string ReleasedOutlineColorHex { get; set; }
+        private string ReleasedOutlineColorHex { get; set; }
 
         /// <summary>
         /// Old setting for the hex code for the pressed background/fill color.
         /// </summary>
         [XmlIgnore]
-        public string PressedBackgroundColorHex { get; set; }
+        private string PressedBackgroundColorHex { get; set; }
 
         /// <summary>
         /// Old setting for the hex code for the released background/fill color.
         /// </summary>
         [XmlIgnore]
-        public string ReleasedBackgroundColorHex { get; set; }
+        private string ReleasedBackgroundColorHex { get; set; }
 
         /// <summary>
         /// Old setting for the hex code for the pressed text color.
         /// </summary>
         [XmlIgnore]
-        public string PressedTextColorHex { get; set; }
+        private string PressedTextColorHex { get; set; }
 
         /// <summary>
         /// Old setting for the hex code for the released text color.
         /// </summary>
         [XmlIgnore]
-        public string ReleasedTextColorHex { get; set; }
+        private string ReleasedTextColorHex { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KeyLimiterSettings"/>

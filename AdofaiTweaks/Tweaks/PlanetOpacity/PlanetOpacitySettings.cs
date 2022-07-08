@@ -1,6 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
-using AdofaiTweaks.Core;
+﻿using AdofaiTweaks.Core;
 
 namespace AdofaiTweaks.Tweaks.PlanetOpacity
 {

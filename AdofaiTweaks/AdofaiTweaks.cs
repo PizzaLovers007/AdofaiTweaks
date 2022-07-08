@@ -53,7 +53,7 @@ namespace AdofaiTweaks
                     .SelectMany(a => a.GetTypes())
                     .Where(t => t.GetCustomAttribute<RegisterTweakAttribute>() != null)
                     .OrderBy(t => t.Name)
-                    .OrderBy(t => t.GetCustomAttribute<RegisterTweakAttribute>().Priority)
+                    .ThenBy(t => t.GetCustomAttribute<RegisterTweakAttribute>().Priority)
                     .ToList();
 
             Logger = modEntry.Logger;

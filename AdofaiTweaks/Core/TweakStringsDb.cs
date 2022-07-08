@@ -17,30 +17,22 @@ namespace AdofaiTweaks.Core
         /// <summary>
         /// Singleton instance for <see cref="TweakStringsDb"/>.
         /// </summary>
-        public static TweakStringsDb Instance {
-            get {
-                if (_instance == null) {
-                    _instance = new TweakStringsDb();
-                }
-                return _instance;
-            }
-        }
+        public static TweakStringsDb Instance => _instance ??= new TweakStringsDb();
 
         private readonly Dictionary<LanguageEnum, Dictionary<string, TweakString>> cache;
 
         private void LoadFromDb(LanguageEnum language) {
             string dbPath = Path.Combine("Mods", "AdofaiTweaks", "TweakStrings.db");
-            using (var db = new LiteDatabase(dbPath)) {
-                var collection = db.GetCollection<TweakString>();
-                var results = collection.Query()
-                    .Where(ts => ts.Language == language)
-                    .ToEnumerable();
-                var dict = new Dictionary<string, TweakString>();
-                foreach (TweakString tweakString in results) {
-                    dict[tweakString.Key] = tweakString;
-                }
-                cache[language] = dict;
+            using var db = new LiteDatabase(dbPath);
+            var collection = db.GetCollection<TweakString>();
+            var results = collection.Query()
+                .Where(ts => ts.Language == language)
+                .ToEnumerable();
+            var dict = new Dictionary<string, TweakString>();
+            foreach (TweakString tweakString in results) {
+                dict[tweakString.Key] = tweakString;
             }
+            cache[language] = dict;
         }
 
         /// <summary>

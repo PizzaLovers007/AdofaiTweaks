@@ -28,7 +28,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         /// <summary>
         /// Keys that should not be listened to.
         /// </summary>
-        public static readonly ISet<KeyCode> SKIPPED_KEYS = new HashSet<KeyCode>() {
+        private static readonly ISet<KeyCode> SKIPPED_KEYS = new HashSet<KeyCode>() {
             KeyCode.Mouse0,
             KeyCode.Mouse1,
             KeyCode.Mouse2,
