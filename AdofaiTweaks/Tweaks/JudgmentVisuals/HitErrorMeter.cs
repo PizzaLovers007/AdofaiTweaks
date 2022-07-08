@@ -16,7 +16,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         /// <summary>
         /// A singleton instance of <see cref="HitErrorMeter"/>.
         /// </summary>
-        public static HitErrorMeter Instance { get => _instance; }
+        public static HitErrorMeter Instance => _instance;
 
         private readonly Color MISS_COLOR = new Color32(0xff, 0x00, 0x00, 0xff);
         private readonly Color COUNTED_COLOR = new Color32(0xff, 0x6f, 0x4d, 0xff);
@@ -28,7 +28,6 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
         private CanvasScaler scaler;
 
         private GameObject wrapperObj;
-        private Canvas wrapperCanvas;
         private RectTransform wrapperRectTransform;
 
         private Image handImage;
@@ -66,7 +65,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
 
             wrapperObj = new GameObject();
             wrapperObj.transform.SetParent(transform);
-            wrapperCanvas = wrapperObj.AddComponent<Canvas>();
+            wrapperObj.AddComponent<Canvas>();
             wrapperRectTransform = wrapperObj.GetComponent<RectTransform>();
             wrapperRectTransform.anchoredPosition = new Vector2(0, -48);
             wrapperRectTransform.sizeDelta = new Vector2(334, 135);
@@ -162,7 +161,7 @@ namespace AdofaiTweaks.Tweaks.JudgmentVisuals
             }
 
             // Update average
-            if (angleDiff >= -60 && angleDiff <= 60) {
+            if (angleDiff is >= -60 and <= 60) {
                 averageAngle = Mathf.Lerp(averageAngle, angleDiff, Settings.ErrorMeterSensitivity);
             }
 
