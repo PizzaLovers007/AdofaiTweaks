@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
@@ -30,123 +31,136 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         [SyncTweakSettings]
         private HideUiElementsSettings Settings { get; set; }
 
-        private PropertyInfo isEditingLevelProperty =
-            AccessTools.Property(typeof(ADOBase), "isEditingLevel");
+        private HideUiElementsProfile SelectedProfile =>
+            Settings.RecordingMode ? Settings.RecordingProfile : Settings.PlayingProfile;
 
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
             bool newVal;
 
             newVal = GUILayout.Toggle(
-                Settings.HideEverything,
-                TweakStrings.Get(TranslationKeys.HideUiElements.EVERYTHING));
-            if (newVal != Settings.HideEverything) {
-                Settings.HideEverything = newVal;
-                ShowOrHideElements();
+                Settings.RecordingMode,
+                TweakStrings.Get(TranslationKeys.HideUiElements.RECORDING_MODE));
+            if (newVal != Settings.RecordingMode)
+            {
+                Settings.ToggleRecordingMode();
             }
-            if (Settings.HideEverything) {
+
+            newVal = GUILayout.Toggle(
+                Settings.UseRecordingModeShortcut,
+                TweakStrings.Get(TranslationKeys.HideUiElements.USE_RECORDING_MODE_SHORTCUT));
+            if (newVal != Settings.UseRecordingModeShortcut) {
+                Settings.UseRecordingModeShortcut = newVal;
+            }
+
+            if (newVal)
+            {
+                Settings.RecordingModeShortcut.OnGUI(TweakStrings.Get(TranslationKeys.HideUiElements.RECORDING_MODE_SHORTCUT));
+            }
+
+            GUILayout.Space(8f);
+
+            newVal = GUILayout.Toggle(
+                SelectedProfile.HideEverything,
+                TweakStrings.Get(TranslationKeys.HideUiElements.EVERYTHING));
+            if (newVal != SelectedProfile.HideEverything) {
+                SelectedProfile.HideEverything = newVal;
+                Settings.ShowOrHideElements();
+            }
+            if (SelectedProfile.HideEverything) {
                 return;
             }
 
             GUILayout.Space(8f);
 
-            Settings.HideJudgment =
+            SelectedProfile.HideJudgment =
                 GUILayout.Toggle(
-                    Settings.HideJudgment,
+                    SelectedProfile.HideJudgment,
                     TweakStrings.Get(
                         TranslationKeys.HideUiElements.JUDGE_TEXT,
                         TweakStrings.GetRDString("HitMargin." + HitMargin.Perfect),
                         TweakStrings.GetRDString("HitMargin." + HitMargin.EarlyPerfect)));
 
-            Settings.HideMissIndicators =
+            SelectedProfile.HideMissIndicators =
                 GUILayout.Toggle(
-                    Settings.HideMissIndicators,
+                    SelectedProfile.HideMissIndicators,
                     TweakStrings.Get(TranslationKeys.HideUiElements.MISSES));
 
             newVal = GUILayout.Toggle(
-                Settings.HideTitle, TweakStrings.Get(TranslationKeys.HideUiElements.SONG_TITLE));
-            if (newVal != Settings.HideTitle) {
-                Settings.HideTitle = newVal;
-                ShowOrHideElements();
+                SelectedProfile.HideTitle, TweakStrings.Get(TranslationKeys.HideUiElements.SONG_TITLE));
+            if (newVal != SelectedProfile.HideTitle) {
+                SelectedProfile.HideTitle = newVal;
+                Settings.ShowOrHideElements();
             }
 
             newVal = GUILayout.Toggle(
-                Settings.HideOtto, TweakStrings.Get(TranslationKeys.HideUiElements.AUTO));
-            if (newVal != Settings.HideOtto) {
-                Settings.HideOtto = newVal;
-                ShowOrHideElements();
+                SelectedProfile.HideOtto, TweakStrings.Get(TranslationKeys.HideUiElements.AUTO));
+            if (newVal != SelectedProfile.HideOtto) {
+                SelectedProfile.HideOtto = newVal;
+                Settings.ShowOrHideElements();
             }
 
             newVal = GUILayout.Toggle(
-                Settings.HideBeta, TweakStrings.Get(TranslationKeys.HideUiElements.BETA_BUILD));
-            if (newVal != Settings.HideBeta) {
-                Settings.HideBeta = newVal;
-                ShowOrHideElements();
+                SelectedProfile.HideBeta, TweakStrings.Get(TranslationKeys.HideUiElements.BETA_BUILD));
+            if (newVal != SelectedProfile.HideBeta) {
+                SelectedProfile.HideBeta = newVal;
+                Settings.ShowOrHideElements();
             }
         }
 
         /// <inheritdoc/>
         public override void OnEnable() {
             SceneManager.activeSceneChanged += ChangedActiveScene;
-            ShowOrHideElements();
+            MigrateOldSettings();
+            Settings.ShowOrHideElements();
+        }
+
+        /// <summary>
+        /// Migrates old KeyLimiter settings to a KeyViewer profile if there are
+        /// settings to migrate.
+        /// TODO: Delete this after a few releases.
+        /// </summary>
+        private void MigrateOldSettings() {
+            // Check if there are settings to migrate
+            if (!Settings.HideEverything &&
+                !Settings.HideJudgment &&
+                !Settings.HideMissIndicators &&
+                !Settings.HideTitle &&
+                !Settings.HideOtto &&
+                !Settings.HideBeta) {
+                return;
+            }
+
+            // Copy into new profile
+            var profile = new HideUiElementsProfile {
+                HideEverything = Settings.HideEverything,
+                HideJudgment = Settings.HideJudgment,
+                HideMissIndicators = Settings.HideMissIndicators,
+                HideTitle = Settings.HideTitle,
+                HideOtto = Settings.HideOtto,
+                HideBeta = Settings.HideBeta,
+            };
+
+            // Set playing profile to migrated profile
+            Settings.PlayingProfile = profile;
+
+            // Clear old settings
+            Settings.HideEverything =
+                Settings.HideJudgment =
+                    Settings.HideMissIndicators =
+                        Settings.HideTitle =
+                            Settings.HideOtto =
+                                Settings.HideBeta = false;
         }
 
         /// <inheritdoc/>
         public override void OnDisable() {
             SceneManager.activeSceneChanged -= ChangedActiveScene;
-            ShowOrHideElements();
+            Settings.ShowOrHideElements();
         }
 
         private void ChangedActiveScene(Scene current, Scene next) {
-            ShowOrHideElements();
-        }
-
-        private void ShowOrHideElements() {
-            if (scrUIController.instance == null) {
-                return;
-            }
-            scrUIController uiController = scrUIController.instance;
-
-            bool hideEverything = Settings.HideEverything;
-            bool hideOtto = hideEverything || Settings.HideOtto;
-            bool hideBeta = hideEverything || Settings.HideBeta;
-            bool hideTitle = hideEverything || Settings.HideTitle;
-            hideEverything &= AdofaiTweaks.IsEnabled && Settings.IsEnabled;
-            hideOtto &= AdofaiTweaks.IsEnabled && Settings.IsEnabled;
-            hideBeta &= AdofaiTweaks.IsEnabled && Settings.IsEnabled;
-            hideTitle &= AdofaiTweaks.IsEnabled && Settings.IsEnabled;
-
-            RDC.noHud = hideEverything;
-
-            bool isEditingLevel = (bool)isEditingLevelProperty.GetValue(
-                AdofaiTweaks.ReleaseNumber >= 94 ? null : scnEditor.instance);
-
-            if (isEditingLevel) {
-                if (scnEditor.instance?.ottoCanvas.gameObject.activeSelf == hideOtto) {
-                    scnEditor.instance.ottoCanvas.gameObject.SetActive(!hideOtto);
-                }
-            } else {
-                uiController.difficultyImage.enabled = !hideOtto;
-                if (uiController.difficultyContainer.gameObject.activeSelf == hideOtto) {
-                    uiController.difficultyContainer.gameObject.SetActive(!hideOtto);
-                }
-                if (uiController.difficultyFadeContainer.gameObject.activeSelf == hideOtto) {
-                    uiController.difficultyFadeContainer.gameObject.SetActive(!hideOtto);
-                }
-            }
-
-            if (SteamAPI.Init()) {
-                bool isBeta = SteamApps.GetCurrentBetaName(out _, 20);
-                scrEnableIfBeta enableIfBeta =
-                    Resources.FindObjectsOfTypeAll<scrEnableIfBeta>().FirstOrDefault();
-                if (isBeta && enableIfBeta && enableIfBeta.gameObject.activeSelf == hideBeta) {
-                    enableIfBeta.gameObject.SetActive(!hideBeta);
-                }
-            }
-
-            if (uiController.txtLevelName.gameObject.activeSelf == hideTitle) {
-                uiController.txtLevelName.gameObject.SetActive(!hideTitle);
-            }
+            Settings.ShowOrHideElements();
         }
     }
 }

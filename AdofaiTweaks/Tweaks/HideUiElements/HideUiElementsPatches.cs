@@ -12,11 +12,17 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         [SyncTweakSettings]
         private static HideUiElementsSettings Settings { get; set; }
 
+        private static bool CheckRecordingModeShortcut() =>
+            Settings.UseRecordingModeShortcut && Settings.RecordingModeShortcut.CheckShortcut();
+
+        private static HideUiElementsProfile SelectedProfile =>
+            Settings.RecordingMode ? Settings.RecordingProfile : Settings.PlayingProfile;
+
         [HarmonyPatch(typeof(scrHitTextMesh), "Show")]
         private static class JudgmentTextShowPatch
         {
             public static void Prefix(ref Vector3 position) {
-                if (Settings.HideEverything || Settings.HideJudgment) {
+                if (SelectedProfile.HideEverything || SelectedProfile.HideJudgment) {
                     position = new Vector3(123456f, 123456f, 123456f);
                 }
             }
@@ -26,7 +32,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         private static class MissIndicatorPatch
         {
             public static void Postfix(scrMissIndicator __instance) {
-                if (Settings.HideEverything || Settings.HideMissIndicators) {
+                if (SelectedProfile.HideEverything || SelectedProfile.HideMissIndicators) {
                     __instance.transform.position = new Vector3(123456f, 123456f, 123456f);
                 }
             }
@@ -39,13 +45,37 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
 
             public static void Prefix() {
                 prevVal = RDC.auto;
-                if (Settings.HideEverything || Settings.HideOtto) {
+                if (SelectedProfile.HideEverything || SelectedProfile.HideOtto) {
                     RDC.auto = false;
                 }
             }
 
             public static void Postfix() {
                 RDC.auto = prevVal;
+            }
+        }
+
+        [HarmonyPatch(typeof(scnEditor), "Update")]
+        private static class scnEditorRecordingToggleShortcutPatch
+        {
+            public static void Postfix(scnEditor __instance)
+            {
+                if (CheckRecordingModeShortcut() && __instance.inStrictlyEditingMode)
+                {
+                    Settings.ToggleRecordingMode();
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(scnCLS), "Update")]
+        private static class scnCLSRecordingToggleShortcutPatch
+        {
+            public static void Postfix()
+            {
+                if (CheckRecordingModeShortcut())
+                {
+                    Settings.ToggleRecordingMode();
+                }
             }
         }
     }
