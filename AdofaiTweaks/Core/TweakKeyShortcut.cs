@@ -99,7 +99,11 @@ namespace AdofaiTweaks.Core
 
             // Keycode
             GUILayout.TextField(PressKey.ToString());
-            if (GUILayout.Button(TweakStrings.Get(isListening ? TranslationKeys.Global.SHORTCUT_CHANGE_KEY : TranslationKeys.Global.SHORTCUT_DONE))) {
+            string changeOrDoneText =
+                TweakStrings.Get(isListening
+                    ? TranslationKeys.Global.SHORTCUT_DONE
+                    : TranslationKeys.Global.SHORTCUT_CHANGE_KEY);
+            if (GUILayout.Button(changeOrDoneText)) {
                 isListening = !isListening;
             }
 

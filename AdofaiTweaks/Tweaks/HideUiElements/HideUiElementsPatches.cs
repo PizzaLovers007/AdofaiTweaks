@@ -12,9 +12,6 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         [SyncTweakSettings]
         private static HideUiElementsSettings Settings { get; set; }
 
-        private static bool CheckRecordingModeShortcut() =>
-            Settings.UseRecordingModeShortcut && Settings.RecordingModeShortcut.CheckShortcut();
-
         private static HideUiElementsProfile SelectedProfile =>
             Settings.RecordingMode ? Settings.RecordingProfile : Settings.PlayingProfile;
 
@@ -118,26 +115,6 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             private static class TaroCutsceneScriptHideHitErrorMeterPatch
             {
                 public static void Postfix() => HideErrorMeter();
-            }
-        }
-
-        [HarmonyPatch(typeof(scnEditor), "Update")]
-        private static class ScnEditorRecordingToggleShortcutPatch
-        {
-            public static void Postfix(scnEditor __instance) {
-                if (CheckRecordingModeShortcut() && __instance.inStrictlyEditingMode) {
-                    Settings.ToggleRecordingMode();
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(scnCLS), "Update")]
-        private static class ScnCLSRecordingToggleShortcutPatch
-        {
-            public static void Postfix() {
-                if (CheckRecordingModeShortcut()) {
-                    Settings.ToggleRecordingMode();
-                }
             }
         }
     }

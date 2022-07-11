@@ -47,7 +47,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                 Settings.UseRecordingModeShortcut = newVal;
             }
 
-            if (newVal) {
+            if (Settings.UseRecordingModeShortcut) {
                 Settings.RecordingModeShortcut.DrawShortcut(
                     TweakStrings.Get(TranslationKeys.HideUiElements.RECORDING_MODE_SHORTCUT));
             }
@@ -120,6 +120,14 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             if (newVal != SelectedProfile.HideLastFloorFlash) {
                 SelectedProfile.HideLastFloorFlash = newVal;
                 Settings.ShowOrHideElements();
+            }
+        }
+
+        /// <inheritdoc/>
+        public override void OnUpdate(float deltaTime) {
+            if (Settings.UseRecordingModeShortcut
+                && Settings.RecordingModeShortcut.CheckShortcut()) {
+                Settings.ToggleRecordingMode();
             }
         }
 
