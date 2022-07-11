@@ -71,9 +71,17 @@ namespace AdofaiTweaks.Core
         /// </summary>
         /// <returns>Whether the shortcut is precisely triggered.</returns>
         public bool CheckShortcut() {
-            return PressCtrl == RDInput.holdingControl
-                && PressShift == RDInput.holdingShift
-                && PressAlt == RDInput.holdingAlt
+            bool holdingCtrl =
+                Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)
+                || Input.GetKey(KeyCode.LeftMeta) || Input.GetKey(KeyCode.RightMeta);
+            bool holdingShift =
+                Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            bool holdingAlt =
+                Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt);
+
+            return PressCtrl == holdingCtrl
+                && PressShift == holdingShift
+                && PressAlt == holdingAlt
                 && Input.GetKeyDown(PressKey);
         }
 

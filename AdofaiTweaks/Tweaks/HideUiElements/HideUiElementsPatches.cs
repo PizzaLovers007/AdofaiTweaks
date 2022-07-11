@@ -89,7 +89,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         private static class HideHitErrorMeterPatches
         {
             private static void HideErrorMeter() {
-                var controller = ADOBase.controller;
+                var controller = scrController.instance;
                 var errorMeter = controller.errorMeter;
                 if ((SelectedProfile.HideEverything || SelectedProfile.HideHitErrorMeter) &&
                     errorMeter &&
