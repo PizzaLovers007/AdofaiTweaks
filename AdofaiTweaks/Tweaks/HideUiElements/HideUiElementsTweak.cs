@@ -124,6 +124,11 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         }
 
         /// <inheritdoc/>
+        public override void OnHideGUI() {
+            Settings.RecordingModeShortcut.IsListening = false;
+        }
+
+        /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
             if (Settings.UseRecordingModeShortcut
                 && Settings.RecordingModeShortcut.CheckShortcut()) {
