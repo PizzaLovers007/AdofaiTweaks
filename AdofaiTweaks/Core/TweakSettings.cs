@@ -38,8 +38,7 @@ namespace AdofaiTweaks.Core
         /// <param name="modEntry">The UMM mod entry for AdofaiTweaks.</param>
         public override void Save(UnityModManager.ModEntry modEntry) {
             var filepath = GetPath(modEntry);
-            try
-            {
+            try {
                 using var writer = new StreamWriter(filepath);
                 var serializer = new XmlSerializer(GetType());
                 serializer.Serialize(writer, this);

@@ -18,11 +18,9 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         /// <summary>
         /// The plain color.
         /// </summary>
-        public Color PlainColor
-        {
+        public Color PlainColor {
             get => _plainColor;
-            set
-            {
+            set {
                 _plainColor = value;
                 PlainColorHex = ColorUtility.ToHtmlStringRGB(value);
             }
@@ -40,11 +38,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         public Gradient Gradient { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ObjectColor"/>
-        /// class with a default color.
+        /// Initializes a new instance of the <see cref="ObjectColor"/> class
+        /// with a default color.
         /// </summary>
-        public ObjectColor()
-        {
+        public ObjectColor() {
             PlainColor = Color.white;
         }
     }

@@ -1,11 +1,5 @@
-using System.Collections.Generic;
-using System.Reflection;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
-using DG.Tweening;
-using HarmonyLib;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace AdofaiTweaks.Tweaks.RestrictJudgments

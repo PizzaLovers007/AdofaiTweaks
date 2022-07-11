@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AdofaiTweaks.Core.Attributes;
@@ -79,8 +78,7 @@ namespace AdofaiTweaks.Core
             }
         }
 
-        private Type[] GetAllNestedTypes(Type type)
-        {
+        private Type[] GetAllNestedTypes(Type type) {
             return GetAllNestedTypes(type.GetNestedTypes(AccessTools.all));
         }
 

@@ -36,8 +36,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         /// <summary>
         /// Key shortcut for toggling recording mode.
         /// </summary>
-        public TweakKeyShortcut RecordingModeShortcut { get; set; } = new ()
-        {
+        public TweakKeyShortcut RecordingModeShortcut { get; set; } = new () {
             PressCtrl = true,
             PressShift = false,
             PressAlt = false,
@@ -47,8 +46,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         /// <summary>
         /// Toggle recording mode.
         /// </summary>
-        public void ToggleRecordingMode()
-        {
+        public void ToggleRecordingMode() {
             RecordingMode = !RecordingMode;
 
             var recordingModeChangeEventHandler =
@@ -68,8 +66,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         /// Update elements' visibility.
         /// </summary>
         public void ShowOrHideElements() {
-            if (scrUIController.instance == null)
-            {
+            if (scrUIController.instance == null) {
                 return;
             }
 
@@ -120,45 +117,37 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             }
         }
 
-#pragma warning disable SA1124
-        #region Old settings
-#pragma warning restore SA1124
-
         /// <summary>
-        /// Hides all UI elements.
-        /// OLD SETTINGS. ONLY FOR MIGRATING.
+        /// Hides all UI elements. OLD SETTINGS. ONLY FOR MIGRATING.
         /// </summary>
         public bool HideEverything { get; set; }
 
         /// <summary>
-        /// Hides judgments (Perfect, EPerfect, etc.).
-        /// OLD SETTINGS. ONLY FOR MIGRATING.
+        /// Hides judgments (Perfect, EPerfect, etc.). OLD SETTINGS. ONLY FOR
+        /// MIGRATING.
         /// </summary>
         public bool HideJudgment { get; set; }
 
         /// <summary>
-        /// Hides miss indicators (the circled X icons).
-        /// OLD SETTINGS. ONLY FOR MIGRATING.
+        /// Hides miss indicators (the circled X icons). OLD SETTINGS. ONLY FOR
+        /// MIGRATING.
         /// </summary>
         public bool HideMissIndicators { get; set; }
 
         /// <summary>
-        /// Hides the song title and artist.
+        /// Hides the song title and artist. OLD SETTINGS. ONLY FOR MIGRATING.
         /// </summary>
         public bool HideTitle { get; set; }
 
         /// <summary>
-        /// Hides Otto and the timing target icon in the bottom right.
-        /// OLD SETTINGS. ONLY FOR MIGRATING.
+        /// Hides Otto and the timing target icon in the bottom right. OLD
+        /// SETTINGS. ONLY FOR MIGRATING.
         /// </summary>
         public bool HideOtto { get; set; }
 
         /// <summary>
-        /// Hides the "Beta Build" text.
-        /// OLD SETTINGS. ONLY FOR MIGRATING.
+        /// Hides the "Beta Build" text. OLD SETTINGS. ONLY FOR MIGRATING.
         /// </summary>
         public bool HideBeta { get; set; }
-
-        #endregion
     }
 }

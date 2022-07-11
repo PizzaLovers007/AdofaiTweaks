@@ -102,8 +102,7 @@ namespace AdofaiTweaks.Core
                 foreach (MethodInfo method in PatchTargetMethods) {
                     List<HarmonyMethod> hardcodedMethods = new List<HarmonyMethod>();
 
-                    foreach (string methodName in HardcodedMethodNames)
-                    {
+                    foreach (string methodName in HardcodedMethodNames) {
                         MethodInfo patchMethod = AccessTools.Method(PatchType, methodName);
                         hardcodedMethods.Add(patchMethod == null ? null : new HarmonyMethod(patchMethod));
                     }

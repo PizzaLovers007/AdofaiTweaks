@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ADOFAI;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
@@ -148,8 +147,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                     ffxSetHitsound[] ffxSetHitsounds = gameObject.GetComponentsInChildren<ffxSetHitsound>();
 
                     if (ffxSetHitsounds != null) {
-                        foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds)
-                        {
+                        foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds) {
                             Settings.UpdateVolume(ffxSetHitsound);
                         }
                     }

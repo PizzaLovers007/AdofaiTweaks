@@ -25,8 +25,7 @@ namespace AdofaiTweaks
         /// Loads an assembly at the given file path.
         /// </summary>
         /// <param name="path">The path to the assembly.</param>
-        private static void LoadAssembly(string path)
-        {
+        private static void LoadAssembly(string path) {
             // Load other assemblies
             using FileStream stream = new FileStream(path, FileMode.Open);
             byte[] data = new byte[stream.Length];

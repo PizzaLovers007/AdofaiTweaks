@@ -31,12 +31,13 @@ namespace AdofaiTweaks.Core
         public KeyCode PressKey { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TweakKeyShortcut"/> class.
+        /// Initializes a new instance of the <see cref="TweakKeyShortcut"/>
+        /// class.
         /// </summary>
         public TweakKeyShortcut() { }
 
         [NonSerialized]
-        private bool _isListening;
+        private bool isListening;
 
         [NonSerialized]
         private readonly ISet<KeyCode> BLACKLISTED_KEYS = new HashSet<KeyCode>
@@ -61,24 +62,26 @@ namespace AdofaiTweaks.Core
         };
 
         /// <summary>
-        /// Check if this shortcut is pressed in current frame.
-        /// SHOULD BE ONLY CALLED IN <c>Update()</c>.
+        /// Check if this shortcut is pressed in current frame. SHOULD BE ONLY
+        /// CALLED IN <c>Update()</c>.
         /// </summary>
         /// <returns>Whether the shortcut is precisely triggered.</returns>
         public bool CheckShortcut() =>
-            PressCtrl == RDInput.holdingControl && PressShift == RDInput.holdingShift && PressAlt == RDInput.holdingAlt && Input.GetKeyDown(PressKey);
+            PressCtrl == RDInput.holdingControl
+                && PressShift == RDInput.holdingShift
+                && PressAlt == RDInput.holdingAlt
+                && Input.GetKeyDown(PressKey);
 
         /// <summary>
-        /// Visualize shortcut options.
-        /// SHOULD BE ONLY CALLED IN <c>OnGUI()</c>.
+        /// Visualize shortcut options. SHOULD BE ONLY CALLED IN <c>OnGUI()</c>.
         /// </summary>
-        /// <param name="labelText">The label text that is shown before the shortcut GUI.</param>
-        public void OnGUI(string labelText = null)
-        {
+        /// <param name="labelText">
+        /// The label text that is shown before the shortcut GUI.
+        /// </param>
+        public void DrawShortcut(string labelText = null) {
             GUILayout.BeginHorizontal();
 
-            if (!string.IsNullOrEmpty(labelText))
-            {
+            if (!string.IsNullOrEmpty(labelText)) {
                 GUILayout.Label(labelText);
             }
 
@@ -96,13 +99,11 @@ namespace AdofaiTweaks.Core
 
             // Keycode
             GUILayout.TextField(PressKey.ToString());
-            if (GUILayout.Button(TweakStrings.Get(_isListening ? TranslationKeys.Global.SHORTCUT_CHANGE_KEY : TranslationKeys.Global.SHORTCUT_DONE)))
-            {
-                _isListening = !_isListening;
+            if (GUILayout.Button(TweakStrings.Get(isListening ? TranslationKeys.Global.SHORTCUT_CHANGE_KEY : TranslationKeys.Global.SHORTCUT_DONE))) {
+                isListening = !isListening;
             }
 
-            if (_isListening)
-            {
+            if (isListening) {
                 foreach (KeyCode code in Enum.GetValues(typeof(KeyCode))) {
                     // Skip key if not pressed or blacklisted
                     if (!Input.GetKeyDown(code) || BLACKLISTED_KEYS.Contains(code)) {

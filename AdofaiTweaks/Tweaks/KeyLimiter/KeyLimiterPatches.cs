@@ -58,8 +58,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 // Limit keys pressed
                 bool pseudoMultipress = false;
-                if (AccessTools.Field(typeof(scrController), "pseudoMultipress").GetValue(__instance) is bool castedPseudoMultipress)
-                {
+                if (AccessTools.Field(typeof(scrController), "pseudoMultipress").GetValue(__instance) is bool castedPseudoMultipress) {
                     pseudoMultipress = castedPseudoMultipress;
                 }
 

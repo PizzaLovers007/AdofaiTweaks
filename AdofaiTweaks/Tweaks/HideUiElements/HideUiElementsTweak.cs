@@ -36,8 +36,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             newVal = GUILayout.Toggle(
                 Settings.RecordingMode,
                 TweakStrings.Get(TranslationKeys.HideUiElements.RECORDING_MODE));
-            if (newVal != Settings.RecordingMode)
-            {
+            if (newVal != Settings.RecordingMode) {
                 Settings.ToggleRecordingMode();
             }
 
@@ -48,9 +47,9 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                 Settings.UseRecordingModeShortcut = newVal;
             }
 
-            if (newVal)
-            {
-                Settings.RecordingModeShortcut.OnGUI(TweakStrings.Get(TranslationKeys.HideUiElements.RECORDING_MODE_SHORTCUT));
+            if (newVal) {
+                Settings.RecordingModeShortcut.DrawShortcut(
+                    TweakStrings.Get(TranslationKeys.HideUiElements.RECORDING_MODE_SHORTCUT));
             }
 
             GUILayout.Space(8f);
@@ -132,7 +131,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         }
 
         /// <summary>
-        /// Migrates old KeyLimiter settings to a KeyViewer profile if there are
+        /// Migrates old HideUiElement settings to a profile if there are
         /// settings to migrate.
         /// TODO: Delete this after a few releases.
         /// </summary>

@@ -53,14 +53,9 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         public bool HideLastFloorFlash { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HideUiElementsProfile"/> class.
+        /// Initializes a new instance of the
+        /// <see cref="HideUiElementsProfile"/> class.
         /// </summary>
         public HideUiElementsProfile() { }
-
-        /*/// <summary>
-        /// Creates a copy of <c>this</c>.
-        /// </summary>
-        /// <returns>A copy of <c>this</c>.</returns>
-        public UiHideOptionsProfile Copy() => Copy<UiHideOptionsProfile>();*/
     }
 }

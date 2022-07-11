@@ -33,7 +33,8 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         public bool HitsoundForceVolume { get; set; }
 
         /// <summary>
-        /// Whether to ignore the hitsound volume in the level's settings and overwrite hitsound volume.
+        /// Whether to ignore the hitsound volume in the level's settings and
+        /// overwrite hitsound volume.
         /// </summary>
         public bool HitsoundIgnoreStartingValue { get; set; }
 
@@ -50,22 +51,16 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         /// <summary>
         /// Updates volume, should be called every map loads.
         /// </summary>
-        public void UpdateVolume()
-        {
-            if (!HitsoundIgnoreStartingValue)
-            {
+        public void UpdateVolume() {
+            if (!HitsoundIgnoreStartingValue) {
                 return;
             }
 
             scrConductor instance = scrConductor.instance;
-            if (instance)
-            {
-                if (HitsoundForceVolume)
-                {
+            if (instance) {
+                if (HitsoundForceVolume) {
                     instance.hitSoundVolume = HitsoundVolumeScale;
-                }
-                else
-                {
+                } else {
                     instance.hitSoundVolume *= HitsoundVolumeScale;
                 }
             }
@@ -74,15 +69,13 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         /// <summary>
         /// Updates volume in event.
         /// </summary>
-        /// <param name="ffxSetHitsound">hitsound variable to change volume.</param>
-        public void UpdateVolume(ffxSetHitsound ffxSetHitsound)
-        {
-            if (HitsoundForceVolume)
-            {
+        /// <param name="ffxSetHitsound">
+        /// hitsound variable to change volume.
+        /// </param>
+        public void UpdateVolume(ffxSetHitsound ffxSetHitsound) {
+            if (HitsoundForceVolume) {
                 ffxSetHitsound.volume = HitsoundVolumeScale;
-            }
-            else
-            {
+            } else {
                 ffxSetHitsound.volume *= HitsoundVolumeScale;
             }
         }

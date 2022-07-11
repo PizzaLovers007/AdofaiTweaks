@@ -185,8 +185,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             }
 
             if (GUILayout.Button(
-                    TweakStrings.Get(TranslationKeys.KeyViewer.CLEAR_KEY_COUNT)))
-            {
+                    TweakStrings.Get(TranslationKeys.KeyViewer.CLEAR_KEY_COUNT))) {
                 keyViewer.ClearCounts();
             }
             GUILayout.FlexibleSpace();

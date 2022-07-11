@@ -14,8 +14,7 @@ namespace AdofaiTweaks.Core
         /// <typeparam name="T">Type of the profile instance.</typeparam>
         /// <returns>A copy of <c>this</c>.</returns>
         protected T Copy<T>()
-            where T : TweakSettingsProfile
-        {
+            where T : TweakSettingsProfile {
             using var ms = new MemoryStream();
             var serializer = new XmlSerializer(GetType());
             serializer.Serialize(ms, this);

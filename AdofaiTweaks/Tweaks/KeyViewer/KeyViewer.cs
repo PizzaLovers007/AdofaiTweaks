@@ -355,13 +355,10 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         /// <summary>
         /// Clears the current key counts.
         /// </summary>
-        public void ClearCounts()
-        {
-            foreach (KeyCode key in keyCounts.Keys.ToList())
-            {
+        public void ClearCounts() {
+            foreach (KeyCode key in keyCounts.Keys.ToList()) {
                 keyCounts[key] = 0;
-                if (keyCountTexts.ContainsKey(key))
-                {
+                if (keyCountTexts.ContainsKey(key)) {
                     keyCountTexts[key].text = "0";
                 }
             }

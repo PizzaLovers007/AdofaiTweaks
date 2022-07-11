@@ -62,18 +62,14 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             [HarmonyPatch(typeof(scrController), "OnLandOnPortal")]
             private static class HideResultTextPatch
             {
-                public static void Prefix()
-                {
-                    if (SelectedProfile.HideEverything || SelectedProfile.HideLastFloorFlash)
-                    {
+                public static void Prefix() {
+                    if (SelectedProfile.HideEverything || SelectedProfile.HideLastFloorFlash) {
                         shouldIgnoreFlashOnce = true;
                     }
                 }
 
-                public static void Postfix(scrController __instance)
-                {
-                    if (SelectedProfile.HideEverything || SelectedProfile.HideResult)
-                    {
+                public static void Postfix(scrController __instance) {
+                    if (SelectedProfile.HideEverything || SelectedProfile.HideResult) {
                         __instance.txtCongrats.gameObject.SetActive(false);
                         __instance.txtResults.gameObject.SetActive(false);
                     }
@@ -83,10 +79,8 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             [HarmonyPatch(typeof(scrFlash), "Flash")]
             private static class HideLastFloorFlashPatch
             {
-                private static bool Prefix(ref Color _colorStart)
-                {
-                    if (shouldIgnoreFlashOnce && _colorStart == Color.white.WithAlpha(.4f))
-                    {
+                public static bool Prefix(ref Color _colorStart) {
+                    if (shouldIgnoreFlashOnce && _colorStart == Color.white.WithAlpha(.4f)) {
                         return shouldIgnoreFlashOnce = false;
                     }
 
@@ -97,27 +91,25 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
 
         private static class HideHitErrorMeterPatches
         {
-            private static void HideErrorMeter()
-            {
+            private static void HideErrorMeter() {
                 var controller = ADOBase.controller;
                 var errorMeter = controller.errorMeter;
                 if ((SelectedProfile.HideEverything || SelectedProfile.HideHitErrorMeter) &&
                     errorMeter &&
                     controller.gameworld &&
-                    errorMeter.gameObject.activeSelf)
-                {
+                    errorMeter.gameObject.activeSelf) {
                     errorMeter.gameObject.SetActive(false);
                 }
             }
 
             [HarmonyPatch(typeof(scrController), "paused", MethodType.Setter)]
-            private static class scrControllerHideHitErrorMeterPatch
+            private static class ScrControllerHideHitErrorMeterPatch
             {
                 public static void Postfix() => HideErrorMeter();
             }
 
             [HarmonyPatch(typeof(scrPlanet), "MoveToNextFloor")]
-            private static class scrPlanetHideHitErrorMeterPatch
+            private static class ScrPlanetHideHitErrorMeterPatch
             {
                 public static void Postfix() => HideErrorMeter();
             }
@@ -130,24 +122,20 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         }
 
         [HarmonyPatch(typeof(scnEditor), "Update")]
-        private static class scnEditorRecordingToggleShortcutPatch
+        private static class ScnEditorRecordingToggleShortcutPatch
         {
-            public static void Postfix(scnEditor __instance)
-            {
-                if (CheckRecordingModeShortcut() && __instance.inStrictlyEditingMode)
-                {
+            public static void Postfix(scnEditor __instance) {
+                if (CheckRecordingModeShortcut() && __instance.inStrictlyEditingMode) {
                     Settings.ToggleRecordingMode();
                 }
             }
         }
 
         [HarmonyPatch(typeof(scnCLS), "Update")]
-        private static class scnCLSRecordingToggleShortcutPatch
+        private static class ScnCLSRecordingToggleShortcutPatch
         {
-            public static void Postfix()
-            {
-                if (CheckRecordingModeShortcut())
-                {
+            public static void Postfix() {
+                if (CheckRecordingModeShortcut()) {
                     Settings.ToggleRecordingMode();
                 }
             }
