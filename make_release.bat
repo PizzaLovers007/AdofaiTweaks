@@ -1,4 +1,4 @@
-msbuild /p:Configuration=Release
+msbuild /p:Configuration=Release -m
 cd AdofaiTweaks.Generator/bin/Release
 .\AdofaiTweaks.Generator.exe
 cd ../../..
