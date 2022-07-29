@@ -1,4 +1,5 @@
-﻿using AdofaiTweaks.Core.Attributes;
+﻿using System.Reflection;
+using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
 using UnityEngine;
 
@@ -12,6 +13,9 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         [SyncTweakSettings]
         private static KeyLimiterSettings Settings { get; set; }
 
+        private static readonly PropertyInfo _scrControllerCLSModeProperty =
+            AccessTools.Property(typeof(scrController), "CLSMode");
+
         [TweakPatch(
             "KeyLimiter.CountValidKeysPressedBeforeMultipressPatch",
             "scrController",
@@ -19,10 +23,13 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             MaxVersion = 71)]
         private static class CountValidKeysPressedBeforeMultipressPatch
         {
+            private static readonly FieldInfo _scrControllerPseudoMultipressField =
+                AccessTools.Field(typeof(scrController), "pseudoMultipress");
+
             public static bool Prefix(ref int __result, scrController __instance) {
                 // Do not limit keys if current scene is CLS and player has
                 // disabled key limiting in CLS
-                if (!Settings.LimitKeyOnCLS && __instance.CLSMode) {
+                if (!Settings.LimitKeyOnCLS && (bool)_scrControllerCLSModeProperty.GetValue(__instance)) {
                     return true;
                 }
 
@@ -30,7 +37,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 // disabled key limiting in there
                 if (!Settings.LimitKeyOnMainScreen
                     && !__instance.gameworld
-                    && !__instance.CLSMode) {
+                    && !(bool)_scrControllerCLSModeProperty.GetValue(__instance)) {
                     return true;
                 }
 
@@ -58,7 +65,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 // Limit keys pressed
                 bool pseudoMultipress = false;
-                if (AccessTools.Field(typeof(scrController), "pseudoMultipress").GetValue(__instance) is bool castedPseudoMultipress) {
+                if (_scrControllerPseudoMultipressField.GetValue(__instance) is bool castedPseudoMultipress) {
                     pseudoMultipress = castedPseudoMultipress;
                 }
 
@@ -75,10 +82,25 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             MinVersion = 72)]
         private static class CountValidKeysPressedAfterMultipressPatch
         {
+            private static readonly PropertyInfo _ADOBaseIsCLSProperty =
+                AccessTools.Property(typeof(ADOBase), "isCLS");
+
+            private static readonly bool ReleaseNumberIsBelow94 = AdofaiTweaks.ReleaseNumber < 94;
+
+            private static bool GetCLSMode(scrController controller = null)
+            {
+                if (ReleaseNumberIsBelow94)
+                {
+                    return (bool)_scrControllerCLSModeProperty.GetValue(controller);
+                }
+
+                return (bool)_ADOBaseIsCLSProperty.GetValue(null);
+            }
+
             public static bool Prefix(ref int __result, scrController __instance) {
                 // Do not limit keys if current scene is CLS and player has
                 // disabled key limiting in CLS
-                if (!Settings.LimitKeyOnCLS && __instance.CLSMode) {
+                if (!Settings.LimitKeyOnCLS && GetCLSMode(__instance)) {
                     return true;
                 }
 
@@ -86,7 +108,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 // disabled key limiting in there
                 if (!Settings.LimitKeyOnMainScreen
                     && !__instance.gameworld
-                    && !__instance.CLSMode) {
+                    && !GetCLSMode(__instance)) {
                     return true;
                 }
 
@@ -119,7 +141,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
         }
 
-        [HarmonyPatch(typeof(scrController), "CheckForSpecialInputKeysOrPause")]
+        // TODO: Find a corresponding method on versions after r94
+        [TweakPatch(
+            "KeyLimiter.CheckForSpecialInputKeysOrPausePatch",
+            "scrController",
+            "CheckForSpecialInputKeysOrPause",
+            MaxVersion = 93)]
         private static class ControllerCheckForSpecialInputKeysOrPausePatch
         {
             public static void Postfix(ref bool __result, scrController __instance) {
@@ -129,12 +156,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 }
 
                 // Don't force keys if it's paused
-                if (scrController.instance?.paused ?? true) {
+                if (__instance?.paused ?? true) {
                     return;
                 }
 
                 // Do not override special keys in CLS
-                if (__instance.CLSMode) {
+                if ((bool)_scrControllerCLSModeProperty.GetValue(__instance)) {
                     return;
                 }
 

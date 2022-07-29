@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core;
 using HarmonyLib;
-using Steamworks;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.HideUiElements
@@ -100,11 +99,11 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                 }
             }
 
-            if (SteamAPI.Init()) {
-                bool isBeta = SteamApps.GetCurrentBetaName(out _, 20);
+            if ((SteamIntegration.Instance?.initialized ?? false) && !string.IsNullOrEmpty(GCS.steamBranchName))
+            {
                 scrEnableIfBeta enableIfBeta =
                     Resources.FindObjectsOfTypeAll<scrEnableIfBeta>().FirstOrDefault();
-                if (isBeta && enableIfBeta && enableIfBeta.gameObject.activeSelf == hideBeta) {
+                if (enableIfBeta && enableIfBeta.gameObject.activeSelf == hideBeta) {
                     enableIfBeta.gameObject.SetActive(!hideBeta);
                 }
             }
