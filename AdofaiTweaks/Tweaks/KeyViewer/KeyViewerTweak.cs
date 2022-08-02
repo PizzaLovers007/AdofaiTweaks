@@ -84,9 +84,14 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
 
         private void UpdateKeyState() {
             UpdateViewerVisibility();
-            foreach (KeyCode code in CurrentProfile.ActiveKeys) {
-                keyState[code] = Input.GetKey(code);
+
+            // Only update keys when not currently replaying
+            if (!ReplayInput.IsReplayingInputs) {
+                foreach (KeyCode code in CurrentProfile.ActiveKeys) {
+                    keyState[code] = Input.GetKey(code);
+                }
             }
+
             keyViewer.UpdateState(keyState);
         }
 
@@ -444,10 +449,12 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
             GameObject.DontDestroyOnLoad(keyViewerObj);
             keyViewer = keyViewerObj.AddComponent<KeyViewer>();
             keyViewer.Profile = CurrentProfile;
+            ReplayInput.KeyViewer = keyViewer;
 
             UpdateViewerVisibility();
 
             keyState = new Dictionary<KeyCode, bool>();
+            ReplayInput.KeyState = keyState;
         }
 
         /// <summary>
@@ -499,6 +506,7 @@ namespace AdofaiTweaks.Tweaks.KeyViewer
         /// <inheritdoc/>
         public override void OnDisable() {
             GameObject.Destroy(keyViewer.gameObject);
+            ReplayInput.KeyViewer = null;
         }
 
         private void UpdateViewerVisibility() {

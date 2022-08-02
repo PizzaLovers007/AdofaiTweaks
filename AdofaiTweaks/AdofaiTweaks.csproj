@@ -177,6 +177,7 @@
     <Compile Include="Tweaks\KeyViewer\KeyViewerSettings.cs" />
     <Compile Include="Tweaks\KeyViewer\KeyViewerTweak.cs" />
     <Compile Include="Tweaks\KeyViewer\KeyViewer.cs" />
+    <Compile Include="Tweaks\KeyViewer\ReplayInput.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousPatches.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousSettings.cs" />
     <Compile Include="Tweaks\Miscellaneous\MiscellaneousTweak.cs" />
