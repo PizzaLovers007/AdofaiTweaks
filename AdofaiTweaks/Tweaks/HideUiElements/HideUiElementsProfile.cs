@@ -28,9 +28,19 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
         public bool HideTitle { get; set; }
 
         /// <summary>
-        /// Hides Otto and the timing target icon in the bottom right.
+        /// Hides Otto.
         /// </summary>
         public bool HideOtto { get; set; }
+
+        /// <summary>
+        /// Hides the timing target icon in the bottom right corner.
+        /// </summary>
+        public bool HideTimingTarget { get; set; }
+
+        /// <summary>
+        /// Hides the no fail indicator in the bottom right corner.
+        /// </summary>
+        public bool HideNoFailIcon { get; set; }
 
         /// <summary>
         /// Hides the "Beta Build" text.

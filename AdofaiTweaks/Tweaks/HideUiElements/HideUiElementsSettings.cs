@@ -4,6 +4,7 @@ using System.Reflection;
 using AdofaiTweaks.Core;
 using HarmonyLib;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AdofaiTweaks.Tweaks.HideUiElements
 {
@@ -71,12 +72,17 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
 
             bool hideEverything = selectedProfile.HideEverything;
             bool hideOtto = hideEverything || selectedProfile.HideOtto;
+            bool hideTimingTarget = hideEverything || selectedProfile.HideTimingTarget;
+            bool hideNoFail = hideEverything || selectedProfile.HideNoFailIcon;
             bool hideBeta = hideEverything || selectedProfile.HideBeta;
             bool hideTitle = hideEverything || selectedProfile.HideTitle;
 
             var tweakEnabled = AdofaiTweaks.IsEnabled && IsEnabled;
             hideEverything &= tweakEnabled;
             hideOtto &= tweakEnabled;
+            hideTimingTarget &= tweakEnabled;
+            hideNoFail &= tweakEnabled;
+            hideTitle &= tweakEnabled;
             hideBeta &= tweakEnabled;
             hideTitle &= tweakEnabled;
 
@@ -86,16 +92,21 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                 AdofaiTweaks.ReleaseNumber >= 94 ? null : scnEditor.instance);
 
             if (isEditingLevel) {
-                if (scnEditor.instance?.ottoCanvas.gameObject.activeSelf == hideOtto) {
-                    scnEditor.instance.ottoCanvas.gameObject.SetActive(!hideOtto);
+                scnEditor.instance.autoImage.enabled = !hideOtto;
+                if (scnEditor.instance?.editorDifficultySelector.gameObject.activeSelf == hideTimingTarget) {
+                    scnEditor.instance.editorDifficultySelector.gameObject.SetActive(!hideTimingTarget);
+                }
+                if (scnEditor.instance?.buttonNoFail.gameObject.activeSelf == hideNoFail) {
+                    scnEditor.instance.buttonNoFail.gameObject.SetActive(!hideNoFail);
                 }
             } else {
-                uiController.difficultyImage.enabled = !hideOtto;
-                if (uiController.difficultyContainer.gameObject.activeSelf == hideOtto) {
-                    uiController.difficultyContainer.gameObject.SetActive(!hideOtto);
+                uiController.noFailImage.enabled = !hideNoFail;
+                uiController.difficultyImage.enabled = !hideTimingTarget;
+                if (uiController.difficultyContainer.gameObject.activeSelf == hideTimingTarget) {
+                    uiController.difficultyContainer.gameObject.SetActive(!hideTimingTarget);
                 }
-                if (uiController.difficultyFadeContainer.gameObject.activeSelf == hideOtto) {
-                    uiController.difficultyFadeContainer.gameObject.SetActive(!hideOtto);
+                if (uiController.difficultyFadeContainer.gameObject.activeSelf == hideTimingTarget) {
+                    uiController.difficultyFadeContainer.gameObject.SetActive(!hideTimingTarget);
                 }
             }
 
