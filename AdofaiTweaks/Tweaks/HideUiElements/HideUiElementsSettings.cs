@@ -82,7 +82,6 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             hideOtto &= tweakEnabled;
             hideTimingTarget &= tweakEnabled;
             hideNoFail &= tweakEnabled;
-            hideTitle &= tweakEnabled;
             hideBeta &= tweakEnabled;
             hideTitle &= tweakEnabled;
 
@@ -93,6 +92,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
 
             if (isEditingLevel) {
                 scnEditor.instance.autoImage.enabled = !hideOtto;
+                scnEditor.instance.buttonAuto.enabled = !hideOtto;
                 if (scnEditor.instance?.editorDifficultySelector.gameObject.activeSelf == hideTimingTarget) {
                     scnEditor.instance.editorDifficultySelector.gameObject.SetActive(!hideTimingTarget);
                 }
