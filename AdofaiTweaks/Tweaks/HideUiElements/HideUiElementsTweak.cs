@@ -95,6 +95,20 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             }
 
             newVal = GUILayout.Toggle(
+                SelectedProfile.HideTimingTarget, TweakStrings.Get(TranslationKeys.HideUiElements.TIMING_TARGET));
+            if (newVal != SelectedProfile.HideTimingTarget) {
+                SelectedProfile.HideTimingTarget = newVal;
+                Settings.ShowOrHideElements();
+            }
+
+            newVal = GUILayout.Toggle(
+                SelectedProfile.HideNoFailIcon, TweakStrings.Get(TranslationKeys.HideUiElements.NO_FAIL_ICON));
+            if (newVal != SelectedProfile.HideNoFailIcon) {
+                SelectedProfile.HideNoFailIcon = newVal;
+                Settings.ShowOrHideElements();
+            }
+
+            newVal = GUILayout.Toggle(
                 SelectedProfile.HideBeta, TweakStrings.Get(TranslationKeys.HideUiElements.BETA_BUILD));
             if (newVal != SelectedProfile.HideBeta) {
                 SelectedProfile.HideBeta = newVal;
