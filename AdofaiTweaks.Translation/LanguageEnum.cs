@@ -12,5 +12,6 @@
         FRENCH = 4,
         VIETNAMESE = 5,
         CHINESE_SIMPLIFIED = 6,
+        RUSSIAN = 7,
     }
 }
