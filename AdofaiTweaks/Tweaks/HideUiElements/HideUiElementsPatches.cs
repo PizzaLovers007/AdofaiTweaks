@@ -52,6 +52,14 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
             }
         }
 
+        [HarmonyPatch(typeof(scnEditor), "SwitchToEditMode")]
+        private static class HideNoFailAndTimingTargetPatch
+        {
+            public static void Postfix() {
+                Settings.ShowOrHideElements();
+            }
+        }
+
         private static class HideResultTextAndFlashPatches
         {
             private static bool shouldIgnoreFlashOnce;
