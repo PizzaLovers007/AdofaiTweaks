@@ -77,6 +77,7 @@ namespace AdofaiTweaks.Tweaks.HideUiElements
                     if (SelectedProfile.HideEverything || SelectedProfile.HideResult) {
                         __instance.txtCongrats.gameObject.SetActive(false);
                         __instance.txtResults.gameObject.SetActive(false);
+                        __instance.txtAllStrictClear.gameObject.SetActive(false);
                     }
                 }
             }
