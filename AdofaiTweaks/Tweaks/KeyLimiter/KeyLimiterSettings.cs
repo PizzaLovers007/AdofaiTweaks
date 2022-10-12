@@ -11,9 +11,14 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
     public class KeyLimiterSettings : TweakSettings
     {
         /// <summary>
-        /// The keys that are counted as input.
+        /// The synchronous input keys that are counted as input.
         /// </summary>
-        public List<KeyCode> ActiveKeys { get; set; } = new List<KeyCode>();
+        public List<KeyCode> ActiveKeys { get; set; } = new ();
+
+        /// <summary>
+        /// The asynchronous input keys that are counted as input.
+        /// </summary>
+        public List<object> ActiveAsyncKeys { get; set; } = new ();
 
         /// <summary>
         /// Old setting for showing the key viewer.
@@ -54,6 +59,11 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         /// Limit key on main screen.
         /// </summary>
         public bool LimitKeyOnMainScreen { get; set; } = true;
+
+        /// <summary>
+        /// Whether the user has migrated their KeyLimiter settings to async input version.
+        /// </summary>
+        public bool MigratedToAsyncKeys { get; set; }
 
         private Color _pressedOutlineColor;
 

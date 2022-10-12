@@ -79,7 +79,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             "KeyLimiter.CountValidKeysPressedAfterMultipressPatch",
             "scrController",
             "CountValidKeysPressed",
-            MinVersion = 72)]
+            MinVersion = 72,
+            MaxVersion = 96)]
         private static class CountValidKeysPressedAfterMultipressPatch
         {
             private static readonly PropertyInfo _ADOBaseIsCLSProperty =
@@ -133,6 +134,59 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                         keysPressed++;
                     }
                 }
+
+                // Limit keys pressed
+                __result = Mathf.Min(4, keysPressed);
+
+                return false;
+            }
+        }
+
+        [TweakPatch(
+            "KeyLimiter.CountValidKeysAfterAsyncInputRefactorPatch",
+            "scrController",
+            "CountValidKeysPressed",
+            MinVersion = 97)]
+        private static class CountValidKeysAfterAsyncInputRefactorPatch
+        {
+            public static bool Prefix(ref int __result, scrController __instance)
+            {
+                // Do not limit keys if current scene is CLS and player has
+                // disabled key limiting in CLS
+                if (!Settings.LimitKeyOnCLS && ADOBase.isCLS) {
+                    return true;
+                }
+
+                // Do not limit keys if player is in main screen and has
+                // disabled key limiting in there
+                if (!Settings.LimitKeyOnMainScreen
+                    && !__instance.gameworld
+                    && !ADOBase.isCLS) {
+                    return true;
+                }
+
+                // Stop player inputs while we're editing the keys
+                if (Settings.IsListening) {
+                    __result = 0;
+                    return false;
+                }
+
+                int keysPressed = 0;
+
+                // Check registered keys
+                // TODO: Use async input stuff if appropriate, and use reflections to avoid type not found exceptions
+                /*
+                foreach (KeyCode code in Settings.ActiveKeys) {
+                    // TODO: keysPressed++ time
+                }
+
+                // Always account for certain keys
+                foreach (KeyCode code in KeyLimiterTweak.ALWAYS_BOUND_KEYS) {
+                    if (Input.GetKeyDown(code)) {
+                        keysPressed++;
+                    }
+                }
+                */
 
                 // Limit keys pressed
                 __result = Mathf.Min(4, keysPressed);
