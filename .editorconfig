@@ -1,0 +1,12 @@
+root = true
+
+[*.cs]
+# Rider settings
+;csharp_type_declaration_braces = end_of_line
+;csharp_brace_style = end_of_line
+;type_declaration_braces = end_of_line
+;brace_style = end_of_line
+resharper_csharp_type_declaration_braces = end_of_line
+resharper_csharp_brace_style = end_of_line
+resharper_type_declaration_braces = end_of_line
+resharper_brace_style = end_of_line
