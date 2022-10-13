@@ -41,8 +41,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private KeyLimiterSettings Settings { get; set; }
 
         private static readonly bool IsAsyncInputAvailable = AdofaiTweaks.ReleaseNumber >= 97;
-        private static Rect warningWindowRect = new Rect(20, 20, 120, 50);
-        private static bool displayWarningWindow;
+        private static bool displayMigrationWarning;
 
         /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
@@ -153,15 +152,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
 
             // Not added string: "Convert the settings to {async?a:''}synchronous input system"
-            if (GUILayout.Button(TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
-            {
-                displayWarningWindow = true;
-            }
+            displayMigrationWarning |= GUILayout.Button(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
 
-            if (displayWarningWindow)
+            if (displayMigrationWarning)
             {
-                // Not added string: "Warning"
-                warningWindowRect = GUI.Window(0, warningWindowRect, MigrationWarningPromptGUI, TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
+                // TODO: Invoke through reflection to avoid type not found exception
+                MigrationWarningPromptGUI();
             }
 
             // Not added string: "Your settings are for {async?a:''}synchronous input system. Do you want to switch to __ input?"
@@ -179,7 +175,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
         }
 
-        private void MigrationWarningPromptGUI(int _)
+        // TODO: Invoke through reflection to avoid type not found exception
+        private void MigrationWarningPromptGUI()
         {
             MoreGUILayout.BeginIndent();
             // Not added string: "You are about to change the settings. Are you sure? The migration is only possible in versions above r97"
@@ -189,11 +186,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             if (GUILayout.Button(TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
             {
                 MigrateActiveKeys();
+                displayMigrationWarning = false;
             }
             // Not added string: "No"
             if (GUILayout.Button(TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
             {
-                displayWarningWindow = false;
+                displayMigrationWarning = false;
             }
             GUILayout.EndHorizontal();
             MoreGUILayout.EndIndent();
