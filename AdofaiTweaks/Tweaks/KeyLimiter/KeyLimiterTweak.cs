@@ -111,15 +111,11 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
         // Separated to another method to avoid type not found exception in older game versions
         private void IterateAndUpdateRegisteredAsyncKeys() {
-            AdofaiTweaks.Logger.Log("start iterate");
             foreach (var code in AsyncInputManager.frameDependentKeyDownMask.Except(ALWAYS_BOUND_ASYNC_KEYS)) {
                 // Register/unregister the key
-                AdofaiTweaks.Logger.Log($"check keydown for {code}");
                 if (Settings.ActiveAsyncKeys.Contains(code)) {
-                    AdofaiTweaks.Logger.Log($"remove");
                     Settings.ActiveAsyncKeys.Remove(code);
                 } else {
-                    AdofaiTweaks.Logger.Log($"add");
                     Settings.ActiveAsyncKeys.Add(code);
                 }
             }
