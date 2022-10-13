@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
 using UnityEngine;
@@ -173,20 +174,18 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 int keysPressed = 0;
 
-                // Check registered keys
-                // TODO: Use async input stuff if appropriate, and use reflections to avoid type not found exceptions
-                /*
-                foreach (KeyCode code in Settings.ActiveKeys) {
-                    // TODO: keysPressed++ time
+                if (AsyncInputManager.isActive) {
+                    // Check registered keys
+                    keysPressed += Settings.ActiveAsyncKeys.Count(k => AsyncInput.GetKeyDown(k, false))
+                                   // Always account for certain keys
+                                   + KeyLimiterTweak.ALWAYS_BOUND_ASYNC_KEYS.Count(k => AsyncInput.GetKeyDown(k, false));
                 }
-
-                // Always account for certain keys
-                foreach (KeyCode code in KeyLimiterTweak.ALWAYS_BOUND_KEYS) {
-                    if (Input.GetKeyDown(code)) {
-                        keysPressed++;
-                    }
+                else {
+                    // Check registered keys
+                    keysPressed += Settings.ActiveKeys.Count(Input.GetKeyDown)
+                                   // Always account for certain keys
+                                   + KeyLimiterTweak.ALWAYS_BOUND_KEYS.Count(Input.GetKeyDown);
                 }
-                */
 
                 // Limit keys pressed
                 __result = Mathf.Min(4, keysPressed);

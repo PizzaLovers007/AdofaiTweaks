@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
@@ -37,11 +38,38 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             KeyCode.Mouse6,
         };
 
-        [SyncTweakSettings]
-        private KeyLimiterSettings Settings { get; set; }
+        /// <summary>
+        /// Always bound keys but async. Initialized at static constructor.
+        /// </summary>
+        public static readonly ISet<ushort> ALWAYS_BOUND_ASYNC_KEYS;
 
         private static readonly bool IsAsyncInputAvailable = AdofaiTweaks.ReleaseNumber >= 97;
-        private static bool displayMigrationWarning;
+
+        private static bool GetAsyncInputEnabled() {
+            return AsyncInputManager.isActive;
+        }
+
+        static KeyLimiterTweak()
+        {
+            // Do not process if types aren't there
+            if (!IsAsyncInputAvailable)
+            {
+                return;
+            }
+
+            IDictionary<KeyCode, ushort> unityNativeKeymap = KeyCodeConverter.UnityNativeKeyCodeList
+                .GroupBy(x => x)
+                .ToDictionary(g => g.Key.Item1, g => g.First().Item2);
+
+            ALWAYS_BOUND_ASYNC_KEYS = ALWAYS_BOUND_KEYS
+                .Select(k => unityNativeKeymap.TryGetValue(k, out ushort a) ? a : MutualKeyCode.AsyncNullKeyCode)
+                .ToHashSet();
+
+            ALWAYS_BOUND_ASYNC_KEYS.Remove(MutualKeyCode.AsyncNullKeyCode);
+        }
+
+        [SyncTweakSettings]
+        private KeyLimiterSettings Settings { get; set; }
 
         /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
@@ -53,17 +81,46 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 return;
             }
 
-            foreach (KeyCode code in Enum.GetValues(typeof(KeyCode))) {
-                // Skip key if not pressed or should always be bound
-                if (!Input.GetKeyDown(code) || ALWAYS_BOUND_KEYS.Contains(code)) {
-                    continue;
-                }
+            bool isAsyncInputEnabled = false;
+            if (IsAsyncInputAvailable)
+            {
+                // Calling as a method to avoid exception
+                isAsyncInputEnabled = GetAsyncInputEnabled();
+            }
 
+            if (isAsyncInputEnabled) {
+                IterateAndUpdateRegisteredAsyncKeys();
+            }
+            else
+            {
+                foreach (KeyCode code in Enum.GetValues(typeof(KeyCode))) {
+                    // Skip key if not pressed or should always be bound
+                    if (!Input.GetKeyDown(code) || ALWAYS_BOUND_KEYS.Contains(code)) {
+                        continue;
+                    }
+
+                    // Register/unregister the key
+                    if (Settings.ActiveKeys.Contains(code)) {
+                        Settings.ActiveKeys.Remove(code);
+                    } else {
+                        Settings.ActiveKeys.Add(code);
+                    }
+                }
+            }
+        }
+
+        // Separated to another method to avoid type not found exception in older game versions
+        private void IterateAndUpdateRegisteredAsyncKeys() {
+            AdofaiTweaks.Logger.Log("start iterate");
+            foreach (var code in AsyncInputManager.frameDependentKeyDownMask.Except(ALWAYS_BOUND_ASYNC_KEYS)) {
                 // Register/unregister the key
-                if (Settings.ActiveKeys.Contains(code)) {
-                    Settings.ActiveKeys.Remove(code);
+                AdofaiTweaks.Logger.Log($"check keydown for {code}");
+                if (Settings.ActiveAsyncKeys.Contains(code)) {
+                    AdofaiTweaks.Logger.Log($"remove");
+                    Settings.ActiveAsyncKeys.Remove(code);
                 } else {
-                    Settings.ActiveKeys.Add(code);
+                    AdofaiTweaks.Logger.Log($"add");
+                    Settings.ActiveAsyncKeys.Add(code);
                 }
             }
         }
@@ -79,20 +136,14 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         }
 
         private void DrawKeyRegisterSettingsGUI() {
+            bool isAsyncInputEnabled = false;
             if (IsAsyncInputAvailable)
             {
-                MigrationReminderGUI();
+                DisplaySelectedInputSystemGUI();
                 GUILayout.Space(12f);
-            }
-            else if (Settings.MigratedToAsyncKeys)
-            {
-                // Not added string:
-                // "<b>Warning!</b> Your settings were meant for asynchronous input system, " +
-                // "but the this version of the game does not have asynchronous input system.\n" +
-                // "If you want to use KeyLimiter again, go back to any version that is above " +
-                // "{version r97} and migrate your settings back to synchronous input only."
-                GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
-                GUILayout.Space(12f);
+
+                // Calling as a method to avoid exception
+                isAsyncInputEnabled = GetAsyncInputEnabled();
             }
 
             // List of registered keys
@@ -102,9 +153,16 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             GUILayout.BeginVertical();
             GUILayout.Space(8f);
             GUILayout.EndVertical();
-            foreach (KeyCode code in Settings.ActiveKeys) {
-                GUILayout.Label(code.ToString());
-                GUILayout.Space(8f);
+            if (isAsyncInputEnabled)
+            {
+                LabelActiveAsyncKeys();
+            }
+            else
+            {
+                foreach (KeyCode code in Settings.ActiveKeys) {
+                    GUILayout.Label(code.ToString());
+                    GUILayout.Space(8f);
+                }
             }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -135,75 +193,23 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 GUILayout.Toggle(
                     Settings.LimitKeyOnMainScreen,
                     TweakStrings.Get(TranslationKeys.KeyLimiter.LIMIT_MAIN_MENU));
-
-            // Display options to migrate their settings to sync/async input if types are there
-            if (IsAsyncInputAvailable)
-            {
-                DrawActiveKeysMigrationGUI();
-            }
         }
 
-        private void DrawActiveKeysMigrationGUI()
+        // Separated to another method to avoid type not found exception in older game versions
+        private void DisplaySelectedInputSystemGUI()
         {
-            // Not added string: "Your settings are for {async?a:''}synchronous input system. Do you want to migrate your settings to __ input?"
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
-
-            // Not added string: "Convert the settings to {async?a:''}synchronous input system"
-            displayMigrationWarning |= GUILayout.Button(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
-
-            if (displayMigrationWarning)
-            {
-                MigrationWarningPromptGUI();
-            }
-
-            // Not added string: "Your settings are for {async?a:''}synchronous input system. Do you want to switch to __ input?"
+            // Not added string: "Currently selected input system: {AsyncInputManager.isActive ? 'async':'sync'}\n" +
+            // "Note that the async key and sync keycodes are not shared nor migratable. " +
+            // "You need to configure both sync and async input independently."
             GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
         }
 
-        private void MigrationReminderGUI()
+        // Separated to another method to avoid type not found exception in older game versions
+        private void LabelActiveAsyncKeys()
         {
-            if (Settings.MigratedToAsyncKeys != Persistence.GetChosenAsynchronousInput())
-            {
-                // Not added string: "Warning: Your settings are for {async?a:''}synchronous input system, " +
-                // "but the current input system is {}. Consider migrating the mod settings or toggling async input."
-                GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
-            }
-        }
-
-        private void MigrationWarningPromptGUI()
-        {
-            MoreGUILayout.BeginIndent();
-            // Not added string: "You are about to change the settings. Are you sure? The migration is only possible in versions above r97"
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
-            GUILayout.BeginHorizontal();
-            // Not added string: "Yes"
-            if (GUILayout.Button(TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
-            {
-                MigrateActiveKeys();
-                displayMigrationWarning = false;
-            }
-            // Not added string: "No"
-            if (GUILayout.Button(TweakStrings.Get(TranslationKeys.Global.TEST_KEY)))
-            {
-                displayMigrationWarning = false;
-            }
-            GUILayout.EndHorizontal();
-            MoreGUILayout.EndIndent();
-        }
-
-        private void MigrateActiveKeys()
-        {
-            if (Settings.MigratedToAsyncKeys)
-            {
-                // TODO: Migrate back to sync keys
-                AdofaiTweaks.Logger.Log("[KeyLimiterTweak] Test async -> sync migration");
-                Settings.MigratedToAsyncKeys = false;
-            }
-            else
-            {
-                // TODO: Migrate to async keys
-                AdofaiTweaks.Logger.Log("[KeyLimiterTweak] Test sync -> async migration");
-                Settings.MigratedToAsyncKeys = true;
+            foreach (var code in Settings.ActiveAsyncKeys) {
+                GUILayout.Label(((SharpHook.Native.KeyCode)code).ToString().Replace("Vc", ""));
+                GUILayout.Space(8f);
             }
         }
     }
