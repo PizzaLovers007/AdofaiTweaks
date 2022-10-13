@@ -211,7 +211,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             {
                 // TODO: Migrate to async keys
                 AdofaiTweaks.Logger.Log("[KeyLimiterTweak] Test sync -> async migration");
-                Settings.MigratedToAsyncKeys = false;
+                Settings.MigratedToAsyncKeys = true;
             }
         }
     }
