@@ -81,7 +81,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         private void DrawKeyRegisterSettingsGUI() {
             if (IsAsyncInputAvailable)
             {
-                // TODO: Invoke through reflection to avoid type not found exception
                 MigrationReminderGUI();
                 GUILayout.Space(12f);
             }
@@ -140,12 +139,10 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             // Display options to migrate their settings to sync/async input if types are there
             if (IsAsyncInputAvailable)
             {
-                // TODO: Invoke through reflection to avoid type not found exception
                 DrawActiveKeysMigrationGUI();
             }
         }
 
-        // TODO: Invoke through reflection to avoid type not found exception
         private void DrawActiveKeysMigrationGUI()
         {
             // Not added string: "Your settings are for {async?a:''}synchronous input system. Do you want to migrate your settings to __ input?"
@@ -156,7 +153,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
             if (displayMigrationWarning)
             {
-                // TODO: Invoke through reflection to avoid type not found exception
                 MigrationWarningPromptGUI();
             }
 
@@ -164,7 +160,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
         }
 
-        // TODO: Invoke through reflection to avoid type not found exception
         private void MigrationReminderGUI()
         {
             if (Settings.MigratedToAsyncKeys != Persistence.GetChosenAsynchronousInput())
@@ -175,7 +170,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
         }
 
-        // TODO: Invoke through reflection to avoid type not found exception
         private void MigrationWarningPromptGUI()
         {
             MoreGUILayout.BeginIndent();
