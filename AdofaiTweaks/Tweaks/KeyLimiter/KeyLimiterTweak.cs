@@ -192,10 +192,11 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         // Separated to another method to avoid type not found exception in older game versions
         private void DisplaySelectedInputSystemGUI()
         {
-            // Not added string: "Currently selected input system: {AsyncInputManager.isActive ? 'async':'sync'}\n" +
-            // "Note that the async key and sync keycodes are not shared nor migratable. " +
-            // "You need to configure both sync and async input independently."
-            GUILayout.Label(TweakStrings.Get(TranslationKeys.Global.TEST_KEY));
+            GUILayout.Label(TweakStrings.Get(
+                TranslationKeys.KeyLimiter.SELECTED_INPUT_SYSTEM,
+                AsyncInputManager.isActive ?
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.ASYNCHRONOUS_INPUT_SYSTEM) :
+                    TweakStrings.Get(TranslationKeys.KeyLimiter.SYNCHRONOUS_INPUT_SYSTEM)));
         }
 
         // Separated to another method to avoid type not found exception in older game versions
