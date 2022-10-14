@@ -47,23 +47,26 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             return AsyncInputManager.isActive;
         }
 
-        static KeyLimiterTweak()
-        {
-            // Do not process if types aren't there
-            if (!GameVersionState.AsyncInputAvailable)
-            {
-                return;
-            }
-
+        private static ISet<ushort> SetupAsyncKeyData() {
             IDictionary<KeyCode, ushort> unityNativeKeymap = KeyCodeConverter.UnityNativeKeyCodeList
                 .GroupBy(x => x)
                 .ToDictionary(g => g.Key.Item1, g => g.First().Item2);
 
-            ALWAYS_BOUND_ASYNC_KEYS = ALWAYS_BOUND_KEYS
+            var alwaysBoundAsyncKeys = ALWAYS_BOUND_KEYS
                 .Select(k => unityNativeKeymap.TryGetValue(k, out ushort a) ? a : MutualKeyCode.AsyncNullKeyCode)
                 .ToHashSet();
 
-            ALWAYS_BOUND_ASYNC_KEYS.Remove(MutualKeyCode.AsyncNullKeyCode);
+            alwaysBoundAsyncKeys.Remove(MutualKeyCode.AsyncNullKeyCode);
+
+            return alwaysBoundAsyncKeys;
+        }
+
+        static KeyLimiterTweak()
+        {
+            // Do not process if types aren't there
+            if (GameVersionState.AsyncInputAvailable) {
+                ALWAYS_BOUND_ASYNC_KEYS = SetupAsyncKeyData();
+            }
         }
 
         [SyncTweakSettings]
