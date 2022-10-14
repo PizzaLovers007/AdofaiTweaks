@@ -16,4 +16,6 @@ call "%msBuildDir%\MSBuild.exe" "AdofaiTweaks.Generator.csproj" /p:Configuration
 
 "bin\Debug\AdofaiTweaks.Generator.exe"
 
+copy "AdofaiTweaks.Strings.dll" "bin\Debug\"
+
 set msBuildDir=
