@@ -156,14 +156,15 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         }
 
         [TweakPatch(
-            "Miscellaneous.EnforceStateAtGetChosenAsynchronousInput",
-            "Persistence",
-            "GetChosenAsynchronousInput",
+            "Miscellaneous.EnforceAsyncInputStateAtControllerStart",
+            "scrController",
+            "Start",
             minVersion: 97)]
-        private static class EnforceStateAtGetChosenAsynchronousInputPatch {
-            public static void Postfix(bool __result) {
-                if (Settings.SyncInputStateToInputOptions && AsyncInputManager.isActive != __result) {
-                    AsyncInputManager.ToggleHook(__result);
+        private static class EnforceAsyncInputStateAtControllerStartPatch {
+            public static void Postfix() {
+                if (Settings.SyncInputStateToInputOptions) {
+                    var desiredState = Persistence.GetChosenAsynchronousInput();
+                    AsyncInputManager.ToggleHook(desiredState);
                 }
             }
         }
