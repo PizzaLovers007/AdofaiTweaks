@@ -85,6 +85,14 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 MoreGUILayout.EndIndent();
             }
 
+            if (GameVersionState.AsyncInputAvailable) {
+                // Fix settings state and async input enabled status desync
+                // TODO: Add string and remove TEST_KEY
+                Settings.SyncInputStateToInputOptions = GUILayout.Toggle(
+                    Settings.SyncInputStateToInputOptions,
+                    TweakStrings.Get(TranslationKeys./*Miscellaneous.SYNC_INPUT_STATE*/Global.TEST_KEY));
+            }
+
 #if DEBUG
             // Test feature
             if (Settings.SetBpmOnStart =

@@ -154,5 +154,18 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 }
             }
         }
+
+        [TweakPatch(
+            "Miscellaneous.EnforceStateAtGetChosenAsynchronousInput",
+            "Persistence",
+            "GetChosenAsynchronousInput",
+            minVersion: 97)]
+        private static class EnforceStateAtGetChosenAsynchronousInputPatch {
+            public static void Postfix(bool __result) {
+                if (Settings.SyncInputStateToInputOptions && AsyncInputManager.isActive != __result) {
+                    AsyncInputManager.ToggleHook(__result);
+                }
+            }
+        }
     }
 }

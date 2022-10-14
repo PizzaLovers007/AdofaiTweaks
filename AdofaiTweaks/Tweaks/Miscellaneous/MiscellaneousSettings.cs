@@ -49,6 +49,12 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
         public float Bpm { get; set; } = 100;
 
         /// <summary>
+        /// Whether to force sync the <see cref="AsyncInputManager"/> with
+        /// <c>ChosenAsynchronousInput</c> option in the game.
+        /// </summary>
+        public bool SyncInputStateToInputOptions { get; set; } = true;
+
+        /// <summary>
         /// Updates volume, should be called every map loads.
         /// </summary>
         public void UpdateVolume() {
