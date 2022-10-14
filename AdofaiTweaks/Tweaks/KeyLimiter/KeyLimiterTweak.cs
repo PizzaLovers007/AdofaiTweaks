@@ -43,8 +43,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         /// </summary>
         public static readonly ISet<ushort> ALWAYS_BOUND_ASYNC_KEYS;
 
-        private static readonly bool IsAsyncInputAvailable = AdofaiTweaks.ReleaseNumber >= 97;
-
         private static bool GetAsyncInputEnabled() {
             return AsyncInputManager.isActive;
         }
@@ -52,7 +50,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         static KeyLimiterTweak()
         {
             // Do not process if types aren't there
-            if (!IsAsyncInputAvailable)
+            if (!GameVersionState.AsyncInputAvailable)
             {
                 return;
             }
@@ -82,7 +80,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
 
             bool isAsyncInputEnabled = false;
-            if (IsAsyncInputAvailable)
+            if (GameVersionState.AsyncInputAvailable)
             {
                 // Calling as a method to avoid exception
                 isAsyncInputEnabled = GetAsyncInputEnabled();
@@ -133,7 +131,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
         private void DrawKeyRegisterSettingsGUI() {
             bool isAsyncInputEnabled = false;
-            if (IsAsyncInputAvailable)
+            if (GameVersionState.AsyncInputAvailable)
             {
                 DisplaySelectedInputSystemGUI();
                 GUILayout.Space(12f);
