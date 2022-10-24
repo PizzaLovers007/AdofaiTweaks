@@ -37,6 +37,7 @@ Join the ADOFAI.gg community discord! https://discord.gg/TKdpbUUfUa
 * Tiếng Việt (Provided by Gesomaru)
 * 中文（简体）(Provided by Gunbuster)
 * Русский (Provided by fallen and the Russian ADOFAI community https://discord.gg/vrknbRPaSr)
+* 日本語 (Provided by [のむチュウ / sjk](https://github.com/sjkim04))
 
 ## Images
 
