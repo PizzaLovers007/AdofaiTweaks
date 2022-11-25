@@ -176,9 +176,13 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 if (AsyncInputManager.isActive) {
                     // Check registered keys
-                    keysPressed += Settings.ActiveAsyncKeys.Count(k => AsyncInput.GetKeyDown(k, false))
-                                   // Always account for certain keys
-                                   + KeyLimiterTweak.ALWAYS_BOUND_ASYNC_KEYS.Count(k => AsyncInput.GetKeyDown(k, false));
+                    keysPressed += Settings.ActiveAsyncKeys.Count(k => AsyncInput.GetKeyDown(k, false));
+                    // Always account for certain keys
+                    if (GameVersionState.OldAsyncInputAvailable) {
+                        keysPressed += KeyLimiterTweak.ALWAYS_BOUND_OLD_ASYNC_KEYS.Count(k => AsyncInput.GetKeyDown(k, false));
+                    } else if (GameVersionState.AsyncInputAvailable) {
+                        keysPressed += KeyLimiterTweak.ALWAYS_BOUND_ASYNC_KEYS.Count(k => AsyncInput.GetKeyDown(k, false));
+                    }
                 }
                 else {
                     // Check registered keys

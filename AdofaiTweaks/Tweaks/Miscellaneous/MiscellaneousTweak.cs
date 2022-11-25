@@ -85,7 +85,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 MoreGUILayout.EndIndent();
             }
 
-            if (GameVersionState.AsyncInputAvailable) {
+            if (GameVersionState.OldAsyncInputAvailable) {
                 // Fix settings state and async input enabled status desync
                 Settings.SyncInputStateToInputOptions = GUILayout.Toggle(
                     Settings.SyncInputStateToInputOptions,

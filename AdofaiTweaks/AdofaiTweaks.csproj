@@ -75,8 +75,8 @@
     <Reference Include="RDTools">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\RDTools.dll</HintPath>
     </Reference>
-    <Reference Include="SharpHook">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\SharpHook.dll</HintPath>
+    <Reference Include="SkyHook.Unity">
+      <HintPath>ExtraDependencies\SkyHook.Unity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
