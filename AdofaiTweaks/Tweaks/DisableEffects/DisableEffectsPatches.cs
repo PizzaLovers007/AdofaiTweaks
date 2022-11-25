@@ -92,41 +92,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         }
 
         [TweakPatch(
-            "DisableEffects.FlashScrubToTimeAlwaysClear",
-            "ffxFlashPlus",
-            "ScrubToTime",
-            MaxVersion = 82)]
-        private static class FlashScrubToTimeAlwaysClearPatch
-        {
-            public static void Prefix(ffxFlashPlus __instance) {
-                if (!Settings.DisableFlash) {
-                    return;
-                }
-                __instance.startColor = Color.clear;
-                __instance.endColor = Color.clear;
-            }
-        }
-
-        [TweakPatch(
             "DisableEffects.HomStartEffectAlwaysDisabled",
             "ffxHallOfMirrorsPlus",
             "StartEffect")]
         private static class HomStartEffectAlwaysDisabledPatch
-        {
-            public static void Postfix(ffxHallOfMirrorsPlus __instance) {
-                if (!Settings.DisableHallOfMirrors) {
-                    return;
-                }
-                __instance.cam.Bgcamstatic.enabled = true;
-            }
-        }
-
-        [TweakPatch(
-            "DisableEffects.HomScrubToTimeAlwaysDisabled",
-            "ffxHallOfMirrorsPlus",
-            "ScrubToTime",
-            MaxVersion = 82)]
-        private static class HomScrubToTimeAlwaysDisabledPatch
         {
             public static void Postfix(ffxHallOfMirrorsPlus __instance) {
                 if (!Settings.DisableHallOfMirrors) {
@@ -148,58 +117,10 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         }
 
         [TweakPatch(
-            "DisableEffects.ShakeScreenScrubToTimeAlwaysDisabled",
-            "ffxShakeScreenPlus",
-            "ScrubToTime",
-            MaxVersion = 82)]
-        private static class ShakeScreenScrubToTimeAlwaysDisabledPatch
-        {
-            public static bool Prefix() {
-                return !Settings.DisableScreenShake;
-            }
-        }
-
-        [TweakPatch(
             "DisableEffects.MoveFloorStartEffectLimitRange",
             "ffxMoveFloorPlus",
             "StartEffect")]
         private static class MoveFloorStartEffectLimitRangePatch
-        {
-            private static int origStart;
-            private static int origEnd;
-
-            public static void Prefix(ffxMoveFloorPlus __instance) {
-                if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
-                    return;
-                }
-                int index = scrController.instance.currFloor.seqID;
-                origStart = __instance.start;
-                origEnd = __instance.end;
-                if (origEnd < index + Settings.MoveTrackMax / 2) {
-                    __instance.start = Math.Max(origEnd - Settings.MoveTrackMax - 1, origStart);
-                } else if (origStart > index - Settings.MoveTrackMax / 2) {
-                    __instance.end = Math.Min(origStart + Settings.MoveTrackMax - 1, origEnd);
-                } else {
-                    __instance.start = Math.Max(index - Settings.MoveTrackMax / 2, origStart);
-                    __instance.end = Math.Min(index + Settings.MoveTrackMax / 2, origEnd);
-                }
-            }
-
-            public static void Postfix(ffxMoveFloorPlus __instance) {
-                if (Settings.MoveTrackMax > DisableEffectsSettings.MOVE_TRACK_UPPER_BOUND) {
-                    return;
-                }
-                __instance.start = origStart;
-                __instance.end = origEnd;
-            }
-        }
-
-        [TweakPatch(
-            "DisableEffects.MoveFloorScrubToTimeLimitRange",
-            "ffxMoveFloorPlus",
-            "ScrubToTime",
-            MaxVersion = 82)]
-        private static class MoveFloorScrubToTimeLimitRangePatch
         {
             private static int origStart;
             private static int origEnd;
