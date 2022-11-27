@@ -112,5 +112,89 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
                 }
             }
         }
+
+        [TweakPatch(
+            "PlanetColorPatches.RainbowModeBeforeControllerRefactor",
+            "scrController",
+            "RainbowMode",
+            maxVersion: 74)]
+        private static class RainbowModeBeforeControllerRefactorPatch
+        {
+            public static bool Prefix() {
+                Persistence.SetPlayerColor(scrPlanet.rainbowColor, true);
+                Persistence.SetPlayerColor(scrPlanet.rainbowColor, false);
+                return false;
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.RainbowModeAfterControllerRefactor",
+            "scnLevelSelect",
+            "RainbowMode",
+            minVersion: 75)]
+        private static class RainbowModeAfterControllerRefactorPatch
+        {
+            public static bool Prefix() {
+                Persistence.SetPlayerColor(scrPlanet.rainbowColor, true);
+                Persistence.SetPlayerColor(scrPlanet.rainbowColor, false);
+                return false;
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.EnbyModeBeforeControllerRefactor",
+            "scrController",
+            "EnbyMode",
+            maxVersion: 74)]
+        private static class EnbyModeBeforeControllerRefactorPatch
+        {
+            public static bool Prefix() {
+                Persistence.SetPlayerColor(scrPlanet.nbYellowColor, true);
+                Persistence.SetPlayerColor(scrPlanet.nbPurpleColor, false);
+                return false;
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.EnbyModeAfterControllerRefactor",
+            "scnLevelSelect",
+            "EnbyMode",
+            minVersion: 75)]
+        private static class EnbyModeAfterControllerRefactorPatch
+        {
+            public static bool Prefix() {
+                Persistence.SetPlayerColor(scrPlanet.nbYellowColor, true);
+                Persistence.SetPlayerColor(scrPlanet.nbPurpleColor, false);
+                return false;
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.TransModeBeforeControllerRefactor",
+            "scrController",
+            "TransMode",
+            maxVersion: 74)]
+        private static class TransModeBeforeControllerRefactorPatch
+        {
+            public static bool Prefix() {
+                Persistence.SetPlayerColor(scrPlanet.transBlueColor, true);
+                Persistence.SetPlayerColor(scrPlanet.transPinkColor, false);
+                return false;
+            }
+        }
+
+        [TweakPatch(
+            "PlanetColorPatches.TransModeAfterControllerRefactor",
+            "scnLevelSelect",
+            "TransMode",
+            minVersion: 75)]
+        private static class TransModeAfterControllerRefactorPatch
+        {
+            public static bool Prefix() {
+                Persistence.SetPlayerColor(scrPlanet.transBlueColor, true);
+                Persistence.SetPlayerColor(scrPlanet.transPinkColor, false);
+                return false;
+            }
+        }
     }
 }
