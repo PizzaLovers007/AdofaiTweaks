@@ -85,6 +85,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
         /// <inheritdoc/>
         public override void OnSettingsGUI() {
+            AsyncInputManagerCompat.UpdateAsyncKeyCache();
             DrawKeyRegisterSettingsGUI();
         }
 
@@ -139,6 +140,13 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             } else {
                 if (GUILayout.Button(TweakStrings.Get(TranslationKeys.KeyLimiter.CHANGE_KEYS))) {
                     Settings.IsListening = true;
+                }
+                if (GUILayout.Button(TweakStrings.Get(TranslationKeys.KeyLimiter.CLEAR_ALL_KEYS))) {
+                    if (AsyncInputManagerCompat.IsAsyncInputEnabled) {
+                        Settings.ActiveAsyncKeys.Clear();
+                    } else {
+                        Settings.ActiveKeys.Clear();
+                    }
                 }
             }
             GUILayout.FlexibleSpace();

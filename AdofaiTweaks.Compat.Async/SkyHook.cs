@@ -35,7 +35,9 @@ namespace AdofaiTweaks.Compat.Async
         /// Gets the human-readable string of the given <paramref name="code"/>.
         /// </summary>
         /// <param name="code">The raw keycode value.</param>
-        /// <returns>Human-readable string of the given <paramref name="code"/>.</returns>
+        /// <returns>
+        /// Human-readable string of the given <paramref name="code"/>.
+        /// </returns>
         public static string GetLabel(ushort code) {
             if (codeToLabelDict.TryGetValue(code, out KeyLabel label)) {
                 return label.ToString();
@@ -46,23 +48,39 @@ namespace AdofaiTweaks.Compat.Async
         /// <summary>
         /// Gets the keys that have been pressed down on this frame.
         /// </summary>
-        /// <returns>The raw keycodes for the keys that have been pressed down on this frame.</returns>
+        /// <returns>
+        /// The raw keycodes for the keys that have been pressed down on this
+        /// frame.
+        /// </returns>
         public static IEnumerable<ushort> GetKeysDownThisFrame() {
             foreach (var code in AsyncInputManager.frameDependentKeyDownMask) {
                 if (ALWAYS_BOUND_ASYNC_KEYS.Contains(code.label)) {
                     continue;
                 }
                 yield return code.key;
-                codeToLabelDict[code.key] = code.label;
             }
         }
 
         /// <summary>
         /// Gets the number of always-bound keys pressed down on this frame.
         /// </summary>
-        /// <returns>The number of always-bound keys pressed down on this frame.</returns>
+        /// <returns>
+        /// The number of always-bound keys pressed down on this frame.
+        /// </returns>
         public static int GetKeyDownCountForAlwaysBoundKeys() {
             return ALWAYS_BOUND_ASYNC_KEYS.Count(key => AsyncInput.GetKeyDown(key, false));
+        }
+
+        /// <summary>
+        /// Updates the internal cache based on current <see
+        /// cref="AsyncKeyCode"/> inputs this frame. Can be removed once the
+        /// <see cref="UnityEngine.KeyCode"/> to <see cref="KeyLabel"/> mapping
+        /// can be accessed statically.
+        /// </summary>
+        public static void UpdateAsyncKeyCache() {
+            foreach (var code in AsyncInputManager.frameDependentKeyDownMask) {
+                codeToLabelDict[code.key] = code.label;
+            }
         }
     }
 

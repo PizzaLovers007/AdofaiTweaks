@@ -23,15 +23,16 @@ namespace AdofaiTweaks.Compat.Async
         /// <summary>
         /// A set of keys that will always be counted as input.
         /// </summary>
-        private static readonly ISet<UnityEngine.KeyCode> ALWAYS_BOUND_KEYS = new HashSet<UnityEngine.KeyCode> {
-            UnityEngine.KeyCode.Mouse0,
-            UnityEngine.KeyCode.Mouse1,
-            UnityEngine.KeyCode.Mouse2,
-            UnityEngine.KeyCode.Mouse3,
-            UnityEngine.KeyCode.Mouse4,
-            UnityEngine.KeyCode.Mouse5,
-            UnityEngine.KeyCode.Mouse6,
-        };
+        private static readonly ISet<UnityEngine.KeyCode> ALWAYS_BOUND_KEYS =
+            new HashSet<UnityEngine.KeyCode> {
+                UnityEngine.KeyCode.Mouse0,
+                UnityEngine.KeyCode.Mouse1,
+                UnityEngine.KeyCode.Mouse2,
+                UnityEngine.KeyCode.Mouse3,
+                UnityEngine.KeyCode.Mouse4,
+                UnityEngine.KeyCode.Mouse5,
+                UnityEngine.KeyCode.Mouse6,
+            };
 
         private static readonly IDictionary<ushort, UnityEngine.KeyCode> codeToKeyCodeDict =
             KeyCodeConverter.UnityNativeKeyCodeList
@@ -39,7 +40,8 @@ namespace AdofaiTweaks.Compat.Async
                 .ToDictionary(t => t.Key, t => t.First().Item1);
 
         /// <summary>
-        /// Always bound keys but for async input. Initialized at static constructor.
+        /// Always bound keys but for async input. Initialized at static
+        /// constructor.
         ///
         /// <br/> Unused after r97.
         /// </summary>
@@ -50,9 +52,10 @@ namespace AdofaiTweaks.Compat.Async
         }
 
         private static ISet<ushort> SetupOldAsyncKeyData() {
-            IDictionary<UnityEngine.KeyCode, ushort> unityNativeKeymap = KeyCodeConverter.UnityNativeKeyCodeList
-                .GroupBy(x => x.Item1)
-                .ToDictionary(g => g.Key, g => g.First().Item2);
+            IDictionary<UnityEngine.KeyCode, ushort> unityNativeKeymap =
+                KeyCodeConverter.UnityNativeKeyCodeList
+                    .GroupBy(x => x.Item1)
+                    .ToDictionary(g => g.Key, g => g.First().Item2);
 
             ISet<ushort> alwaysBoundAsyncKeys = ALWAYS_BOUND_KEYS
                 .Select(k => unityNativeKeymap.TryGetValue(k, out ushort a) ? a : (ushort)0)
@@ -67,7 +70,9 @@ namespace AdofaiTweaks.Compat.Async
         /// Gets the human-readable string of the given <paramref name="code"/>.
         /// </summary>
         /// <param name="code">The raw keycode value.</param>
-        /// <returns>Human-readable string of the given <paramref name="code"/>.</returns>
+        /// <returns>
+        /// Human-readable string of the given <paramref name="code"/>.
+        /// </returns>
         public static string GetLabel(ushort code) {
             if (codeToKeyCodeDict.TryGetValue(code, out UnityEngine.KeyCode keyCode)) {
                 return keyCode.ToString();
@@ -78,9 +83,15 @@ namespace AdofaiTweaks.Compat.Async
         /// <summary>
         /// Gets the keys that have been pressed down on this frame.
         /// </summary>
-        /// <returns>The raw keycodes for the keys that have been pressed down on this frame.</returns>
+        /// <returns>
+        /// The raw keycodes for the keys that have been pressed down on this
+        /// frame.
+        /// </returns>
         public static IEnumerable<ushort> GetKeysDownThisFrame() {
-            foreach (var key in AsyncInputManager.frameDependentKeyDownMask.Except(ALWAYS_BOUND_ASYNC_KEYS)) {
+            foreach (var key in AsyncInputManager.frameDependentKeyDownMask) {
+                if (ALWAYS_BOUND_ASYNC_KEYS.Contains(key)) {
+                    continue;
+                }
                 yield return key;
             }
         }
@@ -88,9 +99,17 @@ namespace AdofaiTweaks.Compat.Async
         /// <summary>
         /// Gets the number of always-bound keys pressed down on this frame.
         /// </summary>
-        /// <returns>The number of always-bound keys pressed down on this frame.</returns>
+        /// <returns>
+        /// The number of always-bound keys pressed down on this frame.
+        /// </returns>
         public static int GetKeyDownCountForAlwaysBoundKeys() {
             return ALWAYS_BOUND_ASYNC_KEYS.Count(key => AsyncInput.GetKeyDown(key, false));
+        }
+
+        /// <summary>
+        /// Does nothing in this version. Meant for AsyncKeyCode caching.
+        /// </summary>
+        public static void UpdateAsyncKeyCache() {
         }
     }
 
