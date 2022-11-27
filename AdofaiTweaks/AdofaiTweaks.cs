@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core;
@@ -275,6 +276,18 @@ namespace AdofaiTweaks
             foreach (TweakRunner runner in tweakRunners) {
                 runner.OnUpdate(deltaTime);
             }
+        }
+
+        /// <summary>
+        /// Loads an assembly at the given file path.
+        /// </summary>
+        /// <param name="path">The path to the assembly.</param>
+        private static void LoadAssembly(string path) {
+            // Load other assemblies
+            using FileStream stream = new FileStream(path, FileMode.Open);
+            byte[] data = new byte[stream.Length];
+            stream.Read(data, 0, data.Length);
+            AppDomain.CurrentDomain.Load(data);
         }
     }
 }

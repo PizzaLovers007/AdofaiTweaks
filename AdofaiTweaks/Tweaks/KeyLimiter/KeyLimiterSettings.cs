@@ -13,12 +13,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         /// <summary>
         /// The synchronous input keys that are counted as input.
         /// </summary>
-        public List<KeyCode> ActiveKeys { get; set; } = new ();
+        public List<KeyCode> ActiveKeys { get; set; } = new();
 
         /// <summary>
         /// The asynchronous input keys that are counted as input.
         /// </summary>
-        public List<ushort> ActiveAsyncKeys { get; set; } = new ();
+        public List<ushort> ActiveAsyncKeys { get; set; } = new();
 
         /// <summary>
         /// Old setting for showing the key viewer.

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
+using AdofaiTweaks.Compat.Async;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
-using HarmonyLib;
-using SkyHook;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.KeyLimiter
@@ -42,77 +39,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             KeyCode.Mouse6,
         };
 
-        /// <summary>
-        /// Always bound keys but for async input. Initialized at static constructor.
-        /// <br/>
-        /// Unused after r97.
-        /// </summary>
-        public static readonly ISet<ushort> ALWAYS_BOUND_OLD_ASYNC_KEYS;
-
-        /// <summary>
-        /// Always bound keys but for async input. Initialized at static constructor.
-        /// </summary>
-        public static readonly ISet<KeyLabel> ALWAYS_BOUND_ASYNC_KEYS = new HashSet<KeyLabel> {
-            KeyLabel.MouseLeft,
-            KeyLabel.MouseMiddle,
-            KeyLabel.MouseRight,
-            KeyLabel.MouseX1,
-            KeyLabel.MouseX2,
-        };
-
-        /// <summary>
-        /// Dictionary of skyhook's ushort keycodes matched to key labels.
-        /// <br/>
-        /// This is only cached in runtime and will always not be a full list of all key codes.
-        /// </summary>
-        public static ReadOnlyDictionary<ushort, KeyLabel> CODE_TO_LABEL_DICT => new ReadOnlyDictionary<ushort, KeyLabel>(codeToLabelDict);
-        private static Dictionary<ushort, KeyLabel> codeToLabelDict = new Dictionary<ushort, KeyLabel>();
-
-        private static bool GetAsyncInputEnabled() {
-            return AsyncInputManager.isActive;
-        }
-
-        private static ISet<ushort> SetupOldAsyncKeyData() {
-            var typeKeyCodeConverter = Type.GetType("KeyCodeConverter");
-            IReadOnlyList<Tuple<KeyCode, ushort>> unityNativeKeyCodeList =
-                (IReadOnlyList<Tuple<KeyCode, ushort>>)AccessTools.Field(typeKeyCodeConverter, "UnityNativeKeyCodeList")
-                    .GetValue(null);
-
-            IDictionary<KeyCode, ushort> unityNativeKeymap = unityNativeKeyCodeList
-                .GroupBy(x => x)
-                .ToDictionary(g => g.Key.Item1, g => g.First().Item2);
-
-            ISet<ushort> alwaysBoundAsyncKeys = ALWAYS_BOUND_KEYS
-                .Select(k => unityNativeKeymap.TryGetValue(k, out ushort a) ? a : (ushort)0)
-                .ToHashSet();
-
-            alwaysBoundAsyncKeys.Remove(0); // ushort 0
-
-            return alwaysBoundAsyncKeys;
-        }
-
-        static KeyLimiterTweak()
-        {
-            // Do not process if types aren't there
-            if (GameVersionState.OldAsyncInputAvailable) {
-                // r97 async support for keylimiter
-                ALWAYS_BOUND_OLD_ASYNC_KEYS = SetupOldAsyncKeyData();
-            }
-        }
-
         [SyncTweakSettings]
         private KeyLimiterSettings Settings { get; set; }
 
         /// <inheritdoc/>
         public override void OnUpdate(float deltaTime) {
             UpdateRegisteredKeys();
-
-            // Key up events are always called regardless of application's focused state
-            foreach (var code in AsyncInputManager.frameDependentKeyUpMask) {
-                if (!codeToLabelDict.ContainsKey(code.key)) {
-                    codeToLabelDict.Add(code.key, code.label);
-                }
-            }
         }
 
         private void UpdateRegisteredKeys() {
@@ -120,19 +52,16 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 return;
             }
 
-            bool isAsyncInputEnabled = false;
-            if (GameVersionState.OldAsyncInputAvailable
-                || GameVersionState.AsyncInputAvailable)
-            {
-                // Calling as a method to avoid exception
-                isAsyncInputEnabled = GetAsyncInputEnabled();
-            }
-
-            if (isAsyncInputEnabled) {
-                IterateAndUpdateRegisteredAsyncKeys();
-            }
-            else
-            {
+            if (AsyncInputManagerCompat.IsAsyncInputEnabled) {
+                foreach (var key in AsyncInputManagerCompat.GetKeysDownThisFrame()) {
+                    // Register/unregister the key
+                    if (Settings.ActiveAsyncKeys.Contains(key)) {
+                        Settings.ActiveAsyncKeys.Remove(key);
+                    } else {
+                        Settings.ActiveAsyncKeys.Add(key);
+                    }
+                }
+            } else {
                 foreach (KeyCode code in Enum.GetValues(typeof(KeyCode))) {
                     // Skip key if not pressed or should always be bound
                     if (!Input.GetKeyDown(code) || ALWAYS_BOUND_KEYS.Contains(code)) {
@@ -149,34 +78,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
         }
 
-        // Separated to another method to avoid type not found exception in older game versions
-        private void IterateAndUpdateRegisteredAsyncKeys() {
-            if (GameVersionState.OldAsyncInputAvailable) {
-                var oldFrameDependentKeyDownMaskType =
-                    AccessTools.Field(typeof(AsyncInputManager), "frameDependentKeyDownMask");
-                var frameDependentKeyDownMask = (HashSet<ushort>)oldFrameDependentKeyDownMaskType.GetValue(null);
-
-                foreach (var code in frameDependentKeyDownMask.Except(ALWAYS_BOUND_OLD_ASYNC_KEYS)) {
-                    // Register/unregister the key
-                    if (Settings.ActiveAsyncKeys.Contains(code)) {
-                        Settings.ActiveAsyncKeys.Remove(code);
-                    } else {
-                        Settings.ActiveAsyncKeys.Add(code);
-                    }
-                }
-            } else if (GameVersionState.AsyncInputAvailable) {
-                foreach (var code in AsyncInputManager.frameDependentKeyDownMask) {
-                    // Register/unregister the key
-                    var key = code.key;
-                    if (Settings.ActiveAsyncKeys.Contains(key)) {
-                        Settings.ActiveAsyncKeys.Remove(key);
-                    } else {
-                        Settings.ActiveAsyncKeys.Add(key);
-                    }
-                }
-            }
-        }
-
         /// <inheritdoc/>
         public override void OnHideGUI() {
             Settings.IsListening = false;
@@ -188,14 +89,15 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
         }
 
         private void DrawKeyRegisterSettingsGUI() {
-            bool isAsyncInputEnabled = false;
-            if (GameVersionState.OldAsyncInputAvailable || GameVersionState.AsyncInputAvailable)
-            {
-                DisplaySelectedInputSystemGUI();
+            // Input type header
+            if (AsyncInputManagerCompat.IsAsyncAvailable) {
+                GUILayout.Label(TweakStrings.Get(
+                    TranslationKeys.KeyLimiter.SELECTED_INPUT_SYSTEM,
+                    AsyncInputManagerCompat.IsAsyncInputEnabled ?
+                        TweakStrings.Get(TranslationKeys.KeyLimiter.ASYNCHRONOUS_INPUT_SYSTEM) :
+                        TweakStrings.Get(TranslationKeys.KeyLimiter.SYNCHRONOUS_INPUT_SYSTEM)));
                 GUILayout.Space(12f);
-
-                // Calling as a method to avoid exception
-                isAsyncInputEnabled = GetAsyncInputEnabled();
+                AdofaiTweaks.Logger.Log($"async enabled: {AsyncInputManagerCompat.IsAsyncInputEnabled}");
             }
 
             // List of registered keys
@@ -205,12 +107,19 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             GUILayout.BeginVertical();
             GUILayout.Space(8f);
             GUILayout.EndVertical();
-            if (isAsyncInputEnabled)
-            {
-                LabelActiveAsyncKeys();
-            }
-            else
-            {
+            if (AsyncInputManagerCompat.IsAsyncInputEnabled) {
+                foreach (var code in Settings.ActiveAsyncKeys) {
+                    var label = new StringBuilder();
+
+                    label.Append(code);
+                    label.Append('(');
+                    label.Append(AsyncInputManagerCompat.GetLabel(code));
+                    label.Append(')');
+
+                    GUILayout.Label(label.ToString());
+                    GUILayout.Space(8f);
+                }
+            } else {
                 foreach (KeyCode code in Settings.ActiveKeys) {
                     GUILayout.Label(code.ToString());
                     GUILayout.Space(8f);
@@ -245,41 +154,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                 GUILayout.Toggle(
                     Settings.LimitKeyOnMainScreen,
                     TweakStrings.Get(TranslationKeys.KeyLimiter.LIMIT_MAIN_MENU));
-        }
-
-        // Separated to another method to avoid type not found exception in older game versions
-        private void DisplaySelectedInputSystemGUI()
-        {
-            GUILayout.Label(TweakStrings.Get(
-                TranslationKeys.KeyLimiter.SELECTED_INPUT_SYSTEM,
-                AsyncInputManager.isActive ?
-                    TweakStrings.Get(TranslationKeys.KeyLimiter.ASYNCHRONOUS_INPUT_SYSTEM) :
-                    TweakStrings.Get(TranslationKeys.KeyLimiter.SYNCHRONOUS_INPUT_SYSTEM)));
-        }
-
-        // Separated to another method to avoid type not found exception in older game versions
-        private void LabelActiveAsyncKeys()
-        {
-            if (GameVersionState.OldAsyncInputAvailable) {
-                foreach (var code in Settings.ActiveAsyncKeys) {
-                    GUILayout.Label(code.ToString().Replace("Vc", ""));
-                    GUILayout.Space(8f);
-                }
-            } else if (GameVersionState.AsyncInputAvailable) {
-                foreach (var code in Settings.ActiveAsyncKeys) {
-                    var label = new StringBuilder($"{code}(");
-
-                    if (codeToLabelDict.TryGetValue(code, out KeyLabel keyLabel)) {
-                        label.Append(keyLabel);
-                    } else {
-                        label.Append("Label Not Cached");
-                    }
-
-                    label.Append(')');
-                    GUILayout.Label(label.ToString());
-                    GUILayout.Space(8f);
-                }
-            }
         }
     }
 }

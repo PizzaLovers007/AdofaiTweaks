@@ -76,7 +76,7 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\RDTools.dll</HintPath>
     </Reference>
     <Reference Include="SkyHook.Unity">
-      <HintPath>ExtraDependencies\SkyHook.Unity.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\SkyHook.Unity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -213,6 +213,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AdofaiTweaks.Compat.Async\AdofaiTweaks.Compat.Async.csproj">
+      <Project>{6df2eaff-e8b3-4cf5-9df4-7b987faab0af}</Project>
+      <Name>AdofaiTweaks.Compat.Async</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AdofaiTweaks.Generator\AdofaiTweaks.Generator.csproj">
       <Project>{c3adebac-a8e9-456f-a751-4fd146a728c7}</Project>
       <Name>AdofaiTweaks.Generator</Name>

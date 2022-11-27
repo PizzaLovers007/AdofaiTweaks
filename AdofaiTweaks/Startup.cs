@@ -18,6 +18,17 @@ namespace AdofaiTweaks
             LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Translation.dll");
             LoadAssembly("Mods/AdofaiTweaks/LiteDB.dll");
 
+            if (TryLoadAssembly("A Dance of Fire and Ice_Data/Managed/SkyHook.Unity.dll")) {
+                LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Compat.AsyncSkyHook.dll");
+                modEntry.Logger.Log("Async assembly: SkyHook");
+            } else if (TryLoadAssembly("A Dance of Fire and Ice_Data/Managed/SharpHook.dll")) {
+                LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Compat.AsyncSharpHook.dll");
+                modEntry.Logger.Log("Async assembly: SharpHook");
+            } else {
+                LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Compat.AsyncPolyfill.dll");
+                modEntry.Logger.Log("Async assembly: Polyfill");
+            }
+
             AdofaiTweaks.Setup(modEntry);
         }
 
@@ -31,6 +42,23 @@ namespace AdofaiTweaks
             byte[] data = new byte[stream.Length];
             stream.Read(data, 0, data.Length);
             AppDomain.CurrentDomain.Load(data);
+        }
+
+        /// <summary>
+        /// Attempts to load an assembly at the given file path.
+        /// </summary>
+        /// <param name="path">The path to the assembly.</param>
+        /// <returns>
+        /// <c>true</c> if the assembly was successfully loaded, <c>false</c>
+        /// otherwise.
+        /// </returns>
+        private static bool TryLoadAssembly(string path) {
+            try {
+                LoadAssembly(path);
+                return true;
+            } catch (Exception) {
+                return false;
+            }
         }
     }
 }

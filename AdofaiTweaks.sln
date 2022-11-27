@@ -7,7 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks", "AdofaiTweak
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B3BDA86E-6C46-4C94-95CA-B7C3679990A8}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		build_sharphook.bat = build_sharphook.bat
+		build_skyhook.bat = build_skyhook.bat
 		CODEOWNERS = CODEOWNERS
 		Info.json = Info.json
 		LICENSE.md = LICENSE.md
@@ -16,18 +19,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Repository.json = Repository.json
 		StyleCop.ruleset = StyleCop.ruleset
 		VERSION.txt = VERSION.txt
-		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Translation", "AdofaiTweaks.Translation\AdofaiTweaks.Translation.csproj", "{0B6F2259-90FE-495F-AA89-C2406AE1450D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Generator", "AdofaiTweaks.Generator\AdofaiTweaks.Generator.csproj", "{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Compat.Async", "AdofaiTweaks.Compat.Async\AdofaiTweaks.Compat.Async.csproj", "{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Game|Any CPU = Game|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SharpHook|Any CPU = SharpHook|Any CPU
+		SkyHook|Any CPU = SkyHook|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,18 +42,40 @@ Global
 		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Game|Any CPU.Build.0 = Game|Any CPU
 		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{285D8437-6A8E-4ABE-AB99-9936852430F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.SharpHook|Any CPU.ActiveCfg = Release|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.SharpHook|Any CPU.Build.0 = Release|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.SkyHook|Any CPU.ActiveCfg = Release|Any CPU
+		{285D8437-6A8E-4ABE-AB99-9936852430F7}.SkyHook|Any CPU.Build.0 = Release|Any CPU
 		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Game|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Game|Any CPU.Build.0 = Debug|Any CPU
 		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.SharpHook|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.SharpHook|Any CPU.Build.0 = Release|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.SkyHook|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6F2259-90FE-495F-AA89-C2406AE1450D}.SkyHook|Any CPU.Build.0 = Release|Any CPU
 		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Game|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Game|Any CPU.Build.0 = Debug|Any CPU
 		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.SharpHook|Any CPU.ActiveCfg = Release|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.SharpHook|Any CPU.Build.0 = Release|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.SkyHook|Any CPU.ActiveCfg = Release|Any CPU
+		{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}.SkyHook|Any CPU.Build.0 = Release|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.Game|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.Game|Any CPU.Build.0 = Debug|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.SharpHook|Any CPU.ActiveCfg = SharpHook|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.SharpHook|Any CPU.Build.0 = SharpHook|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.SkyHook|Any CPU.ActiveCfg = SkyHook|Any CPU
+		{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}.SkyHook|Any CPU.Build.0 = SkyHook|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

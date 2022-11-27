@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using AdofaiTweaks.Compat.Async;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
 using UnityEngine;
@@ -89,10 +90,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
             private static readonly bool ReleaseNumberIsBelow94 = AdofaiTweaks.ReleaseNumber < 94;
 
-            private static bool GetCLSMode(scrController controller = null)
-            {
-                if (ReleaseNumberIsBelow94)
-                {
+            private static bool GetCLSMode(scrController controller = null) {
+                if (ReleaseNumberIsBelow94) {
                     return (bool)_scrControllerCLSModeProperty.GetValue(controller);
                 }
 
@@ -150,8 +149,7 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             MinVersion = 97)]
         private static class CountValidKeysAfterAsyncInputRefactorPatch
         {
-            public static bool Prefix(ref int __result, scrController __instance)
-            {
+            public static bool Prefix(ref int __result, scrController __instance) {
                 // Do not limit keys if current scene is CLS and player has
                 // disabled key limiting in CLS
                 if (!Settings.LimitKeyOnCLS && ADOBase.isCLS) {
@@ -174,17 +172,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
                 int keysPressed = 0;
 
-                if (AsyncInputManager.isActive) {
+                if (AsyncInputManagerCompat.IsAsyncInputEnabled) {
                     // Check registered keys
-                    keysPressed += Settings.ActiveAsyncKeys.Count(k => AsyncInput.GetKeyDown(k, false));
-                    // Always account for certain keys
-                    if (GameVersionState.OldAsyncInputAvailable) {
-                        keysPressed += KeyLimiterTweak.ALWAYS_BOUND_OLD_ASYNC_KEYS.Count(k => AsyncInput.GetKeyDown(k, false));
-                    } else if (GameVersionState.AsyncInputAvailable) {
-                        keysPressed += KeyLimiterTweak.ALWAYS_BOUND_ASYNC_KEYS.Count(k => AsyncInput.GetKeyDown(k, false));
-                    }
-                }
-                else {
+                    keysPressed += Settings.ActiveAsyncKeys.Count(AsyncInputCompat.GetKeyDown)
+                                   // Always account for certain keys
+                                   + AsyncInputManagerCompat.GetKeyDownCountForAlwaysBoundKeys();
+                } else {
                     // Check registered keys
                     keysPressed += Settings.ActiveKeys.Count(Input.GetKeyDown)
                                    // Always account for certain keys
