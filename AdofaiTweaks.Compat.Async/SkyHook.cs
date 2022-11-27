@@ -40,7 +40,7 @@ namespace AdofaiTweaks.Compat.Async
             if (codeToLabelDict.TryGetValue(code, out KeyLabel label)) {
                 return label.ToString();
             }
-            return "Not cached yet";
+            return "Unknown";
         }
 
         /// <summary>
@@ -49,6 +49,9 @@ namespace AdofaiTweaks.Compat.Async
         /// <returns>The raw keycodes for the keys that have been pressed down on this frame.</returns>
         public static IEnumerable<ushort> GetKeysDownThisFrame() {
             foreach (var code in AsyncInputManager.frameDependentKeyDownMask) {
+                if (ALWAYS_BOUND_ASYNC_KEYS.Contains(code.label)) {
+                    continue;
+                }
                 yield return code.key;
                 codeToLabelDict[code.key] = code.label;
             }
