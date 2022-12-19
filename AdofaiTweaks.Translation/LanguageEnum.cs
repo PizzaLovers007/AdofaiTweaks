@@ -14,5 +14,6 @@
         CHINESE_SIMPLIFIED = 6,
         RUSSIAN = 7,
         JAPANESE = 8,
+        GERMAN = 9,
     }
 }
