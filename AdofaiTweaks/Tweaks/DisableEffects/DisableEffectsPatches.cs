@@ -65,14 +65,11 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         [TweakPatch(
             "DisableEffects.SetBloomAlwaysFalse",
             "ffxBloomPlus",
-            "SetBloom")]
-        private static class SetBloomAlwaysFalsePatch
+            "StartEffect")]
+        private static class BloomStartEffectDoNothingPatch
         {
-            public static void Prefix(ref bool bEnable) {
-                if (!Settings.DisableBloom) {
-                    return;
-                }
-                bEnable = false;
+            public static bool Prefix() {
+                return !Settings.DisableBloom;
             }
         }
 
