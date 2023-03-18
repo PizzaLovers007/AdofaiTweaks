@@ -105,16 +105,32 @@ namespace AdofaiTweaks.Tweaks.DisableEffects
         }
 
         [TweakPatch(
-            "DisableEffects.HomStartEffectAlwaysDisabled",
+            "DisableEffects.HomStartEffectAlwaysDisabledPre105",
             "ffxHallOfMirrorsPlus",
-            "StartEffect")]
-        private static class HomStartEffectAlwaysDisabledPatch
+            "StartEffect",
+            MaxVersion = 104)]
+        private static class HomStartEffectAlwaysDisabledPre105Patch
         {
             public static void Postfix(ffxHallOfMirrorsPlus __instance) {
                 if (!Settings.DisableHallOfMirrors) {
                     return;
                 }
                 __instance.cam.Bgcamstatic.enabled = true;
+            }
+        }
+
+        [TweakPatch(
+            "DisableEffects.HomStartEffectAlwaysDisabledPost105",
+            "ffxHallOfMirrorsPlus",
+            "StartEffect",
+            MinVersion = 105)]
+        private static class HomStartEffectAlwaysDisabledPost105Patch
+        {
+            public static void Postfix(ffxHallOfMirrorsPlus __instance) {
+                if (!Settings.DisableHallOfMirrors) {
+                    return;
+                }
+                __instance.cam.Bgcamstatic.clearFlags = CameraClearFlags.Color;
             }
         }
 
