@@ -75,69 +75,35 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             }
         }
 
-        [HarmonyPatch(typeof(CustomLevel), "Play")]
-        private static class CustomLevelPlayPatch
+        [TweakPatch(
+            "Miscellaneous.ForceHitsoundVolumePreScnGamePatch",
+            "CustomLevel",
+            "ApplyEvent",
+            maxVersion: 106)]
+        private static class ForceHitsoundVolumePreScnGamePatch
         {
-            public static void IncreaseInputOffset(int offset) {
-                scrConductor.currentPreset.inputOffset += offset;
-            }
+            public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors) {
+                if (evnt.eventType == LevelEventType.SetHitsound && Settings.IsEnabled && Settings.SetHitsoundVolume) {
+                    int floor = evnt.floor;
+                    GameObject gameObject = floors[floor].gameObject;
 
-            public static void IncreaseVisualOffset(int offset) {
-                scrConductor.visualOffset += offset;
-            }
+                    ffxSetHitsound[] ffxSetHitsounds = gameObject.GetComponentsInChildren<ffxSetHitsound>();
 
-            public static void Postfix(CustomLevel __instance, ref int seqID) {
-                if (Settings.IsEnabled && Settings.SetHitsoundVolume) {
-                    Settings.UpdateVolume();
-                }
-
-#if DEBUG
-                // TODO Finish working on start set bpm
-                if (Settings.IsEnabled && Settings.SetBpmOnStart) {
-                    float oldBpm = scrConductor.instance.bpm, // original bpm
-                        newBpm = Settings.Bpm; // new bpm to replace
-
-                    // floor the player is currently on
-                    scrFloor floor = scrLevelMaker.instance.listFloors[seqID];
-
-                    // current floor's angle
-                    double angle = (floor.exitangle - floor.entryangle + 360) % 360;
-                    if (angle == 0) {
-                        angle = 360;
+                    if (ffxSetHitsounds != null) {
+                        foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds) {
+                            Settings.UpdateVolume(ffxSetHitsound);
+                        }
                     }
-
-                    // (bpm, angle) => (1000 * angle) / (3 * bpm)
-
-                    // bpm has to be bpmConstant when floor.speed is multiplied,
-                    // so dividing floor.speed here (this code does not work
-                    // properly) conductor.controller.speed = newBpm /
-                    // conductor.controller.speed;
-
-                    // floor's speed should be changed, to set the bpm right
-                    float timeCalcBase = (float)angle * 1000,
-                        oldTime = timeCalcBase / (oldBpm * 3),
-                        newTime = timeCalcBase / (Settings.Bpm * 3);
-                    int timeDiff = Mathf.RoundToInt(oldTime - newTime);
-
-                    // add the time difference to sync the music
-                    // scrConductor.currentPreset.inputOffset += timeDiff;
-                    // scrConductor.visualOffset += timeDiff;
-
-                    /* old code:
-                    // add the time difference between the old and new time, to
-                    // sync the music
-                    conductor.song.time += timeDiff;
-                    conductor.song2.time += timeDiff;
-                    */
-
-                    scrConductor.instance.StartCoroutine("DesyncFix");
                 }
-#endif
             }
         }
 
-        [HarmonyPatch(typeof(CustomLevel), "ApplyEvent")]
-        private static class CustomLevelApplyEventPatch
+        [TweakPatch(
+            "Miscellaneous.ForceHitsoundVolumePostScnGamePatch",
+            "scnGame",
+            "ApplyEvent",
+            minVersion: 107)]
+        private static class ForceHitsoundVolumePostScnGamePatch
         {
             public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors) {
                 if (evnt.eventType == LevelEventType.SetHitsound && Settings.IsEnabled && Settings.SetHitsoundVolume) {
@@ -160,7 +126,8 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             "scrController",
             "Start",
             minVersion: 97)]
-        private static class EnforceAsyncInputStateAtControllerStartPatch {
+        private static class EnforceAsyncInputStateAtControllerStartPatch
+        {
             public static void Postfix() {
                 if (Settings.SyncInputStateToInputOptions) {
                     var desiredState = Persistence.GetChosenAsynchronousInput();
