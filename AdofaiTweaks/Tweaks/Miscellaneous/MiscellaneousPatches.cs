@@ -79,7 +79,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             "Miscellaneous.ForceHitsoundVolumePreScnGamePatch",
             "CustomLevel",
             "ApplyEvent",
-            maxVersion: 106)]
+            maxVersion: 107)]
         private static class ForceHitsoundVolumePreScnGamePatch
         {
             public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors) {
@@ -102,7 +102,7 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             "Miscellaneous.ForceHitsoundVolumePostScnGamePatch",
             "scnGame",
             "ApplyEvent",
-            minVersion: 107)]
+            minVersion: 108)]
         private static class ForceHitsoundVolumePostScnGamePatch
         {
             public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors) {
