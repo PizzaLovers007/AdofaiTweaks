@@ -29,14 +29,14 @@ Join the ADOFAI.gg community discord! https://discord.gg/TKdpbUUfUa
 ## Supported Languages
 
 * English
-* 한국어 (Provided by [CrackThrough](https://github.com/CrackThrough) & [NoBrain0917](https://github.com/NoBrain0917))
+* 한국어 (Provided by [CrackThrough](https://github.com/CrackThrough) and [NoBrain0917](https://github.com/NoBrain0917))
 * Español (Provided by
     [Econ](https://www.youtube.com/channel/UCE7Kv2xKmB_pLnBV0VBrNYA))
 * Polski (Provided by crispy)
 * Français (Provided by Woopie 2)
 * Tiếng Việt (Provided by Gesomaru)
 * 中文（简体）(Provided by Gunbuster)
-* Deutsch (Provided by Pisk and JustABlitz)
+* Deutsch (Provided by Pisk, JustABlitz, and [mariokirby1703](https://www.youtube.com/c/mariokirby1703))
 * Русский (Provided by fallen and the Russian ADOFAI community https://discord.gg/vrknbRPaSr)
 * 日本語 (Provided by [のむチュウ / sjk](https://github.com/sjkim04))
 
