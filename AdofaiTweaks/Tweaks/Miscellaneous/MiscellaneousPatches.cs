@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ADOFAI;
 using AdofaiTweaks.Core.Attributes;
+using DG.Tweening;
 using HarmonyLib;
 using UnityEngine;
 
@@ -43,8 +44,12 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
             }
         }
 
-        [HarmonyPatch(typeof(scnEditor), "Update")]
-        private static class EditorUpdatePatch
+        [TweakPatch(
+            "Miscellaneous.RemoveZoomPreTweenPatch",
+            "scnEditor",
+            "Update",
+            maxVersion: 107)]
+        private static class RemoveZoomPreTweenPatch
         {
             private static float originalScrollValue;
 
@@ -71,6 +76,34 @@ namespace AdofaiTweaks.Tweaks.Miscellaneous
                 var mouseScrollDelta = Input.mouseScrollDelta;
                 if (Mathf.Abs(mouseScrollDelta.y) > 0.05f) {
                     scrCamera.instance.userSizeMultiplier = originalScrollValue;
+                }
+            }
+        }
+
+        [TweakPatch(
+            "Miscellaneous.RemoveZoomPostTweenPatch",
+            "scnEditor",
+            "Update",
+            minVersion: 108)]
+        private static class RemoveZoomPostTweenPatch
+        {
+            public static void Postfix() {
+                if (!Settings.DisableEditorZoom) {
+                    return;
+                }
+                if (!scnEditor.instance.playMode) {
+                    return;
+                }
+                var mouseScrollDelta = Input.mouseScrollDelta;
+                if (Mathf.Abs(mouseScrollDelta.y) > 0.05f) {
+                    float originalZoom = scrCamera.instance.userSizeMultiplier;
+                    DOTween.To(
+                            () => scrCamera.instance.userSizeMultiplier,
+                            unused => scrCamera.instance.userSizeMultiplier = originalZoom,
+                            originalZoom,
+                            0.1f)
+                        .SetEase(Ease.OutQuad)
+                        .SetUpdate(true);
                 }
             }
         }
