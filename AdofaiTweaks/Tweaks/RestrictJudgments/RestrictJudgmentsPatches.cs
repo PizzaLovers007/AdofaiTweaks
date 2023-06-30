@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Reflection;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
+using HarmonyLib;
 using UnityEngine.UI;
 
 namespace AdofaiTweaks.Tweaks.RestrictJudgments
@@ -11,6 +14,12 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
     {
         [SyncTweakSettings]
         private static RestrictJudgmentsSettings Settings { get; set; }
+
+        private static readonly MethodInfo resetCustomLevelMethod =
+            AccessTools.Method(typeof(scrController), "ResetCustomLevel");
+
+        private static readonly MethodInfo restartMethod =
+            AccessTools.Method(typeof(scrController), "Restart");
 
         private static bool invokedFailAction = false;
         private static HitMargin latestHitMargin;
@@ -101,9 +110,24 @@ namespace AdofaiTweaks.Tweaks.RestrictJudgments
                 shouldInstantRestart = false;
                 Controller.instantExplode = false;
                 if (scnEditor.instance != null) {
-                    __instance.StartCoroutine(__instance.ResetCustomLevel());
+                    object[] resetParams;
+                    if (AdofaiTweaks.ReleaseNumber >= 110) {
+                        resetParams = new object[] { true };
+                    } else {
+                        resetParams = new object[] { };
+                    }
+                    __instance.StartCoroutine(
+                        (IEnumerator)resetCustomLevelMethod.Invoke(
+                            __instance,
+                            resetParams));
                 } else {
-                    __instance.Restart();
+                    object[] resetParams;
+                    if (AdofaiTweaks.ReleaseNumber >= 110) {
+                        resetParams = new object[] { false };
+                    } else {
+                        resetParams = new object[] { };
+                    }
+                    restartMethod.Invoke(__instance, resetParams);
                 }
                 return false;
             }
