@@ -1,7 +1,9 @@
 ﻿#if SKY_HOOK
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using SkyHook;
 
 namespace AdofaiTweaks.Compat.Async
@@ -14,7 +16,31 @@ namespace AdofaiTweaks.Compat.Async
         /// <summary>
         /// Whether async input is enabled.
         /// </summary>
-        public static bool IsAsyncInputEnabled => SkyHookManager.Instance.isHookActive;
+        public static bool IsAsyncInputEnabled => IsAsyncEnabled_Hook();
+        public static bool IsAsyncEnabled_Hook()
+        {
+
+            var bindingFlags = System.Reflection.BindingFlags.IgnoreReturn;
+            unchecked
+            {
+                bindingFlags = (System.Reflection.BindingFlags)0xffffffffffffffff;
+            }
+            
+            Object instance = SkyHookManager.Instance;
+            MethodInfo[] meths = instance.GetType().GetMethods();
+
+
+            foreach (MethodInfo item in meths)
+            {
+                if(item.Name == "get_isHookActive")
+                {
+                    return (bool)item.Invoke(instance, null);
+                }
+            }
+            throw new System.Exception("wtf dude...");
+             
+            
+        }
 
         /// <summary>
         /// Whether async input is available in this version of the game.
