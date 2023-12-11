@@ -1,7 +1,10 @@
 ﻿#if SKY_HOOK
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using HarmonyLib;
 using SkyHook;
 
 namespace AdofaiTweaks.Compat.Async
@@ -11,10 +14,27 @@ namespace AdofaiTweaks.Compat.Async
     /// </summary>
     public static class AsyncInputManagerCompat
     {
+        private static readonly FieldInfo IsHookActiveField =
+            AccessTools.Field(typeof(SkyHookManager), "isHookActive");
+        private static readonly PropertyInfo IsHookActiveProperty =
+            AccessTools.Property(typeof(SkyHookManager), "isHookActive");
+
         /// <summary>
         /// Whether async input is enabled.
         /// </summary>
-        public static bool IsAsyncInputEnabled => SkyHookManager.Instance.isHookActive;
+        public static bool IsAsyncInputEnabled => IsAsyncEnabled_Hook();
+        private static bool IsAsyncEnabled_Hook()
+        {
+            // r120 changed the isHookActive field to a property getter, so check
+            // for both using reflection to ensure older and newer versions work.
+            if (IsHookActiveField != null) {
+                return (bool)IsHookActiveField.GetValue(SkyHookManager.Instance);
+            } else if (IsHookActiveProperty != null) {
+                return (bool)IsHookActiveProperty.GetValue(SkyHookManager.Instance);
+            } else {
+                throw new InvalidOperationException("Could not find isHookActive in SkyHook.");
+            }
+        }
 
         /// <summary>
         /// Whether async input is available in this version of the game.
