@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using HarmonyLib;
 using SkyHook;
 
 namespace AdofaiTweaks.Compat.Async
@@ -13,33 +14,26 @@ namespace AdofaiTweaks.Compat.Async
     /// </summary>
     public static class AsyncInputManagerCompat
     {
+        private static readonly FieldInfo IsHookActiveField =
+            AccessTools.Field(typeof(SkyHookManager), "isHookActive");
+        private static readonly PropertyInfo IsHookActiveProperty =
+            AccessTools.Property(typeof(SkyHookManager), "isHookActive");
+
         /// <summary>
         /// Whether async input is enabled.
         /// </summary>
         public static bool IsAsyncInputEnabled => IsAsyncEnabled_Hook();
-        public static bool IsAsyncEnabled_Hook()
+        private static bool IsAsyncEnabled_Hook()
         {
-
-            var bindingFlags = System.Reflection.BindingFlags.IgnoreReturn;
-            unchecked
-            {
-                bindingFlags = (System.Reflection.BindingFlags)0xffffffffffffffff;
+            // r120 changed the isHookActive field to a property getter, so check
+            // for both using reflection to ensure older and newer versions work.
+            if (IsHookActiveField != null) {
+                return (bool)IsHookActiveField.GetValue(SkyHookManager.Instance);
+            } else if (IsHookActiveProperty != null) {
+                return (bool)IsHookActiveProperty.GetValue(SkyHookManager.Instance);
+            } else {
+                throw new InvalidOperationException("Could not find isHookActive in SkyHook.");
             }
-            
-            Object instance = SkyHookManager.Instance;
-            MethodInfo[] meths = instance.GetType().GetMethods();
-
-
-            foreach (MethodInfo item in meths)
-            {
-                if(item.Name == "get_isHookActive")
-                {
-                    return (bool)item.Invoke(instance, null);
-                }
-            }
-            throw new System.Exception("wtf dude...");
-             
-            
         }
 
         /// <summary>
