@@ -10,3 +10,5 @@ resharper_csharp_type_declaration_braces = end_of_line
 resharper_csharp_brace_style = end_of_line
 resharper_type_declaration_braces = end_of_line
 resharper_brace_style = end_of_line
+indent_style = space
+end_of_line = lf
