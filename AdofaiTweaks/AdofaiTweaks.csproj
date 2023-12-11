@@ -26,7 +26,7 @@
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\UnityModManager\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="AdofaiTweaks.Strings">
-      <HintPath>..\AdofaiTweaks.Generator\bin\$(Configuration)\AdofaiTweaks.Strings.dll</HintPath>
+      <HintPath>..\AdofaiTweaks.Generator\bin\$(Configuration)\net7.0\AdofaiTweaks.Strings.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\Assembly-CSharp.dll</HintPath>

@@ -7,6 +7,8 @@ using System.Text;
 using AdofaiTweaks.Translation;
 using ExcelDataReader;
 using LiteDB;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace AdofaiTweaks.Generator
 {
@@ -26,6 +28,10 @@ namespace AdofaiTweaks.Generator
         }
 
         private static void GenerateDatabase() {
+            // Required by ExcelDataReader to parse strings in binary BIFF2-5
+            // Excel documents encoded with DOS-era code pages.
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             using (var db = new LiteDatabase("TweakStrings.db")) {
                 db.DropCollection(typeof(TweakString).Name);
                 var collection = db.GetCollection<TweakString>();
@@ -65,11 +71,6 @@ namespace AdofaiTweaks.Generator
         }
 
         private static void GenerateKeyClass() {
-            CompilerParameters parameters = new CompilerParameters() {
-                GenerateExecutable = false,
-                OutputAssembly = "AdofaiTweaks.Strings.dll",
-            };
-
             StringBuilder sb = new StringBuilder();
             sb.Append("namespace AdofaiTweaks.Strings { ");
             sb.Append("public class TranslationKeys { ");
@@ -107,9 +108,17 @@ namespace AdofaiTweaks.Generator
 
             sb.Append("} }");
 
-            CodeDomProvider.CreateProvider("CSharp").CompileAssemblyFromSource(
-                parameters,
-                sb.ToString());
+            var compilation =
+                CSharpCompilation
+                    .Create("AdofaiTweaks.Strings")
+                    .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+                    .AddReferences(
+                        MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
+                    .AddSyntaxTrees(CSharpSyntaxTree.ParseText(sb.ToString()));
+            var emitResult = compilation.Emit("AdofaiTweaks.Strings.dll");
+            if (!emitResult.Success) {
+                throw new Exception("Errors: " + string.Join("\n", emitResult.Diagnostics));
+            }
         }
 
         private static string PascalToUpperCamel(string s) {
