@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks", "AdofaiTweaks\AdofaiTweaks.csproj", "{285D8437-6A8E-4ABE-AB99-9936852430F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdofaiTweaks", "AdofaiTweaks\AdofaiTweaks.csproj", "{285D8437-6A8E-4ABE-AB99-9936852430F7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B3BDA86E-6C46-4C94-95CA-B7C3679990A8}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,11 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		VERSION.txt = VERSION.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Translation", "AdofaiTweaks.Translation\AdofaiTweaks.Translation.csproj", "{0B6F2259-90FE-495F-AA89-C2406AE1450D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdofaiTweaks.Translation", "AdofaiTweaks.Translation\AdofaiTweaks.Translation.csproj", "{0B6F2259-90FE-495F-AA89-C2406AE1450D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Generator", "AdofaiTweaks.Generator\AdofaiTweaks.Generator.csproj", "{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdofaiTweaks.Generator", "AdofaiTweaks.Generator\AdofaiTweaks.Generator.csproj", "{C3ADEBAC-A8E9-456F-A751-4FD146A728C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdofaiTweaks.Compat.Async", "AdofaiTweaks.Compat.Async\AdofaiTweaks.Compat.Async.csproj", "{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdofaiTweaks.Compat.Async", "AdofaiTweaks.Compat.Async\AdofaiTweaks.Compat.Async.csproj", "{6DF2EAFF-E8B3-4CF5-9DF4-7B987FAAB0AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
