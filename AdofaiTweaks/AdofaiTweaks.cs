@@ -51,7 +51,15 @@ namespace AdofaiTweaks
         internal static void Setup(UnityModManager.ModEntry modEntry) {
             allTweakTypes =
                 AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(a => a.GetTypes())
+                    .SelectMany(a => {
+                        // Translation strings generator adds transitive .NET Core assemblies, and
+                        // trying to load these throws an exception.
+                        try {
+                            return a.GetTypes();
+                        } catch (ReflectionTypeLoadException) {
+                            return new Type[0];
+                        }
+                    })
                     .Where(t => t.GetCustomAttribute<RegisterTweakAttribute>() != null)
                     .OrderBy(t => t.Name)
                     .ThenBy(t => t.GetCustomAttribute<RegisterTweakAttribute>().Priority)
