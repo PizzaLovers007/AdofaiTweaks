@@ -1,2 +1,2 @@
 #!/bin/bash
-dotnet build /p:Configuration=SkyHook
+dotnet build -c SkyHook

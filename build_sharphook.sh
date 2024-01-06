@@ -1,2 +1,2 @@
 #!/bin/bash
-dotnet build /p:Configuration=SharpHook
+dotnet build -c SharpHook

@@ -1,28 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <OutputType>Library</OutputType>
     <LangVersion>latest</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-	<Choose>
-		<When Condition="$(OS) == 'Unix'">
-			<PropertyGroup>
-				<GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.steam/steam/steamapps/common/A Dance of Fire and Ice</GamePath>
-				<GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.local/share/Steam/steamapps/common/A Dance of Fire and Ice</GamePath>
-				<GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common/A Dance of Fire and Ice</GamePath>
-			</PropertyGroup>
-		</When>
-		<When Condition="$(OS) == 'Windows_NT'">
-			<PropertyGroup>
-				<_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
-				<GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)/steamapps/common/A Dance of Fire and Ice</GamePath>
+    <Choose>
+      <When Condition="$(OS) == 'Unix'">
+        <PropertyGroup>
+          <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.steam/steam/steamapps/common/A Dance of Fire and Ice</GamePath>
+          <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.local/share/Steam/steamapps/common/A Dance of Fire and Ice</GamePath>
+          <GamePath Condition="!Exists('$(GamePath)')">$(HOME)/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common/A Dance of Fire and Ice</GamePath>
+          <DataPath>$(GamePath)/ADanceOfFireAndIce_Data</DataPath>
+        </PropertyGroup>
+      </When>
+      <When Condition="$(OS) == 'Windows_NT'">
+        <PropertyGroup>
+          <_SteamLibraryPath>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\SOFTWARE\Valve\Steam', 'SteamPath', null, RegistryView.Registry32))</_SteamLibraryPath>
+          <GamePath Condition="!Exists('$(GamePath)') AND '$(_SteamLibraryPath)' != ''">$(_SteamLibraryPath)/steamapps/common/A Dance of Fire and Ice</GamePath>
 
-				<GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\A Dance of Fire and Ice</GamePath>
-				<GamePath Condition="!Exists('$(GamePath)')">$(GamePath)</GamePath>
-			</PropertyGroup>
-		</When>
-	</Choose>
+          <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files\Steam\steamapps\common\A Dance of Fire and Ice</GamePath>
+          <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice</GamePath>
+          <GamePath Condition="!Exists('$(GamePath)')">$(GamePath)</GamePath>
+          <DataPath>$(GamePath)/A Dance Of Fire And Ice_Data</DataPath>
+        </PropertyGroup>
+      </When>
+    </Choose>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <CodeAnalysisRuleSet>..\StyleCop.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -41,78 +44,78 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityModManager\0Harmony.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityModManager\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="AdofaiTweaks.Strings">
-      <HintPath>..\AdofaiTweaks.Generator\bin\$(Configuration)\net7.0\AdofaiTweaks.Strings.dll</HintPath>
+      <HintPath>..\AdofaiTweaks.Generator\bin\$(Configuration)\netstandard2.1\AdofaiTweaks.Strings.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="DOTween, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\DOTween.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\DOTween.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenPro, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\DOTweenPro.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\DOTweenPro.dll</HintPath>
     </Reference>
     <Reference Include="RDTools">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\RDTools.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\RDTools.dll</HintPath>
     </Reference>
     <Reference Include="SkyHook.Unity">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\SkyHook.Unity.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\SkyHook.Unity.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.InputModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.InputModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.UIElementsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityModManager">
-      <HintPath>$(GamePath)\ADanceOfFireAndIce_Data\Managed\UnityModManager\UnityModManager.dll</HintPath>
+      <HintPath>$(DataPath)\Managed\UnityModManager\UnityModManager.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +133,12 @@
   <ItemGroup>
     <Compile Remove="Tweaks\RestrictJudgments\RestrictJudgmentsAction.cs" />
   </ItemGroup>
+  <PropertyGroup>
+    <StringsGeneratorPath>$([System.IO.Path]::Combine($(SolutionDir), AdofaiTweaks.Generator, bin, $(Configuration), netstandard2.1))</StringsGeneratorPath>
+  </PropertyGroup>
+  <Target Name="GenerateStrings" BeforeTargets="BeforeBuild">
+    <Exec Command="cd &quot;$(StringsGeneratorPath)&quot;%0Adotnet AdofaiTweaks.Generator.dll" />
+  </Target>
   <PropertyGroup>
     <AssemblyTitle>AdofaiTweaks</AssemblyTitle>
     <Product>AdofaiTweaks</Product>

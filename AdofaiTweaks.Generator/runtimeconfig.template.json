@@ -1,0 +1,6 @@
+{
+    "framework": {
+        "name": "Microsoft.NETCore.App",
+        "version": "7.0.14"
+    }
+}
