@@ -98,7 +98,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                         TweakStrings.Get(TranslationKeys.KeyLimiter.ASYNCHRONOUS_INPUT_SYSTEM) :
                         TweakStrings.Get(TranslationKeys.KeyLimiter.SYNCHRONOUS_INPUT_SYSTEM)));
                 GUILayout.Space(12f);
-                AdofaiTweaks.Logger.Log($"async enabled: {AsyncInputManagerCompat.IsAsyncInputEnabled}");
             }
 
             // List of registered keys

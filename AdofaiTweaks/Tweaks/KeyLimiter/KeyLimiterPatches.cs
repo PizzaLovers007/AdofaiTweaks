@@ -4,6 +4,7 @@ using AdofaiTweaks.Compat.Async;
 using AdofaiTweaks.Core.Attributes;
 using HarmonyLib;
 using UnityEngine;
+using static RDInputType;
 
 namespace AdofaiTweaks.Tweaks.KeyLimiter
 {
@@ -146,7 +147,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             "KeyLimiter.CountValidKeysAfterAsyncInputRefactorPatch",
             "scrController",
             "CountValidKeysPressed",
-            MinVersion = 97)]
+            MinVersion = 97,
+            MaxVersion = 119)]
         private static class CountValidKeysAfterAsyncInputRefactorPatch
         {
             public static bool Prefix(ref int __result, scrController __instance) {
@@ -191,7 +193,6 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
             }
         }
 
-        // TODO: Find a corresponding method on versions after r94
         [TweakPatch(
             "KeyLimiter.CheckForSpecialInputKeysOrPausePatch",
             "scrController",
@@ -222,6 +223,91 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                         return;
                     }
                 }
+            }
+        }
+
+        [TweakPatch(
+            "KeyLimiter.KeyboardMainWithLimit",
+            "RDInputType_Keyboard",
+            "Main",
+            MinVersion = 120)]
+        private static class KeyboardMainWithLimit
+        {
+            private static readonly MethodInfo GetStateCountMethod =
+                AccessTools.Method(typeof(RDInputType_Keyboard), "GetStateCount");
+
+            public static void Postfix(
+                RDInputType_Keyboard __instance, ref int __result, ButtonState state) {
+                // Do not limit keys if player is in CLS and has disabled key
+                // limiting there
+                if (!Settings.LimitKeyOnCLS && ADOBase.isCLS) {
+                    return;
+                }
+
+                // Do not limit keys if player is in main screen and has
+                // disabled key limiting there
+                if (!Settings.LimitKeyOnMainScreen
+                    && !ADOBase.controller.gameworld
+                    && !ADOBase.isCLS) {
+                    return;
+                }
+
+                // Stop player inputs while we're editing the keys
+                if (Settings.IsListening) {
+                    __result = 0;
+                    return;
+                }
+
+                // Only count the limited keys
+                MainStateCount stateCount =
+                    (MainStateCount)GetStateCountMethod.Invoke(__instance, new object[] { state });
+                __result =
+                    stateCount.keys
+                        .Where(k => Settings.ActiveKeys.Contains((KeyCode)k.value))
+                        .Count();
+            }
+        }
+
+        [TweakPatch(
+            "KeyLimiter.AsyncKeyboardMainWithLimit",
+            "RDInputType_AsyncKeyboard",
+            "Main",
+            MinVersion = 120)]
+        private static class AsyncKeyboardMainWithLimit
+        {
+            private static readonly MethodInfo GetStateCountMethod =
+                AccessTools.Method(typeof(RDInputType_AsyncKeyboard), "GetStateCount");
+
+            public static void Postfix(
+                RDInputType_AsyncKeyboard __instance, ref int __result, ButtonState state) {
+                // Do not limit keys if player is in CLS and has disabled key
+                // limiting there
+                if (!Settings.LimitKeyOnCLS && ADOBase.isCLS) {
+                    return;
+                }
+
+                // Do not limit keys if player is in main screen and has
+                // disabled key limiting there
+                if (!Settings.LimitKeyOnMainScreen
+                    && !ADOBase.controller.gameworld
+                    && !ADOBase.isCLS) {
+                    return;
+                }
+
+                // Stop player inputs while we're editing the keys
+                if (Settings.IsListening) {
+                    __result = 0;
+                    return;
+                }
+
+                // Only count the limited keys
+                MainStateCount stateCount =
+                    (MainStateCount)GetStateCountMethod.Invoke(__instance, new object[] { state });
+                __result =
+                    stateCount.keys
+                        .Select(k => AsyncInputManagerCompat.ConvertAnyKeyCodeToRaw(k))
+                        .Where(kRaw => Settings.ActiveAsyncKeys.Contains(kRaw))
+                        .Count();
             }
         }
     }

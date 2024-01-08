@@ -41,9 +41,7 @@ namespace AdofaiTweaks.Compat.Async
 
         /// <summary>
         /// Always bound keys but for async input. Initialized at static
-        /// constructor.
-        ///
-        /// <br/> Unused after r97.
+        /// constructor. Unused after r97.
         /// </summary>
         public static readonly ISet<ushort> ALWAYS_BOUND_ASYNC_KEYS;
 
@@ -89,10 +87,10 @@ namespace AdofaiTweaks.Compat.Async
         /// </returns>
         public static IEnumerable<ushort> GetKeysDownThisFrame() {
             foreach (var key in AsyncInputManager.frameDependentKeyDownMask) {
-                if (ALWAYS_BOUND_ASYNC_KEYS.Contains(key)) {
+                if (ALWAYS_BOUND_ASYNC_KEYS.Contains(key.key)) {
                     continue;
                 }
-                yield return key;
+                yield return key.key;
             }
         }
 
@@ -110,6 +108,17 @@ namespace AdofaiTweaks.Compat.Async
         /// Does nothing in this version. Meant for AsyncKeyCode caching.
         /// </summary>
         public static void UpdateAsyncKeyCache() {
+        }
+
+        /// <summary>
+        /// Converts an <see cref="AnyKeyCode"/> to a raw async keycode.
+        /// </summary>
+        /// <param name="key">
+        /// The <see cref="AnyKeyCode"/> keycode to convert.
+        /// </param>
+        /// <returns>The converted raw value.</returns>
+        public static ushort ConvertAnyKeyCodeToRaw(AnyKeyCode key) {
+            return ((AsyncKeyCode)key.value).key;
         }
     }
 

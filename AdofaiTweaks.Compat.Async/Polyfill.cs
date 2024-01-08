@@ -64,6 +64,17 @@ namespace AdofaiTweaks.Compat.Async
         /// </summary>
         public static void UpdateAsyncKeyCache() {
         }
+
+        /// <summary>
+        /// Converts an <see cref="AnyKeyCode"/> to a raw async keycode.
+        /// </summary>
+        /// <param name="key">
+        /// The <see cref="AnyKeyCode"/> keycode to convert.
+        /// </param>
+        /// <returns>The converted raw value.</returns>
+        public static ushort ConvertAnyKeyCodeToRaw(AnyKeyCode key) {
+            return 0;
+        }
     }
 
     /// <summary>

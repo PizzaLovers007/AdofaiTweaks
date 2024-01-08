@@ -16,6 +16,7 @@ namespace AdofaiTweaks.Compat.Async
     {
         private static readonly FieldInfo IsHookActiveField =
             AccessTools.Field(typeof(SkyHookManager), "isHookActive");
+
         private static readonly PropertyInfo IsHookActiveProperty =
             AccessTools.Property(typeof(SkyHookManager), "isHookActive");
 
@@ -23,10 +24,11 @@ namespace AdofaiTweaks.Compat.Async
         /// Whether async input is enabled.
         /// </summary>
         public static bool IsAsyncInputEnabled => IsAsyncEnabled_Hook();
-        private static bool IsAsyncEnabled_Hook()
-        {
-            // r120 changed the isHookActive field to a property getter, so check
-            // for both using reflection to ensure older and newer versions work.
+
+        private static bool IsAsyncEnabled_Hook() {
+            // r120 changed the isHookActive field to a property getter, so
+            // check for both using reflection to ensure older and newer
+            // versions work.
             if (IsHookActiveField != null) {
                 return (bool)IsHookActiveField.GetValue(SkyHookManager.Instance);
             } else if (IsHookActiveProperty != null) {
@@ -92,15 +94,26 @@ namespace AdofaiTweaks.Compat.Async
         }
 
         /// <summary>
-        /// Updates the internal cache based on current <see
-        /// cref="AsyncKeyCode"/> inputs this frame. Can be removed once the
-        /// <see cref="UnityEngine.KeyCode"/> to <see cref="KeyLabel"/> mapping
-        /// can be accessed statically.
+        /// Updates the internal cache based on current
+        /// <see cref="AsyncKeyCode"/> inputs this frame. Can be removed once
+        /// the <see cref="UnityEngine.KeyCode"/> to <see cref="KeyLabel"/>
+        /// mapping can be accessed statically.
         /// </summary>
         public static void UpdateAsyncKeyCache() {
             foreach (var code in AsyncInputManager.frameDependentKeyDownMask) {
                 codeToLabelDict[code.key] = code.label;
             }
+        }
+
+        /// <summary>
+        /// Converts an <see cref="AnyKeyCode"/> to a raw async keycode.
+        /// </summary>
+        /// <param name="key">
+        /// The <see cref="AnyKeyCode"/> keycode to convert.
+        /// </param>
+        /// <returns>The converted raw value.</returns>
+        public static ushort ConvertAnyKeyCodeToRaw(AnyKeyCode key) {
+            return ((AsyncKeyCode)key.value).key;
         }
     }
 
