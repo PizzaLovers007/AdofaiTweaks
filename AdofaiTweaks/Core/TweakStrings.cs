@@ -4,6 +4,7 @@ using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
 using AdofaiTweaks.Translation;
 using HarmonyLib;
+using SA.GoogleDoc;
 
 namespace AdofaiTweaks.Core
 {
@@ -45,12 +46,22 @@ namespace AdofaiTweaks.Core
         /// </summary>
         /// <param name="key">The key of the RD string.</param>
         /// <param name="parameters">The parameters for the RD string.</param>
+        /// <param name="section">
+        /// The translation section for the RD string.
+        /// </param>
         /// <returns>The translated string.</returns>
-        public static string GetRDString(string key, Dictionary<string, object> parameters = null) {
+        public static string GetRDString(
+            string key,
+            Dictionary<string, object> parameters = null,
+            LangSection section = LangSection.Translations) {
             if (AdofaiTweaks.ReleaseNumber < 80) {
                 return (string)RD_STRING_GET.Invoke(null, new object[] { key });
-            } else {
+            } else if (AdofaiTweaks.ReleaseNumber < 121) {
                 return (string)RD_STRING_GET.Invoke(null, new object[] { key, parameters });
+            } else {
+                return (string)RD_STRING_GET.Invoke(
+                    null,
+                    new object[] { key, parameters, section });
             }
         }
 
