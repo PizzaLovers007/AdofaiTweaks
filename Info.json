@@ -2,7 +2,7 @@
   "Id": "AdofaiTweaks",
   "DisplayName": "ADOFAI Tweaks",
   "Author": "PizzaLovers007",
-  "Version": "2.6.7",
+  "Version": "2.6.8",
   "ManagerVersion": "0.22.14.0",
   "AssemblyName": "AdofaiTweaks.dll",
   "EntryMethod": "AdofaiTweaks.Startup.Load",
