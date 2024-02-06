@@ -238,6 +238,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
             public static void Postfix(
                 RDInputType_Keyboard __instance, ref int __result, ButtonState state) {
+                // Stop player inputs while we're editing the keys
+                if (Settings.IsListening) {
+                    __result = 0;
+                    return;
+                }
+
                 // Do not limit keys if player is in CLS and has disabled key
                 // limiting there
                 if (!Settings.LimitKeyOnCLS && ADOBase.isCLS) {
@@ -252,9 +258,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     return;
                 }
 
-                // Stop player inputs while we're editing the keys
-                if (Settings.IsListening) {
-                    __result = 0;
+                // Do not limit keys in the pause menu
+                if (scrController.instance.pauseMenu.isActiveAndEnabled) {
                     return;
                 }
 
@@ -280,6 +285,12 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
 
             public static void Postfix(
                 RDInputType_AsyncKeyboard __instance, ref int __result, ButtonState state) {
+                // Stop player inputs while we're editing the keys
+                if (Settings.IsListening) {
+                    __result = 0;
+                    return;
+                }
+
                 // Do not limit keys if player is in CLS and has disabled key
                 // limiting there
                 if (!Settings.LimitKeyOnCLS && ADOBase.isCLS) {
@@ -294,9 +305,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     return;
                 }
 
-                // Stop player inputs while we're editing the keys
-                if (Settings.IsListening) {
-                    __result = 0;
+                // Do not limit keys in the pause menu
+                if (scrController.instance.pauseMenu.isActiveAndEnabled) {
                     return;
                 }
 
