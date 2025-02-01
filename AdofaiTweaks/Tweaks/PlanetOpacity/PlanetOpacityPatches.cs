@@ -26,35 +26,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static readonly PropertyInfo spriteColorProperty =
             AccessTools.Property(spriteField.FieldType, "color");
 
-        private static float CalculateBodyOpacity(scrPlanet planet) {
-            if (planet == scrController.instance.planetRed) {
-                return Settings.PlanetOpacity1.Body;
-            } else if (planet == scrController.instance.planetBlue) {
-                return Settings.PlanetOpacity2.Body;
-            } else {
-                return (Settings.PlanetOpacity1.Body + Settings.PlanetOpacity2.Body) / 2;
-            }
-        }
-
-        private static float CalculateTailOpacity(scrPlanet planet) {
-            if (planet == scrController.instance.planetRed) {
-                return Settings.PlanetOpacity1.Tail;
-            } else if (planet == scrController.instance.planetBlue) {
-                return Settings.PlanetOpacity2.Tail;
-            } else {
-                return (Settings.PlanetOpacity1.Tail + Settings.PlanetOpacity2.Tail) / 2;
-            }
-        }
-
-        private static float CalculateRingOpacity(scrPlanet planet) {
-            if (planet == scrController.instance.planetRed) {
-                return Settings.PlanetOpacity1.Ring;
-            } else if (planet == scrController.instance.planetBlue) {
-                return Settings.PlanetOpacity2.Ring;
-            } else {
-                return (Settings.PlanetOpacity1.Ring + Settings.PlanetOpacity2.Ring) / 2;
-            }
-        }
 
         private static float CalculateBodyOpacity(PlanetRenderer planet)
         {
