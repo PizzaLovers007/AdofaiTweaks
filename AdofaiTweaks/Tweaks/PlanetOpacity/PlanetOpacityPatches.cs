@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using AdofaiTweaks.Core.Attributes;
+﻿using AdofaiTweaks.Core.Attributes;
 using DG.Tweening;
 using HarmonyLib;
+using System.Reflection;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.PlanetOpacity
@@ -15,21 +15,21 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         private static PlanetOpacitySettings Settings { get; set; }
 
         private static readonly MethodInfo setParticleSystemColorMethod =
-            AccessTools.Method(typeof(scrPlanet), "SetParticleSystemColor");
+            AccessTools.Method(typeof(PlanetRenderer), "SetParticleSystemColor");
 
         private static readonly MethodInfo setRingColorMethod =
-            AccessTools.Method(typeof(scrPlanet), "SetRingColor");
+            AccessTools.Method(typeof(PlanetRenderer), "SetRingColor");
 
         private static readonly FieldInfo spriteField =
-            AccessTools.Field(typeof(scrPlanet), "sprite");
+            AccessTools.Field(typeof(PlanetRenderer), "sprite");
 
         private static readonly PropertyInfo spriteColorProperty =
             AccessTools.Property(spriteField.FieldType, "color");
 
         private static float CalculateBodyOpacity(scrPlanet planet) {
-            if (planet == scrController.instance.redPlanet) {
+            if (planet == scrController.instance.planetRed) {
                 return Settings.PlanetOpacity1.Body;
-            } else if (planet == scrController.instance.bluePlanet) {
+            } else if (planet == scrController.instance.planetBlue) {
                 return Settings.PlanetOpacity2.Body;
             } else {
                 return (Settings.PlanetOpacity1.Body + Settings.PlanetOpacity2.Body) / 2;
@@ -37,9 +37,9 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         }
 
         private static float CalculateTailOpacity(scrPlanet planet) {
-            if (planet == scrController.instance.redPlanet) {
+            if (planet == scrController.instance.planetRed) {
                 return Settings.PlanetOpacity1.Tail;
-            } else if (planet == scrController.instance.bluePlanet) {
+            } else if (planet == scrController.instance.planetBlue) {
                 return Settings.PlanetOpacity2.Tail;
             } else {
                 return (Settings.PlanetOpacity1.Tail + Settings.PlanetOpacity2.Tail) / 2;
@@ -47,32 +47,82 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         }
 
         private static float CalculateRingOpacity(scrPlanet planet) {
-            if (planet == scrController.instance.redPlanet) {
+            if (planet == scrController.instance.planetRed) {
                 return Settings.PlanetOpacity1.Ring;
-            } else if (planet == scrController.instance.bluePlanet) {
+            } else if (planet == scrController.instance.planetBlue) {
                 return Settings.PlanetOpacity2.Ring;
             } else {
                 return (Settings.PlanetOpacity1.Ring + Settings.PlanetOpacity2.Ring) / 2;
             }
         }
 
+        private static float CalculateBodyOpacity(PlanetRenderer planet)
+        {
+            if (planet == scrController.instance.planetRed.planetRenderer)
+            {
+                return Settings.PlanetOpacity1.Body;
+            }
+            else if (planet == scrController.instance.planetBlue.planetRenderer)
+            {
+                return Settings.PlanetOpacity2.Body;
+            }
+            else
+            {
+                return (Settings.PlanetOpacity1.Body + Settings.PlanetOpacity2.Body) / 2;
+            }
+        }
+
+        private static float CalculateTailOpacity(PlanetRenderer planet)
+        {
+            if (planet == scrController.instance.planetRed.planetRenderer)
+            {
+                return Settings.PlanetOpacity1.Tail;
+            }
+            else if (planet == scrController.instance.planetBlue.planetRenderer)
+            {
+                return Settings.PlanetOpacity2.Tail;
+            }
+            else
+            {
+                return (Settings.PlanetOpacity1.Tail + Settings.PlanetOpacity2.Tail) / 2;
+            }
+        }
+
+        private static float CalculateRingOpacity(PlanetRenderer planet)
+        {
+            if (planet == scrController.instance.planetRed.planetRenderer)
+            {
+                return Settings.PlanetOpacity1.Ring;
+            }
+            else if (planet == scrController.instance.planetBlue.planetRenderer)
+            {
+                return Settings.PlanetOpacity2.Ring;
+            }
+            else
+            {
+                return (Settings.PlanetOpacity1.Ring + Settings.PlanetOpacity2.Ring) / 2;
+            }
+        }
+
+
+
         private static Color ApplyOpacity(Color color, float opacity) {
             float alpha = color.a * opacity / 100;
             return color.WithAlpha(alpha);
         }
 
-        private static void SetSpriteColor(scrPlanet planet, Color color) {
+        private static void SetSpriteColor(PlanetRenderer planet, Color color) {
             spriteColorProperty.SetValue(spriteField.GetValue(planet), color);
         }
 
-        private static Color GetSpriteColor(scrPlanet planet) {
+        private static Color GetSpriteColor(PlanetRenderer planet) {
             return (Color)spriteColorProperty.GetValue(spriteField.GetValue(planet));
         }
 
-        [HarmonyPatch(typeof(scrPlanet), "SetPlanetColor")]
+        [HarmonyPatch(typeof(PlanetRenderer), "SetPlanetColor")]
         private static class SetPlanetColorPatch
         {
-            public static void Postfix(scrPlanet __instance, Color color) {
+            public static void Postfix(PlanetRenderer __instance, Color color) {
                 float opacity = CalculateBodyOpacity(__instance);
                 ParticleSystem.MainModule psmain = __instance.sparks.main;
                 psmain.startColor = ApplyOpacity(psmain.startColor.color, opacity);
@@ -80,10 +130,10 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             }
         }
 
-        [HarmonyPatch(typeof(scrPlanet), "SetCoreColor")]
+        [HarmonyPatch(typeof(PlanetRenderer), "SetCoreColor")]
         private static class SetCoreColorPatch
         {
-            public static void Postfix(scrPlanet __instance, Color color) {
+            public static void Postfix(PlanetRenderer __instance, Color color) {
                 float opacity = CalculateBodyOpacity(__instance);
                 __instance.glow.color = ApplyOpacity(__instance.glow.color, opacity);
                 ParticleSystem.MainModule psmain = __instance.coreParticles.main;
@@ -98,10 +148,10 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             }
         }
 
-        [HarmonyPatch(typeof(scrPlanet), "SetTailColor")]
+        [HarmonyPatch(typeof(PlanetRenderer), "SetTailColor")]
         private static class SetTailColorPatch
         {
-            public static void Postfix(scrPlanet __instance, Color color) {
+            public static void Postfix(PlanetRenderer __instance, Color color) {
                 float opacity = CalculateTailOpacity(__instance);
                 setParticleSystemColorMethod.Invoke(
                     __instance,
@@ -114,37 +164,37 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             }
         }
 
-        [HarmonyPatch(typeof(scrPlanet), "SetRingColor")]
+        [HarmonyPatch(typeof(PlanetRenderer), "SetRingColor")]
         private static class SetRingColorPatch
         {
-            public static void Postfix(scrPlanet __instance) {
+            public static void Postfix(PlanetRenderer __instance) {
                 float opacity = CalculateRingOpacity(__instance);
                 __instance.ring.color = ApplyOpacity(__instance.ring.color, opacity);
             }
         }
 
-        [HarmonyPatch(typeof(scrPlanet), "SetFaceColor")]
+        [HarmonyPatch(typeof(PlanetRenderer), "SetFaceColor")]
         private static class SetFaceColorPatch
         {
-            public static void Postfix(scrPlanet __instance) {
+            public static void Postfix(PlanetRenderer __instance) {
                 float opacity = CalculateBodyOpacity(__instance);
                 __instance.faceSprite.color = ApplyOpacity(__instance.faceSprite.color, opacity);
             }
         }
 
-        [HarmonyPatch(typeof(scrPlanet), "DisableCustomColor")]
+        [HarmonyPatch(typeof(PlanetRenderer), "DisableCustomColor")]
         private static class DisableCustomColorPatch
         {
-            public static void Postfix(scrPlanet __instance) {
+            public static void Postfix(PlanetRenderer __instance) {
                 float opacity = CalculateBodyOpacity(__instance);
                 SetSpriteColor(__instance, ApplyOpacity(Color.white, opacity));
             }
         }
 
-        [HarmonyPatch(typeof(scrPlanet), "ToggleSpecialPlanet")]
+        [HarmonyPatch(typeof(PlanetRenderer), "ToggleSpecialPlanet")]
         private static class ToggleSpecialPlanetPatch
         {
-            public static void Postfix(scrPlanet __instance, bool on) {
+            public static void Postfix(PlanetRenderer __instance, bool on) {
                 if (!on) {
                     return;
                 }
@@ -166,14 +216,14 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
 
         [TweakPatch(
             "PlanetOpacity.SetRainbowPatchPre110",
-            "scrPlanet",
+            "PlanetRenderer",
             "SetRainbow",
             MaxVersion = 109)]
         private static class SetRainbowPatchPre110
         {
             [HarmonyPriority(Priority.LowerThanNormal)]
             public static bool Prefix(
-                scrPlanet __instance, bool enabled, ref Sequence ___rainbowSeq) {
+                PlanetRenderer __instance, bool enabled, ref Sequence ___rainbowSeq) {
                 SpriteRenderer sprite = (SpriteRenderer)spriteField.GetValue(__instance);
                 float bodyOpacity = CalculateBodyOpacity(__instance);
                 float tailOpacity = CalculateTailOpacity(__instance);
@@ -215,14 +265,14 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
 
         [TweakPatch(
             "PlanetOpacity.SetRainbowPatchPost110",
-            "scrPlanet",
+            "PlanetRenderer",
             "LateUpdate",
             MinVersion = 110)]
         private static class SetRainbowPatchPost110
         {
-            public static void Postfix(scrPlanet __instance, bool ___rainbow) {
+            public static void Postfix(PlanetRenderer __instance, bool ___rainbow) {
                 if (___rainbow && __instance.ring != null) {
-                    Color color = Color.HSVToRGB(scrPlanet.rainbowHue, 1f, 1f);
+                    Color color = Color.HSVToRGB(PlanetRenderer.rainbowHue, 1f, 1f);
                     float opacity = CalculateBodyOpacity(__instance);
                     SetSpriteColor(__instance, ApplyOpacity(color, opacity));
                 }
@@ -231,12 +281,12 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
 
         [TweakPatch(
             "PlanetOpacity.SwitchToOverseerPost114",
-            "scrPlanet",
+            "PlanetRenderer",
             "SwitchToOverseer",
             MinVersion = 114)]
         private static class SwitchToOverseerPost114
         {
-            public static void Postfix(scrPlanet __instance) {
+            public static void Postfix(PlanetRenderer __instance) {
                 float opacity = CalculateBodyOpacity(__instance);
                 SetSpriteColor(__instance, ApplyOpacity(GetSpriteColor(__instance), opacity));
             }
