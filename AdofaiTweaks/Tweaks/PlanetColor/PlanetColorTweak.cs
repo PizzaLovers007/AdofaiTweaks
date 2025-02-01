@@ -23,11 +23,11 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             TweakStrings.Get(TranslationKeys.PlanetColor.DESCRIPTION);
 
         private scrPlanet RedPlanet {
-            get => scrController.instance?.redPlanet;
+            get => scrController.instance?.planetRed;
         }
 
         private scrPlanet BluePlanet {
-            get => scrController.instance?.bluePlanet;
+            get => scrController.instance?.planetBlue;
         }
 
         [SyncTweakSettings]
@@ -157,10 +157,10 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
 
         private void UpdatePlanetColors() {
             if (RedPlanet != null) {
-                RedPlanet.LoadPlanetColor();
+                RedPlanet.planetRenderer.LoadPlanetColor(true);
             }
             if (BluePlanet != null) {
-                BluePlanet.LoadPlanetColor();
+                BluePlanet.planetRenderer.LoadPlanetColor(false);
             }
         }
     }

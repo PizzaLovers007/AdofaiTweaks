@@ -22,8 +22,8 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         public override string Description =>
             TweakStrings.Get(TranslationKeys.PlanetOpacity.DESCRIPTION);
 
-        private scrPlanet RedPlanet { get => scrController.instance?.redPlanet; }
-        private scrPlanet BluePlanet { get => scrController.instance?.bluePlanet; }
+        private scrPlanet RedPlanet { get => scrController.instance?.planetRed; }
+        private scrPlanet BluePlanet { get => scrController.instance?.planetBlue; }
 
         [SyncTweakSettings]
         private PlanetOpacitySettings Settings { get; set; }
@@ -132,10 +132,11 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
 
         private void UpdatePlanetColors() {
             if (RedPlanet != null) {
-                RedPlanet.LoadPlanetColor();
+
+                RedPlanet.planetRenderer.LoadPlanetColor(true);
             }
             if (BluePlanet != null) {
-                BluePlanet.LoadPlanetColor();
+                BluePlanet.planetRenderer.LoadPlanetColor(false);
             }
         }
     }
