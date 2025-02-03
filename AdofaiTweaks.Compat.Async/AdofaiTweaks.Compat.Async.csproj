@@ -128,4 +128,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\SharpHook.4.0.0\build\SharpHook.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SharpHook.4.0.0\build\SharpHook.targets'))" />
   </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
 </Project>
