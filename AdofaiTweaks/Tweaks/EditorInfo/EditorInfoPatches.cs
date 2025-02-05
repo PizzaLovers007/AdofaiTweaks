@@ -19,10 +19,12 @@ namespace AdofaiTweaks.Tweaks.EditorInfo
 
         private static scrFloor lastDisplayedFloor;
 
+        private static int updateDisplayFloorFrame = -1;
+
         private static readonly FieldInfo EditorLastSelectedFloorField =
             AccessTools.Field(typeof(scnEditor), "lastSelectedFloor");
 
-        // Twirls, Set Speeds and Holds are already handled by
+        // Twirls and Holds are already handled by
         // vanilla CalculateFloorAngleLengths() method
         private static readonly LevelEventType[] BeatsAlteringLevelEvents =
             [LevelEventType.FreeRoam, LevelEventType.Pause];
@@ -47,10 +49,13 @@ namespace AdofaiTweaks.Tweaks.EditorInfo
             ADOBase.lm.CalculateFloorAngleLengths();
 
             // Calculate total angle
-            foreach (var floor in editor.selectedFloors) {
+            for (var i = 0; i < editor.selectedFloors.Count; i++) {
+                var floor = editor.selectedFloors[i];
                 if (floor.seqID == editor.floors.Count - 1) continue;
 
-                totalAngle += floor.angleLength * Mathf.Rad2Deg;
+                var speedFactor = i == 0 ? 1 : editor.selectedFloors[0].speed / floor.speed;
+
+                totalAngle += floor.angleLength * speedFactor * Mathf.Rad2Deg;
 
                 var events = editor.events.Where(e =>
                     BeatsAlteringLevelEvents.Contains(e.eventType) && e.active && e.floor == floor.seqID);
@@ -60,7 +65,7 @@ namespace AdofaiTweaks.Tweaks.EditorInfo
                         LevelEventType.Pause => levelEvent.GetFloat("duration") * 180d,
                         LevelEventType.FreeRoam => levelEvent.GetInt("duration") * 180d,
                         _ => 0
-                    };
+                    } * speedFactor;
                 }
             }
 
@@ -121,13 +126,28 @@ namespace AdofaiTweaks.Tweaks.EditorInfo
             }
         }
 
+        private static void UpdateFloorDisplayAfterAFrame() {
+            updateDisplayFloorFrame = Time.frameCount + 1;
+        }
+
+        [HarmonyPatch(typeof(scnEditor), "Update")]
+        private static class RunPerFramePatch {
+            private static void Postfix() {
+                if (updateDisplayFloorFrame != Time.frameCount) return;
+                updateDisplayFloorFrame = -1;
+
+                UpdateFloorDisplay();
+            }
+        }
+
         [HarmonyPatch(typeof(scnEditor), "OnSelectedFloorChange")]
         private static class FloorTextDisplayPatch {
             private static void Postfix(scrFloor ___lastSelectedFloor) => UpdateFloorDisplay(___lastSelectedFloor);
         }
 
+        [HarmonyPatch(typeof(scrFloor), "OnBecameVisible")]
         [HarmonyPatch(typeof(scrFloor), "OnBecameInvisible")]
-        private static class PreventFloorTextDisplayDisappearPatch {
+        private static class FloorTextDisplayCameraFollowPatch {
             private static void Prefix() {
                 var editor = ADOBase.editor;
                 if (!editor) return;
@@ -135,7 +155,7 @@ namespace AdofaiTweaks.Tweaks.EditorInfo
                 if (editor.playMode) return;
                 if (editor.SelectionIsEmpty()) return;
 
-                UpdateFloorDisplay();
+                UpdateFloorDisplayAfterAFrame();
             }
         }
         
