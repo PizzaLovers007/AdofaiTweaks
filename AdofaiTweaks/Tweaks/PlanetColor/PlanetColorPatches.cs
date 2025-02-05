@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Utils;
 using HarmonyLib;
@@ -128,6 +128,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             }
         }
 
+
         [TweakPatch("PlanetColorPatches.PlanetClassSetRingColorPatch", "scrPlanet", "SetRingColor", maxVersion: 127)]
         private static class PlanetClassSetRingColorPatch
         {
@@ -192,6 +193,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             "scrController",
             "RainbowMode",
             maxVersion: 74)]
+
         [TweakPatch(
             "PlanetColorPatches.RainbowModeAfterControllerRefactor",
             "scnLevelSelect",
@@ -202,6 +204,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             private static readonly FieldInfo RainbowColorField = AccessTools.Field(typeof(scrPlanet), "rainbowColor");
 
             public static bool Prefix() {
+
                 var color = (Color)RainbowColorField.GetValue(null);
                 Persistence.SetPlayerColor(color, true);
                 Persistence.SetPlayerColor(color, false);
@@ -214,6 +217,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             "scrController",
             "EnbyMode",
             maxVersion: 74)]
+
         [TweakPatch(
             "PlanetColorPatches.EnbyModeAfterControllerRefactor",
             "scnLevelSelect",
@@ -225,6 +229,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             private static readonly FieldInfo NbPurpleColorField = AccessTools.Field(typeof(scrPlanet), "nbPurpleColor");
 
             public static bool Prefix() {
+
                 Persistence.SetPlayerColor((Color)NbYellowColorField.GetValue(null), true);
                 Persistence.SetPlayerColor((Color)NbPurpleColorField.GetValue(null), false);
                 return false;
@@ -236,6 +241,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             "scrController",
             "TransMode",
             maxVersion: 74)]
+
         [TweakPatch(
             "PlanetColorPatches.TransModeAfterControllerRefactor",
             "scnLevelSelect",
@@ -247,6 +253,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             private static readonly FieldInfo TransPinkColorField = AccessTools.Field(typeof(scrPlanet), "transPinkColor");
 
             public static bool Prefix() {
+
                 Persistence.SetPlayerColor((Color)TransBlueColorField.GetValue(null), true);
                 Persistence.SetPlayerColor((Color)TransPinkColorField.GetValue(null), false);
                 return false;

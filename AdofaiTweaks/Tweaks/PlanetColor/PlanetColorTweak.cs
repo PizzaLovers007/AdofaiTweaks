@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
@@ -149,6 +149,7 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         public override void OnUnpatch() {
             UpdatePlanetColors();
         }
+
 
         private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
             planet.planetRenderer.LoadPlanetColor(planet == PlanetGetter.RedPlanet);

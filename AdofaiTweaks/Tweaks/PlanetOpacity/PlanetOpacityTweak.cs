@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
@@ -24,6 +24,7 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.PlanetOpacity.DESCRIPTION);
+
 
         [SyncTweakSettings]
         private PlanetOpacitySettings Settings { get; set; }
