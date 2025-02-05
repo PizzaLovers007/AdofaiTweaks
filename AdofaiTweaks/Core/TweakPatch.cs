@@ -28,16 +28,16 @@ namespace AdofaiTweaks.Core
             PatchTargetMethods = ClassType?.GetMethods(AccessTools.all).Where(m => m.Name.Equals(Metadata.MethodName));
         }
 
-        private Harmony Harmony { get; set; }
-        private Type ClassType { get; set; }
-        private Type PatchType { get; set; }
-        private IEnumerable<MethodInfo> PatchTargetMethods { get; set; }
-        private readonly string[] HardcodedMethodNames = new[] { "Prefix", "Postfix", "Transpiler", "Finalizer" };
+        private Harmony Harmony { get; }
+        private Type ClassType { get; }
+        private Type PatchType { get; }
+        private IEnumerable<MethodInfo> PatchTargetMethods { get; }
+        private readonly string[] _hardcodedMethodNames = ["Prefix", "Postfix", "Transpiler", "Finalizer"];
 
         /// <summary>
         /// Tweak's patch metadata (attribute data).
         /// </summary>
-        internal TweakPatchAttribute Metadata { get; set; }
+        internal TweakPatchAttribute Metadata { get; }
 
         /// <summary>
         /// Whether the patch is patched (enabled).
@@ -67,14 +67,14 @@ namespace AdofaiTweaks.Core
             {
                 AdofaiTweaks.Logger.Log(
                     string.Format(
-                    "Patch {0} is invalid! - Specific criteria check:\n" +
-                    "Metadata.MinVersion <= GCNS.releaseNumber ({1} <= {2}) is {3}{4}\n" +
-                    "Metadata.MaxVersion <= GCNS.releaseNumber ({5} <= {2}) is {6}{7}\n" +
-                    "ClassType is {8}\n" +
-                    "PatchType is {9}\n" +
-                    "PatchTargetMethods count is {10}{11}\n" +
-                    "Patch target method name is {12}" +
-                    "",
+                    "Patch {0} is inapplicable!\n" +
+                    " ├ Specific criteria check:\n" +
+                    " ├ Metadata.MinVersion <= GCNS.releaseNumber ({1} <= {2}) is {3}{4} - Expected True\n" +
+                    " ├ Metadata.MaxVersion <= GCNS.releaseNumber ({5} <= {2}) is {6}{7} - Expected True\n" +
+                    " ├ ClassType is {8} - Expected Not Null\n" +
+                    " ├ PatchType is {9} - Expected Not Null\n" +
+                    " ├ PatchTargetMethods count is {10}{11} - Expected Not Null, Integer above 0\n" +
+                    " └ Patch target method name is {12} - Expected Not Null, String\n",
                     // Parameters
                     Metadata.PatchId,
                     Metadata.MinVersion,
@@ -99,10 +99,14 @@ namespace AdofaiTweaks.Core
         /// </summary>
         internal void Patch() {
             if (!IsEnabled) {
+#if DEBUG
+                AdofaiTweaks.Logger.Log($"Applying patch {Metadata.PatchId}");
+#endif
+
                 foreach (MethodInfo method in PatchTargetMethods) {
                     List<HarmonyMethod> hardcodedMethods = new List<HarmonyMethod>();
 
-                    foreach (string methodName in HardcodedMethodNames) {
+                    foreach (string methodName in _hardcodedMethodNames) {
                         MethodInfo patchMethod = AccessTools.Method(PatchType, methodName);
                         hardcodedMethods.Add(patchMethod == null ? null : new HarmonyMethod(patchMethod));
                     }
@@ -124,6 +128,9 @@ namespace AdofaiTweaks.Core
         /// </summary>
         internal void Unpatch() {
             if (IsEnabled) {
+#if DEBUG
+                AdofaiTweaks.Logger.Log($"Cancelling patch {Metadata.PatchId}");
+#endif
                 foreach (MethodInfo original in PatchTargetMethods) {
                     foreach (MethodInfo patch in PatchType.GetMethods()) {
                         Harmony.Unpatch(original, patch);
