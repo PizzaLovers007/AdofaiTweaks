@@ -216,6 +216,8 @@
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatches.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsSettings.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
+    <Compile Include="Utils\PlanetComparison.cs" />
+    <Compile Include="Utils\PlanetGetter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
