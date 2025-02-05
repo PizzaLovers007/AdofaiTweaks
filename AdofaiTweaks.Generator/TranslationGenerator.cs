@@ -15,7 +15,7 @@ namespace AdofaiTweaks.Generator
     /// <c>TranslationKeys</c> that holds all the translation keys in the
     /// downloaded translations spreadsheet.
     /// </summary>
-    internal class TranslationGenerator
+    internal abstract class TranslationGenerator
     {
         /// <summary>
         /// Entry point.
