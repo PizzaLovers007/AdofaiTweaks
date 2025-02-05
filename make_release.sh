@@ -15,6 +15,7 @@ cp ../../Info.json .
 cp ../../UnityProject/Assets/AssetBundles/adofai_tweaks.assets .
 cp ../../AdofaiTweaks/bin/Release/AdofaiTweaks.dll .
 cp ../../AdofaiTweaks/bin/Release/LiteDB.dll .
+cp ../../AdofaiTweaks/bin/Release/System.Buffers.dll .
 cp ../../AdofaiTweaks.Translation/bin/Release/AdofaiTweaks.Translation.dll .
 cp ../../AdofaiTweaks.Generator/bin/Release/TweakStrings.db .
 cp ../../AdofaiTweaks.Generator/bin/Release/AdofaiTweaks.Strings.dll .
