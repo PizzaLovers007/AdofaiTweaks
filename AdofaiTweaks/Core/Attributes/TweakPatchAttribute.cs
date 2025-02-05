@@ -7,6 +7,7 @@ namespace AdofaiTweaks.Core.Attributes
     /// Replaces <see cref="HarmonyPatch"/> and prevents mod crashing from
     /// having no class specified in the game's code.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class TweakPatchAttribute : Attribute
     {
         /// <summary>
