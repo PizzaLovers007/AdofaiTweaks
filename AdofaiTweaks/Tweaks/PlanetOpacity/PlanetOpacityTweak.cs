@@ -1,6 +1,9 @@
-﻿using AdofaiTweaks.Core;
+using System.Reflection;
+using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
+using AdofaiTweaks.Utils;
+using HarmonyLib;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.PlanetOpacity
@@ -22,8 +25,6 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         public override string Description =>
             TweakStrings.Get(TranslationKeys.PlanetOpacity.DESCRIPTION);
 
-        private scrPlanet RedPlanet { get => scrController.instance?.planetRed; }
-        private scrPlanet BluePlanet { get => scrController.instance?.planetBlue; }
 
         [SyncTweakSettings]
         private PlanetOpacitySettings Settings { get; set; }
@@ -34,12 +35,15 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
         }
 
         private void MigrateOldSettings() {
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (Settings.SettingsOpacity1 != PlanetOpacitySettings.MIGRATED_VALUE) {
                 Settings.PlanetOpacity1.Body = Settings.SettingsOpacity1;
                 Settings.PlanetOpacity1.Tail = Settings.SettingsOpacity1;
                 Settings.PlanetOpacity1.Ring = Settings.SettingsOpacity1;
                 Settings.SettingsOpacity1 = PlanetOpacitySettings.MIGRATED_VALUE;
             }
+
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (Settings.SettingsOpacity2 != PlanetOpacitySettings.MIGRATED_VALUE) {
                 Settings.PlanetOpacity2.Body = Settings.SettingsOpacity2;
                 Settings.PlanetOpacity2.Tail = Settings.SettingsOpacity2;
@@ -72,8 +76,10 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
                     roundNearest: 1,
                     labelWidth: 80f,
                     valueFormat: "{0}%");
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             if (newOpacity1 != Settings.PlanetOpacity1.Body
                 || newOpacity2 != Settings.PlanetOpacity2.Body) {
+                // ReSharper restore CompareOfFloatsByEqualityOperator
                 Settings.PlanetOpacity1.Body = newOpacity1;
                 Settings.PlanetOpacity2.Body = newOpacity2;
                 UpdatePlanetColors();
@@ -91,8 +97,10 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
                     roundNearest: 1,
                     labelWidth: 80f,
                     valueFormat: "{0}%");
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             if (newOpacity1 != Settings.PlanetOpacity1.Tail
                 || newOpacity2 != Settings.PlanetOpacity2.Tail) {
+                // ReSharper restore CompareOfFloatsByEqualityOperator
                 Settings.PlanetOpacity1.Tail = newOpacity1;
                 Settings.PlanetOpacity2.Tail = newOpacity2;
                 UpdatePlanetColors();
@@ -110,8 +118,10 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
                     roundNearest: 1,
                     labelWidth: 80f,
                     valueFormat: "{0}%");
+            // ReSharper disable CompareOfFloatsByEqualityOperator
             if (newOpacity1 != Settings.PlanetOpacity1.Ring
                 || newOpacity2 != Settings.PlanetOpacity2.Ring) {
+                // ReSharper restore CompareOfFloatsByEqualityOperator
                 Settings.PlanetOpacity1.Ring = newOpacity1;
                 Settings.PlanetOpacity2.Ring = newOpacity2;
                 UpdatePlanetColors();
@@ -130,13 +140,37 @@ namespace AdofaiTweaks.Tweaks.PlanetOpacity
             UpdatePlanetColors();
         }
 
-        private void UpdatePlanetColors() {
-            if (RedPlanet != null) {
+        private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
+            planet.planetRenderer.LoadPlanetColor(planet == PlanetGetter.RedPlanet);
+        }
 
-                RedPlanet.planetRenderer.LoadPlanetColor(true);
+        private static readonly MethodInfo ScrPlanetLoadPlanetColorMethod =
+            AccessTools.Method(typeof(scrPlanet), "LoadPlanetColor");
+
+        private static void LoadPlanetColor(scrPlanet planet) {
+            ScrPlanetLoadPlanetColorMethod.Invoke(planet, []);
+        }
+
+        private static void UpdatePlanetColors() {
+            var redPlanet = PlanetGetter.RedPlanet;
+            var bluePlanet = PlanetGetter.BluePlanet;
+
+            if (redPlanet != null) {
+                if (AdofaiTweaks.ReleaseNumber >= 128) {
+                    LoadPlanetColorWithRenderer(redPlanet);
+                }
+                else {
+                    LoadPlanetColor(redPlanet);
+                }
             }
-            if (BluePlanet != null) {
-                BluePlanet.planetRenderer.LoadPlanetColor(false);
+
+            if (bluePlanet != null) {
+                if (AdofaiTweaks.ReleaseNumber >= 128) {
+                    LoadPlanetColorWithRenderer(bluePlanet);
+                }
+                else {
+                    LoadPlanetColor(bluePlanet);
+                }
             }
         }
     }

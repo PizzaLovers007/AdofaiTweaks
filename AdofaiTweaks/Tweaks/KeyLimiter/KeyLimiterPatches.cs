@@ -315,9 +315,8 @@ namespace AdofaiTweaks.Tweaks.KeyLimiter
                     (MainStateCount)GetStateCountMethod.Invoke(__instance, new object[] { state });
                 __result =
                     stateCount.keys
-                        .Select(k => AsyncInputManagerCompat.ConvertAnyKeyCodeToRaw(k))
-                        .Where(kRaw => Settings.ActiveAsyncKeys.Contains(kRaw))
-                        .Count();
+                        .Select(AsyncInputManagerCompat.ConvertAnyKeyCodeToRaw)
+                        .Count(kRaw => Settings.ActiveAsyncKeys.Contains(kRaw));
             }
         }
     }

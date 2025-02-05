@@ -1,12 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1642864040
+CRC: 189307075
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f68f989e18b72693f06dc38708cff55f
+    Hash: f5b90c4c7fddd8f0968789a31a37e158
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c8cc15a8bb12c00d83ed6c28f94d694b
+    Hash: b1ad5644a043d1357bf6e034c1427b5a
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: f5b90c4c7fddd8f0968789a31a37e158
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -19,12 +22,13 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/KeyBackground.png
+- Assets/Hand.png
+- Assets/Tick.png
+- Assets/NanumGothic-Bold.ttf
 - Assets/NanumGothic-Regular.ttf
 - Assets/KeyOutline.png
-- Assets/Tick.png
 - Assets/Meter.png
-- Assets/Hand.png
-- Assets/KeyBackground.png
-- Assets/NanumGothic-Bold.ttf
 Dependencies: []

@@ -439,3 +439,5 @@ crashlytics-build.properties
 AdofaiTweaks*.zip
 credentials.json
 token.pickle
+/**/myenv
+/**/AdofaiTweaks.Strings.dll
