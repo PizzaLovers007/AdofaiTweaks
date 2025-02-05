@@ -1,6 +1,9 @@
-﻿using AdofaiTweaks.Core;
+﻿using System.Reflection;
+using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
+using AdofaiTweaks.Utils;
+using HarmonyLib;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.PlanetColor
@@ -21,14 +24,6 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         /// <inheritdoc/>
         public override string Description =>
             TweakStrings.Get(TranslationKeys.PlanetColor.DESCRIPTION);
-
-        private scrPlanet RedPlanet {
-            get => scrController.instance?.planetRed;
-        }
-
-        private scrPlanet BluePlanet {
-            get => scrController.instance?.planetBlue;
-        }
 
         [SyncTweakSettings]
         private PlanetColorSettings Settings { get; set; }
@@ -155,12 +150,37 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             UpdatePlanetColors();
         }
 
-        private void UpdatePlanetColors() {
-            if (RedPlanet != null) {
-                RedPlanet.planetRenderer.LoadPlanetColor(true);
+        private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
+            planet.planetRenderer.LoadPlanetColor(planet == PlanetGetter.RedPlanet);
+        }
+
+        private static readonly MethodInfo ScrPlanetLoadPlanetColorMethod =
+            AccessTools.Method(typeof(scrPlanet), "LoadPlanetColor");
+
+        private static void LoadPlanetColor(scrPlanet planet) {
+            ScrPlanetLoadPlanetColorMethod.Invoke(planet, []);
+        }
+
+        private static void UpdatePlanetColors() {
+            var redPlanet = PlanetGetter.RedPlanet;
+            var bluePlanet = PlanetGetter.BluePlanet;
+
+            if (redPlanet != null) {
+                if (AdofaiTweaks.ReleaseNumber >= 128) {
+                    LoadPlanetColorWithRenderer(redPlanet);
+                }
+                else {
+                    LoadPlanetColor(redPlanet);
+                }
             }
-            if (BluePlanet != null) {
-                BluePlanet.planetRenderer.LoadPlanetColor(false);
+
+            if (bluePlanet != null) {
+                if (AdofaiTweaks.ReleaseNumber >= 128) {
+                    LoadPlanetColorWithRenderer(bluePlanet);
+                }
+                else {
+                    LoadPlanetColor(bluePlanet);
+                }
             }
         }
     }

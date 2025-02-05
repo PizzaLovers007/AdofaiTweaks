@@ -1,4 +1,6 @@
-﻿using AdofaiTweaks.Core.Attributes;
+﻿using System.Reflection;
+using AdofaiTweaks.Core.Attributes;
+using AdofaiTweaks.Utils;
 using HarmonyLib;
 using UnityEngine;
 
@@ -14,82 +16,72 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
         [SyncTweakSettings]
         private static PlanetColorSettings Settings { get; set; }
 
-
-        // When you complain about how hideous this is just know that I hate it as much as you do
-        private static bool IsRedPlanet(PlanetRenderer planet) {
-            return planet == scrController.instance.planetRed.planetRenderer;
-        }
-
-        private static bool IsBluePlanet(PlanetRenderer planet) {
-            return planet == scrController.instance.planetBlue.planetRenderer;
-        }
-
-        [HarmonyPatch(typeof(PlanetRenderer), "SetPlanetColor")]
-        private static class SetPlanetColorPatch
+        [TweakPatch("PlanetColorPatches.PlanetRendererSetPlanetColorPatch", "PlanetRenderer", "SetPlanetColor", minVersion: 128)]
+        private static class PlanetRendererSetPlanetColorPatch
         {
             public static void Prefix(PlanetRenderer __instance, ref Color color) {
-                if (IsRedPlanet(__instance) && Settings.Color1Enabled) {
+                if (__instance.IsRedPlanet() && Settings.Color1Enabled) {
                     color = Settings.Color1;
-                } else if (IsBluePlanet(__instance) && Settings.Color2Enabled) {
+                } else if (__instance.IsBluePlanet() && Settings.Color2Enabled) {
                     color = Settings.Color2;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(PlanetRenderer), "SetCoreColor")]
-        private static class SetCoreColorPatch
+        [TweakPatch("PlanetColorPatches.PlanetRendererSetCoreColorPatch", "PlanetRenderer", "SetCoreColor", minVersion: 128)]
+        private static class PlanetRendererSetCoreColorPatch
         {
             public static void Prefix(PlanetRenderer __instance, ref Color color) {
-                if (IsRedPlanet(__instance) && Settings.Color1Enabled) {
+                if (__instance.IsRedPlanet() && Settings.Color1Enabled) {
                     color = Settings.Color1;
-                } else if (IsBluePlanet(__instance) && Settings.Color2Enabled) {
+                } else if (__instance.IsBluePlanet() && Settings.Color2Enabled) {
                     color = Settings.Color2;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(PlanetRenderer), "SetTailColor")]
-        private static class SetTailColorPatch
+        [TweakPatch("PlanetColorPatches.PlanetRendererSetTailColorPatch", "PlanetRenderer", "SetTailColor", minVersion: 128)]
+        private static class PlanetRendererSetTailColorPatch
         {
             public static void Prefix(PlanetRenderer __instance, ref Color color) {
-                if (IsRedPlanet(__instance) && Settings.Color1Enabled) {
+                if (__instance.IsRedPlanet() && Settings.Color1Enabled) {
                     color = Settings.TailColor1;
-                } else if (IsBluePlanet(__instance) && Settings.Color2Enabled) {
+                } else if (__instance.IsBluePlanet() && Settings.Color2Enabled) {
                     color = Settings.TailColor2;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(PlanetRenderer), "SetRingColor")]
-        private static class SetRingColorPatch
+        [TweakPatch("PlanetColorPatches.PlanetRendererSetRingColorPatch", "PlanetRenderer", "SetRingColor", minVersion: 128)]
+        private static class PlanetRendererSetRingColorPatch
         {
             public static void Prefix(PlanetRenderer __instance, ref Color color) {
-                if (IsRedPlanet(__instance) && Settings.Color1Enabled) {
+                if (__instance.IsRedPlanet() && Settings.Color1Enabled) {
                     color = Settings.Color1;
-                } else if (IsBluePlanet(__instance) && Settings.Color2Enabled) {
+                } else if (__instance.IsBluePlanet() && Settings.Color2Enabled) {
                     color = Settings.Color2;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(PlanetRenderer), "SetFaceColor")]
-        private static class SetFaceColorPatch
+        [TweakPatch("PlanetColorPatches.PlanetRendererSetFaceColorPatch", "PlanetRenderer", "SetFaceColor", minVersion: 128)]
+        private static class PlanetRendererSetFaceColorPatch
         {
             public static void Prefix(PlanetRenderer __instance, ref Color color) {
-                if (IsRedPlanet(__instance) && Settings.Color1Enabled) {
+                if (__instance.IsRedPlanet() && Settings.Color1Enabled) {
                     color = Settings.Color1;
-                } else if (IsBluePlanet(__instance) && Settings.Color2Enabled) {
+                } else if (__instance.IsBluePlanet() && Settings.Color2Enabled) {
                     color = Settings.Color2;
                 }
             }
         }
 
-        [HarmonyPatch(typeof(PlanetRenderer), "SetColor")]
-        private static class SetColorPatch
+        [TweakPatch("PlanetColorPatches.PlanetRendererSetColorPatch", "PlanetRenderer", "SetColor", minVersion: 128)]
+        private static class PlanetRendererSetColorPatch
         {
             public static void Postfix(PlanetRenderer __instance, AdofaiPlanetColor planetColor) {
-                if (__instance != scrController.instance.planetRed
-                    && __instance != scrController.instance.planetBlue) {
+                if (!__instance.IsRedPlanet()
+                    && !__instance.IsBluePlanet()) {
                     return;
                 }
                 __instance.SetRainbow(false);
@@ -97,6 +89,86 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
                 __instance.EnableCustomColor();
                 __instance.SetPlanetColor(color);
                 __instance.SetTailColor(color);
+            }
+        }
+
+        [TweakPatch("PlanetColorPatches.PlanetClassSetPlanetColorPatch", "scrPlanet", "SetPlanetColor", maxVersion: 127)]
+        private static class PlanetClassSetPlanetColorPatch
+        {
+            public static void Prefix(scrPlanet __instance, ref Color color) {
+                if (__instance.IsRedPlanetLegacy() && Settings.Color1Enabled) {
+                    color = Settings.Color1;
+                } else if (__instance.IsBluePlanetLegacy() && Settings.Color2Enabled) {
+                    color = Settings.Color2;
+                }
+            }
+        }
+
+        [TweakPatch("PlanetColorPatches.PlanetClassSetCoreColorPatch", "scrPlanet", "SetCoreColor", maxVersion: 127)]
+        private static class PlanetClassSetCoreColorPatch
+        {
+            public static void Prefix(scrPlanet __instance, ref Color color) {
+                if (__instance.IsRedPlanetLegacy() && Settings.Color1Enabled) {
+                    color = Settings.Color1;
+                } else if (__instance.IsBluePlanetLegacy() && Settings.Color2Enabled) {
+                    color = Settings.Color2;
+                }
+            }
+        }
+
+        [TweakPatch("PlanetColorPatches.PlanetClassSetTailColorPatch", "scrPlanet", "SetTailColor", maxVersion: 127)]
+        private static class PlanetClassSetTailColorPatch
+        {
+            public static void Prefix(scrPlanet __instance, ref Color color) {
+                if (__instance.IsRedPlanetLegacy() && Settings.Color1Enabled) {
+                    color = Settings.TailColor1;
+                } else if (__instance.IsBluePlanetLegacy() && Settings.Color2Enabled) {
+                    color = Settings.TailColor2;
+                }
+            }
+        }
+
+        [TweakPatch("PlanetColorPatches.PlanetClassSetRingColorPatch", "scrPlanet", "SetRingColor", maxVersion: 127)]
+        private static class PlanetClassSetRingColorPatch
+        {
+            public static void Prefix(scrPlanet __instance, ref Color color) {
+                if (__instance.IsRedPlanetLegacy() && Settings.Color1Enabled) {
+                    color = Settings.Color1;
+                } else if (__instance.IsBluePlanetLegacy() && Settings.Color2Enabled) {
+                    color = Settings.Color2;
+                }
+            }
+        }
+
+        [TweakPatch("PlanetColorPatches.PlanetClassSetFaceColorPatch", "scrPlanet", "SetFaceColor", maxVersion: 127)]
+        private static class PlanetClassSetFaceColorPatch
+        {
+            public static void Prefix(scrPlanet __instance, ref Color color) {
+                if (__instance.IsRedPlanetLegacy() && Settings.Color1Enabled) {
+                    color = Settings.Color1;
+                } else if (__instance.IsBluePlanetLegacy() && Settings.Color2Enabled) {
+                    color = Settings.Color2;
+                }
+            }
+        }
+
+        [TweakPatch("PlanetColorPatches.PlanetClassSetColorPatch", "scrPlanet", "SetColor", maxVersion: 127)]
+        private static class PlanetClassSetColorPatch {
+            private static readonly MethodInfo SetRainbow = AccessTools.Method(typeof(scrPlanet), "SetRainbow");
+            private static readonly MethodInfo EnableCustomColor = AccessTools.Method(typeof(scrPlanet), "EnableCustomColor");
+            private static readonly MethodInfo SetPlanetColor = AccessTools.Method(typeof(scrPlanet), "SetPlanetColor");
+            private static readonly MethodInfo SetTailColor = AccessTools.Method(typeof(scrPlanet), "SetTailColor");
+
+            public static void Postfix(scrPlanet __instance, AdofaiPlanetColor planetColor) {
+                if (!__instance.IsRedPlanetLegacy()
+                    && !__instance.IsBluePlanetLegacy()) {
+                    return;
+                }
+                SetRainbow.Invoke(__instance, [false]);
+                Color color = planetColor.GetColor();
+                EnableCustomColor.Invoke(__instance, []);
+                SetPlanetColor.Invoke(__instance, [color]);
+                SetTailColor.Invoke(__instance, [color]);
             }
         }
 
@@ -120,25 +192,19 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             "scrController",
             "RainbowMode",
             maxVersion: 74)]
-        private static class RainbowModeBeforeControllerRefactorPatch
-        {
-            public static bool Prefix() {
-                Persistence.SetPlayerColor(PlanetRenderer.rainbowColor, true);
-                Persistence.SetPlayerColor(PlanetRenderer.rainbowColor, false);
-                return false;
-            }
-        }
-
         [TweakPatch(
             "PlanetColorPatches.RainbowModeAfterControllerRefactor",
             "scnLevelSelect",
             "RainbowMode",
             minVersion: 75)]
-        private static class RainbowModeAfterControllerRefactorPatch
+        private static class RainbowModeNearControllerRefactorPatch
         {
+            private static readonly FieldInfo RainbowColorField = AccessTools.Field(typeof(scrPlanet), "rainbowColor");
+
             public static bool Prefix() {
-                Persistence.SetPlayerColor(PlanetRenderer.rainbowColor, true);
-                Persistence.SetPlayerColor(PlanetRenderer.rainbowColor, false);
+                var color = (Color)RainbowColorField.GetValue(null);
+                Persistence.SetPlayerColor(color, true);
+                Persistence.SetPlayerColor(color, false);
                 return false;
             }
         }
@@ -148,25 +214,19 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             "scrController",
             "EnbyMode",
             maxVersion: 74)]
-        private static class EnbyModeBeforeControllerRefactorPatch
-        {
-            public static bool Prefix() {
-                Persistence.SetPlayerColor(PlanetRenderer.nbYellowColor, true);
-                Persistence.SetPlayerColor(PlanetRenderer.nbPurpleColor, false);
-                return false;
-            }
-        }
-
         [TweakPatch(
             "PlanetColorPatches.EnbyModeAfterControllerRefactor",
             "scnLevelSelect",
             "EnbyMode",
             minVersion: 75)]
-        private static class EnbyModeAfterControllerRefactorPatch
+        private static class EnbyModeNearControllerRefactorPatch
         {
+            private static readonly FieldInfo NbYellowColorField = AccessTools.Field(typeof(scrPlanet), "nbYellowColor");
+            private static readonly FieldInfo NbPurpleColorField = AccessTools.Field(typeof(scrPlanet), "nbPurpleColor");
+
             public static bool Prefix() {
-                Persistence.SetPlayerColor(PlanetRenderer.nbYellowColor, true);
-                Persistence.SetPlayerColor(PlanetRenderer.nbPurpleColor, false);
+                Persistence.SetPlayerColor((Color)NbYellowColorField.GetValue(null), true);
+                Persistence.SetPlayerColor((Color)NbPurpleColorField.GetValue(null), false);
                 return false;
             }
         }
@@ -176,25 +236,19 @@ namespace AdofaiTweaks.Tweaks.PlanetColor
             "scrController",
             "TransMode",
             maxVersion: 74)]
-        private static class TransModeBeforeControllerRefactorPatch
-        {
-            public static bool Prefix() {
-                Persistence.SetPlayerColor(PlanetRenderer.transBlueColor, true);
-                Persistence.SetPlayerColor(PlanetRenderer.transPinkColor, false);
-                return false;
-            }
-        }
-
         [TweakPatch(
             "PlanetColorPatches.TransModeAfterControllerRefactor",
             "scnLevelSelect",
             "TransMode",
             minVersion: 75)]
-        private static class TransModeAfterControllerRefactorPatch
+        private static class TransModeNearControllerRefactorPatch
         {
+            private static readonly FieldInfo TransBlueColorField = AccessTools.Field(typeof(scrPlanet), "transBlueColor");
+            private static readonly FieldInfo TransPinkColorField = AccessTools.Field(typeof(scrPlanet), "transPinkColor");
+
             public static bool Prefix() {
-                Persistence.SetPlayerColor(PlanetRenderer.transBlueColor, true);
-                Persistence.SetPlayerColor(PlanetRenderer.transPinkColor, false);
+                Persistence.SetPlayerColor((Color)TransBlueColorField.GetValue(null), true);
+                Persistence.SetPlayerColor((Color)TransPinkColorField.GetValue(null), false);
                 return false;
             }
         }
