@@ -5,7 +5,7 @@
 General tweaks for the rhythm game
 [A Dance of Fire and Ice](https://store.steampowered.com/app/977950/A_Dance_of_Fire_and_Ice/).
 
-Join the ADOFAI.gg community discord! https://discord.gg/TKdpbUUfUa
+Join the [ADOFAI.gg Community Discord](https://discord.gg/adofaigg)!
 
 ## Available Tweaks
 
@@ -59,7 +59,7 @@ Planet Opacity:
 [Video tutorial for a different mod](https://youtu.be/v60FdewWjY8) (thanks
 Econ!)
 
-1. [Install UnityModManager](https://www.nexusmods.com/site/mods/21).
+1. [Install UnityModManager](https://adof.ai/umm).
 1. Download the latest `AdofaiTweaks-x.x.x.zip` file from the
    [Releases](https://github.com/PizzaLovers007/AdofaiTweaks/releases) page.
 1. Open UnityModManager.
