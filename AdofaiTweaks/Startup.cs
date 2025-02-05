@@ -18,6 +18,7 @@ namespace AdofaiTweaks
             LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Translation.dll");
             LoadAssembly("Mods/AdofaiTweaks/LiteDB.dll");
             LoadAssembly("Mods/AdofaiTweaks/System.Buffers.dll");
+            LoadAssembly("Mods/AdofaiTweaks/IndexRange.dll");
 
             if (TryLoadAssembly("A Dance of Fire and Ice_Data/Managed/SkyHook.Unity.dll")) {
                 LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Compat.AsyncSkyHook.dll");

@@ -66,6 +66,9 @@
     <Reference Include="DOTweenPro">
       <HintPath>ExternalDependencies\DOTweenPro.dll</HintPath>
     </Reference>
+    <Reference Include="IndexRange">
+      <HintPath>ExternalDependencies\IndexRange.dll</HintPath>
+    </Reference>
     <Reference Include="LiteDB">
       <HintPath>ExternalDependencies\LiteDB.dll</HintPath>
     </Reference>
@@ -180,6 +183,9 @@
     <Compile Include="Tweaks\DisableEffects\DisableEffectsPatches.cs" />
     <Compile Include="Tweaks\DisableEffects\DisableEffectsSettings.cs" />
     <Compile Include="Tweaks\DisableEffects\DisableEffectsTweak.cs" />
+    <Compile Include="Tweaks\EditorInfo\EditorInfoPatches.cs" />
+    <Compile Include="Tweaks\EditorInfo\EditorInfoSettings.cs" />
+    <Compile Include="Tweaks\EditorInfo\EditorInfoTweak.cs" />
     <Compile Include="Tweaks\HideUiElements\HideUiElementsProfile.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\HitErrorMeter.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
@@ -254,6 +260,7 @@
     <RemoveDir Directories="$(ProjectDir)$(BaseIntermediateOutputPath)" />
   </Target>
   <ItemGroup>
+    <PackageReference Include="IndexRange" Version="1.0.3" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net48" Version="1.0.3" PrivateAssets="all" />
     <PackageReference Include="LiteDB" Version="5.0.21" />
   </ItemGroup>

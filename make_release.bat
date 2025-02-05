@@ -11,6 +11,7 @@ copy ..\UnityProject\Assets\AssetBundles\adofai_tweaks.assets AdofaiTweaks
 copy ..\AdofaiTweaks\bin\Release\AdofaiTweaks.dll AdofaiTweaks
 copy ..\AdofaiTweaks\bin\Release\LiteDB.dll AdofaiTweaks
 copy ..\AdofaiTweaks\bin\Release\System.Buffers.dll AdofaiTweaks
+copy ..\AdofaiTweaks\bin\Release\IndexRange.dll AdofaiTweaks
 copy ..\AdofaiTweaks.Translation\bin\Release\AdofaiTweaks.Translation.dll AdofaiTweaks
 copy ..\AdofaiTweaks.Generator\bin\Release\TweakStrings.db AdofaiTweaks
 copy ..\AdofaiTweaks.Generator\bin\Release\AdofaiTweaks.Strings.dll AdofaiTweaks
