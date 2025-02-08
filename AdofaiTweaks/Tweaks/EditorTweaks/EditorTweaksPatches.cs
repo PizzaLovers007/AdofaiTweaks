@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using ADOFAI;
 using ADOFAI.Editor.Actions;
@@ -28,34 +27,6 @@ internal static class EditorTweaksPatches
 
     private static scrFloor lastDisplayedFloor;
     private static int updateDisplayFloorFrame = -1;
-
-    private static bool skipUpdatingFloorDisplay;
-
-    private static readonly FieldInfo EditorLastSelectedFloorField =
-        AccessTools.Field(typeof(scnEditor), "lastSelectedFloor");
-
-    // Twirls and Holds are already handled by
-    // vanilla CalculateFloorAngleLengths() method
-    private static readonly LevelEventType[] BeatsAlteringLevelEvents =
-        [LevelEventType.FreeRoam, LevelEventType.Pause];
-
-    private static void ResetLastDisplay(bool deactivateText = true) {
-        // Hide the text from the last displayed floor
-        if (!lastDisplayedFloor) {
-            return;
-        }
-
-        if (!lastDisplayedFloor.editorNumText) {
-            return;
-        }
-
-        if (deactivateText) {
-            lastDisplayedFloor.editorNumText.gameObject.SetActive(false);
-        }
-
-        lastDisplayedFloor.editorNumText.letterText.text = lastDisplayedFloor.seqID.ToString();
-        lastDisplayedFloor = null;
-    }
 
     private static void ForceUpdateFloorDisplay(scnEditor editor, scrFloor displayFloor) {
         var sb = new StringBuilder();
@@ -88,12 +59,38 @@ internal static class EditorTweaksPatches
         }
 
         // Display in a way player wants
-        if (Settings.ShowFloorAngle && totalAngle != 0) {
-            sb.AppendLine($"{totalAngle:#.####}\u00b0");
-        }
+        if (totalAngle != 0) {
+            var addLine = false;
+            if (Settings.ShowFloorAngle) {
+                sb.Append($"<color=#ff5252>{totalAngle:#.####}\u00b0</color>");
+                addLine = true;
+            }
 
-        if (Settings.ShowFloorBeats && totalAngle != 0) {
-            sb.Append($"{totalAngle / 180:#.####}");
+            if (Settings.ShowFloorBeats) {
+                if (addLine) {
+                    sb.Append("\n");
+                }
+
+                sb.Append($"<color=#52a9ff>{totalAngle / 180:#.####}\u2669</color>");
+                addLine = true;
+            }
+
+            if (Settings.ShowFloorCount) {
+                if (addLine) {
+                    sb.Append("\n");
+                }
+
+                sb.Append($"<color=#8a8a8a>{editor.selectedFloors.Count}#</color>");
+                addLine = true;
+            }
+
+            if (Settings.ShowFloorDuration) {
+                if (addLine) {
+                    sb.Append("\n");
+                }
+
+                sb.Append($"<color=#ffffff>{totalAngle / (editor.selectedFloors[0].speed * editor.levelData.bpm * 3):0.######}s</color>");
+            }
         }
 
         var text = sb.ToString();
@@ -114,6 +111,29 @@ internal static class EditorTweaksPatches
         lastDisplayedFloor = displayFloor;
     }
 
+    // Twirls and Holds are already handled by
+    // vanilla CalculateFloorAngleLengths() method
+    private static readonly LevelEventType[] BeatsAlteringLevelEvents =
+        [LevelEventType.FreeRoam, LevelEventType.Pause];
+
+    private static void ResetLastDisplay(bool deactivateText = true) {
+        // Hide the text from the last displayed floor
+        if (!lastDisplayedFloor) {
+            return;
+        }
+
+        if (!lastDisplayedFloor.editorNumText) {
+            return;
+        }
+
+        if (deactivateText) {
+            lastDisplayedFloor.editorNumText.gameObject.SetActive(false);
+        }
+
+        lastDisplayedFloor.editorNumText.letterText.text = lastDisplayedFloor.seqID.ToString();
+        lastDisplayedFloor = null;
+    }
+
     private static void UpdateFloorDisplay(scrFloor displayFloor = null) {
         var editor = ADOBase.editor;
         if (!editor) {
@@ -121,6 +141,7 @@ internal static class EditorTweaksPatches
         }
 
         if (editor.SelectionIsEmpty()) {
+            ResetLastDisplay();
             return;
         }
 
@@ -253,20 +274,7 @@ internal static class EditorTweaksPatches
     [HarmonyPatch(typeof(scnEditor), "RemakePath")]
     private static class FloorTextDisplayAfterPathRemakePatch {
         private static void Postfix(scnEditor __instance) {
-            if (skipUpdatingFloorDisplay) {
-                skipUpdatingFloorDisplay = false;
-                AdofaiTweaks.Logger.Log("please return");
-                return;
-            }
-
             UpdateFloorDisplay(lastDisplayedFloor);
-        }
-    }
-
-    [HarmonyPatch(typeof(scnEditor), "Play")]
-    private static class PlayIntentTrackingPatch {
-        private static void Prefix() {
-            skipUpdatingFloorDisplay = true;
         }
     }
 

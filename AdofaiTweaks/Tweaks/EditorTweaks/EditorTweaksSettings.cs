@@ -9,14 +9,24 @@ namespace AdofaiTweaks.Tweaks.EditorTweaks;
 public class EditorTweaksSettings : TweakSettings
 {
     /// <summary>
-    /// Displays angle for selected floor if this option is on.
+    /// Displays angle for selected floors if this option is on.
     /// </summary>
     public bool ShowFloorAngle { get; set; }
 
     /// <summary>
-    /// Displays beats for selected floor if this option is on.
+    /// Displays beats for selected floors if this option is on.
     /// </summary>
     public bool ShowFloorBeats { get; set; }
+
+    /// <summary>
+    /// Displays amount of selected floors if this option is on.
+    /// </summary>
+    public bool ShowFloorCount { get; set; }
+
+    /// <summary>
+    /// Displays duration of selected floors if this option is on.
+    /// </summary>
+    public bool ShowFloorDuration { get; set; }
 
     /// <summary>
     /// Enables fine-tuned rotation for floors.
@@ -37,5 +47,5 @@ public class EditorTweaksSettings : TweakSettings
     /// Whether the patch should display anything.
     /// </summary>
     [XmlIgnore]
-    public bool ShouldShowAny => ShowFloorAngle || ShowFloorBeats;
+    public bool ShouldShowAny => ShowFloorAngle || ShowFloorBeats || ShowFloorCount || ShowFloorDuration;
 }

@@ -37,6 +37,12 @@ internal class EditorTweaksTweak : Tweak
         Settings.ShowFloorBeats = GUILayout.Toggle(
             Settings.ShowFloorBeats,
             TweakStrings.Get(TranslationKeys.EditorTweaks.SHOW_FLOOR_BEATS));
+        Settings.ShowFloorCount = GUILayout.Toggle(
+            Settings.ShowFloorCount,
+            TweakStrings.Get(TranslationKeys.EditorTweaks.SHOW_FLOOR_COUNT));
+        Settings.ShowFloorDuration = GUILayout.Toggle(
+            Settings.ShowFloorDuration,
+            TweakStrings.Get(TranslationKeys.EditorTweaks.SHOW_FLOOR_DURATION));
 
         GUILayout.Space(8f);
 
