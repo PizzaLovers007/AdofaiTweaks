@@ -246,7 +246,26 @@ internal static class EditorTweaksPatches
 
     [HarmonyPatch(typeof(scnEditor), "RemakePath")]
     private static class FloorTextDisplayAfterPathRemakePatch {
-        private static void Postfix() => UpdateFloorDisplay(lastDisplayedFloor);
+        private static void Postfix(scnEditor __instance) {
+            if (PlayIntentTrackingPatch.SkipUpdatingFloorDisplay) {
+                PlayIntentTrackingPatch.SkipUpdatingFloorDisplay = false;
+                AdofaiTweaks.Logger.Log("please return");
+                return;
+            }
+
+            UpdateFloorDisplay(lastDisplayedFloor);
+        }
+    }
+
+    [HarmonyPatch(typeof(scnEditor), "Play")]
+    private static class PlayIntentTrackingPatch {
+        /// <summary>
+        /// Whether the <see cref="scnEditor.Play"/> has been called.
+        /// </summary>
+        internal static bool SkipUpdatingFloorDisplay;
+        private static void Prefix() {
+            SkipUpdatingFloorDisplay = true;
+        }
     }
 
     [HarmonyPatch(typeof(scrFloor), "OnBecameVisible")]
