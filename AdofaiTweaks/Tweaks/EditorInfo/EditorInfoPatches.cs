@@ -30,7 +30,7 @@ namespace AdofaiTweaks.Tweaks.EditorInfo
             [LevelEventType.FreeRoam, LevelEventType.Pause];
 
         private static void ResetLastDisplay(bool deactivateText = true) {
-            // Hide the text from last displayed floor
+            // Hide the text from the last displayed floor
             if (!lastDisplayedFloor) return;
             if (!lastDisplayedFloor.editorNumText) return;
 
