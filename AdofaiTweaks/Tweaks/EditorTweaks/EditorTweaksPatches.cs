@@ -127,11 +127,11 @@ internal static class EditorTweaksPatches
                 displayFloor = editor.selectedFloors[0];
             }
 
-            if (!displayFloor.enabled) {
+            if (!displayFloor || !displayFloor.enabled) {
                 displayFloor = editor.selectedFloors[^1];
             }
 
-            if (!displayFloor.enabled) {
+            if (!displayFloor || !displayFloor.enabled) {
                 var camera = scrCamera.instance;
                 var cameraPos = camera
                     ? camera.transform.position
@@ -153,7 +153,7 @@ internal static class EditorTweaksPatches
                 }
             }
 
-            if (displayFloor.enabled) {
+            if (displayFloor && displayFloor.enabled) {
                 ForceUpdateFloorDisplay(editor, displayFloor);
             }
         }
