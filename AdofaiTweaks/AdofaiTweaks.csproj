@@ -183,9 +183,9 @@
     <Compile Include="Tweaks\DisableEffects\DisableEffectsPatches.cs" />
     <Compile Include="Tweaks\DisableEffects\DisableEffectsSettings.cs" />
     <Compile Include="Tweaks\DisableEffects\DisableEffectsTweak.cs" />
-    <Compile Include="Tweaks\EditorInfo\EditorInfoPatches.cs" />
-    <Compile Include="Tweaks\EditorInfo\EditorInfoSettings.cs" />
-    <Compile Include="Tweaks\EditorInfo\EditorInfoTweak.cs" />
+    <Compile Include="Tweaks\EditorTweaks\EditorTweaksPatches.cs" />
+    <Compile Include="Tweaks\EditorTweaks\EditorTweaksSettings.cs" />
+    <Compile Include="Tweaks\EditorTweaks\EditorTweaksTweak.cs" />
     <Compile Include="Tweaks\HideUiElements\HideUiElementsProfile.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\HitErrorMeter.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
@@ -222,6 +222,7 @@
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatches.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsSettings.cs" />
     <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
+    <Compile Include="Utils\PathDataUtils.cs" />
     <Compile Include="Utils\PlanetComparison.cs" />
     <Compile Include="Utils\PlanetGetter.cs" />
   </ItemGroup>
