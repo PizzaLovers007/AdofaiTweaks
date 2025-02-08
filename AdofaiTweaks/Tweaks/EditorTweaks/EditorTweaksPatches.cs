@@ -29,6 +29,8 @@ internal static class EditorTweaksPatches
     private static scrFloor lastDisplayedFloor;
     private static int updateDisplayFloorFrame = -1;
 
+    private static bool SkipUpdatingFloorDisplay;
+
     private static readonly FieldInfo EditorLastSelectedFloorField =
         AccessTools.Field(typeof(scnEditor), "lastSelectedFloor");
 
@@ -247,8 +249,8 @@ internal static class EditorTweaksPatches
     [HarmonyPatch(typeof(scnEditor), "RemakePath")]
     private static class FloorTextDisplayAfterPathRemakePatch {
         private static void Postfix(scnEditor __instance) {
-            if (PlayIntentTrackingPatch.SkipUpdatingFloorDisplay) {
-                PlayIntentTrackingPatch.SkipUpdatingFloorDisplay = false;
+            if (SkipUpdatingFloorDisplay) {
+                SkipUpdatingFloorDisplay = false;
                 AdofaiTweaks.Logger.Log("please return");
                 return;
             }
@@ -259,10 +261,6 @@ internal static class EditorTweaksPatches
 
     [HarmonyPatch(typeof(scnEditor), "Play")]
     private static class PlayIntentTrackingPatch {
-        /// <summary>
-        /// Whether the <see cref="scnEditor.Play"/> has been called.
-        /// </summary>
-        internal static bool SkipUpdatingFloorDisplay;
         private static void Prefix() {
             SkipUpdatingFloorDisplay = true;
         }
