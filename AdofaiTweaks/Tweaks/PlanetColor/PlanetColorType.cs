@@ -1,13 +1,12 @@
-﻿namespace AdofaiTweaks.Tweaks.PlanetColor
+﻿namespace AdofaiTweaks.Tweaks.PlanetColor;
+
+/// <summary>
+/// The planet coloring type.
+/// </summary>
+public enum PlanetColorType
 {
-    /// <summary>
-    /// The planet coloring type.
-    /// </summary>
-    public enum PlanetColorType
-    {
-        Plain,
-        Gradient,
-        RandomGradient,
-        Random,
-    }
+    Plain,
+    Gradient,
+    RandomGradient,
+    Random,
 }
