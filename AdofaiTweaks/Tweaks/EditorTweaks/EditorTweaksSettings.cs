@@ -29,6 +29,11 @@ public class EditorTweaksSettings : TweakSettings
     public bool ShowFloorDuration { get; set; }
 
     /// <summary>
+    /// Behave exactly the same with tulttak mod behavior, which the last floor isn't included to calculate timing.
+    /// </summary>
+    public bool UseTulttakModBehavior { get; set; }
+
+    /// <summary>
     /// Enables fine-tuned rotation for floors.
     /// </summary>
     public bool FineTuneFloorRotations { get; set; }

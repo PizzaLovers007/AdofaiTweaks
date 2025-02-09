@@ -35,8 +35,13 @@ internal static class EditorTweaksPatches
 
         ADOBase.lm.CalculateFloorAngleLengths();
 
+        var iterations = editor.selectedFloors.Count;
+        if (Settings.UseTulttakModBehavior && iterations > 1) {
+            iterations--;
+        }
+
         // Calculate total angle
-        for (var i = 0; i < editor.selectedFloors.Count; i++) {
+        for (var i = 0; i < iterations; i++) {
             var floor = editor.selectedFloors[i];
             if (floor.seqID == editor.floors.Count - 1) {
                 continue;

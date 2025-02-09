@@ -43,6 +43,9 @@ internal class EditorTweaksTweak : Tweak
         Settings.ShowFloorDuration = GUILayout.Toggle(
             Settings.ShowFloorDuration,
             TweakStrings.Get(TranslationKeys.EditorTweaks.SHOW_FLOOR_DURATION));
+        Settings.UseTulttakModBehavior = GUILayout.Toggle(
+            Settings.UseTulttakModBehavior,
+            TweakStrings.Get(TranslationKeys.EditorTweaks.USE_TULTTAK_MOD_BEHAVIOR));
 
         GUILayout.Space(8f);
 
