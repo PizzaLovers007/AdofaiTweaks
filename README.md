@@ -10,6 +10,7 @@ Join the [ADOFAI.gg Community Discord](https://discord.gg/adofaigg)!
 ## Available Tweaks
 
 * **Disable Effects** - Disables certain effects to improve performance.
+* **Editor Tweaks** - Features related to the Level Editor.
 * **Hide UI Elements** - Hides certain UI elements (Beta Build text, Otto,
    judgment text, etc.).
 * **Judgment Visuals** - Improves the visuals of judgments.
