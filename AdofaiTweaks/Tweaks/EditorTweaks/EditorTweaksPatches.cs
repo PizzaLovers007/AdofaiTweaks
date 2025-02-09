@@ -150,15 +150,15 @@ internal static class EditorTweaksPatches
         } else {
             ResetLastDisplay();
 
-            if (!displayFloor || !displayFloor.enabled) {
+            if (displayFloor != null && !displayFloor.enabled) {
                 displayFloor = editor.selectedFloors[0];
             }
 
-            if (!displayFloor || !displayFloor.enabled) {
+            if (displayFloor != null && !displayFloor.enabled) {
                 displayFloor = editor.selectedFloors[^1];
             }
 
-            if (!displayFloor || !displayFloor.enabled) {
+            if (displayFloor != null && !displayFloor.enabled) {
                 var camera = scrCamera.instance;
                 var cameraPos = camera
                     ? camera.transform.position
@@ -180,7 +180,7 @@ internal static class EditorTweaksPatches
                 }
             }
 
-            if (displayFloor && displayFloor.enabled) {
+            if (displayFloor != null && displayFloor.enabled) {
                 ForceUpdateFloorDisplay(editor, displayFloor);
             }
         }
