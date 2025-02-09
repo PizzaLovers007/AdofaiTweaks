@@ -150,15 +150,15 @@ internal static class EditorTweaksPatches
         } else {
             ResetLastDisplay();
 
-            if (displayFloor != null && !displayFloor.enabled) {
+            if (displayFloor == null || (displayFloor != null && !displayFloor.enabled)) {
                 displayFloor = editor.selectedFloors[0];
             }
 
-            if (displayFloor != null && !displayFloor.enabled) {
+            if (displayFloor == null || (displayFloor != null && !displayFloor.enabled)) {
                 displayFloor = editor.selectedFloors[^1];
             }
 
-            if (displayFloor != null && !displayFloor.enabled) {
+            if (displayFloor == null || (displayFloor != null && !displayFloor.enabled)) {
                 var camera = scrCamera.instance;
                 var cameraPos = camera
                     ? camera.transform.position
@@ -180,7 +180,7 @@ internal static class EditorTweaksPatches
                 }
             }
 
-            if (displayFloor != null && displayFloor.enabled) {
+            if (displayFloor == null || (displayFloor != null && displayFloor.enabled)) {
                 ForceUpdateFloorDisplay(editor, displayFloor);
             }
         }
@@ -299,7 +299,7 @@ internal static class EditorTweaksPatches
                 return;
             }
 
-            if (lastDisplayedFloor == null || lastDisplayedFloor.enabled) {
+            if (lastDisplayedFloor != null && lastDisplayedFloor.enabled) {
                 return;
             }
 
@@ -315,13 +315,7 @@ internal static class EditorTweaksPatches
                 return;
             }
 
-            if (editor.showFloorNums) {
-                // Now turning OFF
-                ResetLastDisplay();
-            } else {
-                // Now turning ON
-                ForceUpdateFloorDisplay(editor, lastDisplayedFloor);
-            }
+            ForceUpdateFloorDisplay(editor, lastDisplayedFloor);
         }
     }
 
