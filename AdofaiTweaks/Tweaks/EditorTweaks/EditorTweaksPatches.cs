@@ -172,6 +172,10 @@ internal static class EditorTweaksPatches
                 var closestFloorDistance = float.PositiveInfinity;
 
                 foreach (var floor in editor.selectedFloors) {
+                    if (!floor) {
+                        continue;
+                    }
+
                     if (!floor.enabled) {
                         continue;
                     }
