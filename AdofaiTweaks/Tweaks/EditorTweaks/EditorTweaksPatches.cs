@@ -109,6 +109,10 @@ internal static class EditorTweaksPatches
 
         displayFloor ??= editor.selectedFloors[^1];
 
+        if (!displayFloor) {
+            return;
+        }
+
         displayFloor.editorNumText.gameObject.SetActive(true);
         displayFloor.editorNumText.letterText.text = text;
 
