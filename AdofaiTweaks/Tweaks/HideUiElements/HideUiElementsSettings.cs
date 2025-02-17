@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using AdofaiTweaks.Core;
+using AdofaiTweaks.Utils;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
@@ -110,7 +111,7 @@ public class HideUiElementsSettings : TweakSettings
             }
         }
 
-        if ((SteamIntegration.Instance?.initialized ?? false) && !string.IsNullOrEmpty(GCS.steamBranchName))
+        if (SteamIntegrationChecker.Check() && !string.IsNullOrEmpty(GCS.steamBranchName))
         {
             scrEnableIfBeta enableIfBeta =
                 Resources.FindObjectsOfTypeAll<scrEnableIfBeta>().FirstOrDefault();

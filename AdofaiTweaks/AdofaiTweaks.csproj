@@ -225,6 +225,7 @@
     <Compile Include="Utils\PathDataUtils.cs" />
     <Compile Include="Utils\PlanetComparison.cs" />
     <Compile Include="Utils\PlanetGetter.cs" />
+    <Compile Include="Utils\SteamIntegrationChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
