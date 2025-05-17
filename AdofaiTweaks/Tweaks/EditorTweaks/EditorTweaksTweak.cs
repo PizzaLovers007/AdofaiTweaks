@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using ADOFAI;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
+using HarmonyLib;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.EditorTweaks;
@@ -85,6 +89,48 @@ internal class EditorTweaksTweak : Tweak
             GUILayout.Label($" · {RDString.Get($"editor.{whitelistedLevelEvent}")} ({whitelistedLevelEvent})");
         }
         MoreGUILayout.EndIndent();
+
+        #if DEBUG
+        var editor = scnEditor.instance;
+        if (editor && editor.selectedFloors.Count > 0) {
+            if (GUILayout.Button($"Create {editor.selectedFloors.Count} track decoration(s) from track selection")) {
+                var events = new LevelEvent[editor.selectedFloors.Count];
+                for (var i = 0; i < events.Length; i++) {
+                    var floor = editor.selectedFloors[i];
+                    const double anglePrecision = 1.0E-6;
+
+                    var e = new LevelEvent(-1, LevelEventType.AddObject);
+                    e["position"] = floor.transform.position.xy() / 1.5f;
+                    e["trackType"] = floor.midSpin ? FloorDecorationType.Midspin : FloorDecorationType.Normal;
+                    e["trackAngle"] = Mathf.Rad2Deg * Math.Abs(floor.exitangle - floor.entryangle);
+                    e["rotation"] = (float)((floor.exitangle - Math.PI * 1.5) * Mathf.Rad2Deg * (floor.exitangle < floor.entryangle ? -1 : 1));
+                    e["scale"] = floor.transform.localScale.xy() * 100;
+                    // e["trackColorType"] = floor.;
+                    // e["trackColor"] = floor.;
+                    // e["secondaryTrackColor"] = floor.;
+                    // e["trackColorAnimDuration"] = floor.;
+                    // e["trackOpacity"] = floor.;
+                    // e["trackStyle"] = floor.;
+                    // e["trackIcon"] = floor.;
+                    // e["trackIconAngle"] = floor.;
+                    // e["trackIconFlipped"] = floor.;
+                    // e["trackRedSwirl"] = floor.;
+                    // e["trackGraySetSpeedIcon"] = floor.;
+                    // e["trackSetSpeedIconBpm"] = floor.;
+                    // e["trackGlowEnabled"] = floor.;
+                    // e["trackGlowColor"] = floor.;
+                    // e["trackIconOutlines"] = floor.;
+
+                    events[i] = e;
+                }
+
+                editor.levelData.decorations.AddRange(events);
+                foreach (var levelEvent in events) {
+                    scrDecorationManager.instance.CreateDecoration(levelEvent, out _);
+                }
+            }
+        }
+        #endif
 
         MoreGUILayout.EndIndent();
     }
