@@ -218,10 +218,10 @@
     <Compile Include="Core\Tweak.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacitySettings.cs" />
     <Compile Include="Tweaks\PlanetOpacity\PlanetOpacityTweak.cs" />
-    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentAction.cs" />
-    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsPatches.cs" />
-    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsSettings.cs" />
-    <Compile Include="Tweaks\RestrictJudgments\RestrictJudgmentsTweak.cs" />
+    <Compile Include="Tweaks\RestrictGameplay\RestrictGameplayAction.cs" />
+    <Compile Include="Tweaks\RestrictGameplay\RestrictGameplayPatches.cs" />
+    <Compile Include="Tweaks\RestrictGameplay\RestrictGameplaySettings.cs" />
+    <Compile Include="Tweaks\RestrictGameplay\RestrictGameplayTweak.cs" />
     <Compile Include="Utils\PathDataUtils.cs" />
     <Compile Include="Utils\PlanetComparison.cs" />
     <Compile Include="Utils\PlanetGetter.cs" />
@@ -250,13 +250,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\Mods\AdofaiTweaks"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>cd "$(SolutionDir)AdofaiTweaks.Generator\bin\$(ConfigurationName)"
-.\AdofaiTweaks.Generator.exe</PreBuildEvent>
-  </PropertyGroup>
   <Target Name="SpicNSpan" AfterTargets="Clean">
     <RemoveDir Directories="$(TargetDir)" />
     <RemoveDir Directories="$(ProjectDir)$(BaseIntermediateOutputPath)" />
