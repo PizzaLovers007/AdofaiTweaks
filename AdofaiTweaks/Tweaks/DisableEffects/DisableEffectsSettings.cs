@@ -21,7 +21,7 @@ public class DisableEffectsSettings : TweakSettings
     /// <summary>
     /// List of filters to exclude from being disabled.
     /// </summary>
-    public List<Filter> FilterExcludeList { get; set; }
+    public List<Filter> FilterExcludeList { get; set; } = new List<Filter>();
 
     /// <summary>
     /// Disables bloom.
