@@ -13,14 +13,14 @@ public class PlanetOpacitySettings : TweakSettings
     public const float MIGRATED_VALUE = -12f;
 
     /// <summary>
-    /// Older field for opacity for planet 1. Use
-    /// <see cref="PlanetOpacity1"/> instead.
+    /// Older field for opacity for planet 1. Use <see cref="PlanetOpacity1"/>
+    /// instead.
     /// </summary>
     public float SettingsOpacity1 { get; set; }
 
     /// <summary>
-    /// Older field for opacity for planet 2. Use
-    /// <see cref="PlanetOpacity2"/> instead.
+    /// Older field for opacity for planet 2. Use <see cref="PlanetOpacity2"/>
+    /// instead.
     /// </summary>
     public float SettingsOpacity2 { get; set; }
 
@@ -35,8 +35,13 @@ public class PlanetOpacitySettings : TweakSettings
     public PlanetOpacityProfile PlanetOpacity2 { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the
-    /// <see cref="PlanetOpacitySettings"/> class with some default colors.
+    /// The opacity settings for planet 3.
+    /// </summary>
+    public PlanetOpacityProfile PlanetOpacity3 { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PlanetOpacitySettings"/>
+    /// class with some default colors.
     /// </summary>
     public PlanetOpacitySettings() {
         // Treat as migrated by default
@@ -49,6 +54,11 @@ public class PlanetOpacitySettings : TweakSettings
             Ring = 50f,
         };
         PlanetOpacity2 = new PlanetOpacityProfile() {
+            Body = 50f,
+            Tail = 50f,
+            Ring = 50f,
+        };
+        PlanetOpacity3 = new PlanetOpacityProfile() {
             Body = 50f,
             Tail = 50f,
             Ring = 50f,

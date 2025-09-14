@@ -25,7 +25,6 @@ public class PlanetOpacityTweak : Tweak
     public override string Description =>
         TweakStrings.Get(TranslationKeys.PlanetOpacity.DESCRIPTION);
 
-
     [SyncTweakSettings]
     private PlanetOpacitySettings Settings { get; set; }
 
@@ -128,6 +127,60 @@ public class PlanetOpacityTweak : Tweak
         }
 
         MoreGUILayout.EndIndent();
+        GUILayout.Space(12f);
+
+        GUILayout.Label(
+            TweakStrings.Get(TranslationKeys.PlanetOpacity.PLANET_THREE),
+            GUILayout.Width(200f));
+
+        MoreGUILayout.BeginIndent();
+
+        newOpacity1 =
+            MoreGUILayout.NamedSlider(
+                TweakStrings.Get(TranslationKeys.PlanetOpacity.BODY),
+                Settings.PlanetOpacity3.Body,
+                0f,
+                100f,
+                150f,
+                roundNearest: 1,
+                labelWidth: 80f,
+                valueFormat: "{0}%");
+        if (newOpacity1 != Settings.PlanetOpacity3.Body) {
+            Settings.PlanetOpacity3.Body = newOpacity1;
+            UpdatePlanetColors();
+        }
+
+        newOpacity1 =
+            MoreGUILayout.NamedSlider(
+                TweakStrings.Get(TranslationKeys.PlanetOpacity.TAIL),
+                Settings.PlanetOpacity3.Tail,
+                0f,
+                100f,
+                150f,
+                roundNearest: 1,
+                labelWidth: 80f,
+                valueFormat: "{0}%");
+        if (newOpacity1 != Settings.PlanetOpacity3.Tail) {
+            Settings.PlanetOpacity3.Tail = newOpacity1;
+            UpdatePlanetColors();
+        }
+
+        newOpacity1 =
+            MoreGUILayout.NamedSlider(
+                TweakStrings.Get(TranslationKeys.PlanetOpacity.RING),
+                Settings.PlanetOpacity3.Ring,
+                0f,
+                100f,
+                150f,
+                roundNearest: 1,
+                labelWidth: 80f,
+                valueFormat: "{0}%");
+        if (newOpacity1 != Settings.PlanetOpacity3.Ring) {
+            Settings.PlanetOpacity3.Ring = newOpacity1;
+            UpdatePlanetColors();
+        }
+
+        MoreGUILayout.EndIndent();
     }
 
     /// <inheritdoc/>
@@ -141,7 +194,11 @@ public class PlanetOpacityTweak : Tweak
     }
 
     private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
-        planet.planetRenderer.LoadPlanetColor(planet == PlanetGetter.RedPlanet);
+        if (planet == PlanetGetter.GreenPlanet) {
+            planet.planetarySystem.ColorPlanets();
+        } else {
+            planet.planetRenderer.LoadPlanetColor(planet == PlanetGetter.RedPlanet);
+        }
     }
 
     private static readonly MethodInfo ScrPlanetLoadPlanetColorMethod =
@@ -154,12 +211,12 @@ public class PlanetOpacityTweak : Tweak
     private static void UpdatePlanetColors() {
         var redPlanet = PlanetGetter.RedPlanet;
         var bluePlanet = PlanetGetter.BluePlanet;
+        var greenPlanet = PlanetGetter.GreenPlanet;
 
         if (redPlanet != null) {
             if (AdofaiTweaks.ReleaseNumber >= 128) {
                 LoadPlanetColorWithRenderer(redPlanet);
-            }
-            else {
+            } else {
                 LoadPlanetColor(redPlanet);
             }
         }
@@ -167,9 +224,16 @@ public class PlanetOpacityTweak : Tweak
         if (bluePlanet != null) {
             if (AdofaiTweaks.ReleaseNumber >= 128) {
                 LoadPlanetColorWithRenderer(bluePlanet);
-            }
-            else {
+            } else {
                 LoadPlanetColor(bluePlanet);
+            }
+        }
+
+        if (greenPlanet != null) {
+            if (AdofaiTweaks.ReleaseNumber >= 128) {
+                LoadPlanetColorWithRenderer(greenPlanet);
+            } else {
+                LoadPlanetColor(greenPlanet);
             }
         }
     }

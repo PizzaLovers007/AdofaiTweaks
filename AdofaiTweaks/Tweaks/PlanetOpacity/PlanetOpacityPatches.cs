@@ -3,7 +3,7 @@ using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Utils;
 using DG.Tweening;
 using HarmonyLib;
-using System.Reflection;
+
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.PlanetOpacity;
@@ -47,7 +47,7 @@ internal static class PlanetOpacityPatches
             return Settings.PlanetOpacity2.Body;
         }
 
-        return (Settings.PlanetOpacity1.Body + Settings.PlanetOpacity2.Body) / 2;
+        return Settings.PlanetOpacity3.Body;
     }
 
     private static float CalculateTailOpacityPost127(PlanetRenderer planet) {
@@ -59,21 +59,19 @@ internal static class PlanetOpacityPatches
             return Settings.PlanetOpacity2.Tail;
         }
 
-        return (Settings.PlanetOpacity1.Tail + Settings.PlanetOpacity2.Tail) / 2;
+        return Settings.PlanetOpacity3.Tail;
     }
 
     private static float CalculateRingOpacityPost127(PlanetRenderer planet) {
-        if (planet.IsRedPlanet())
-        {
+        if (planet.IsRedPlanet()) {
             return Settings.PlanetOpacity1.Ring;
         }
 
-        if (planet.IsBluePlanet())
-        {
+        if (planet.IsBluePlanet()) {
             return Settings.PlanetOpacity2.Ring;
         }
 
-        return (Settings.PlanetOpacity1.Ring + Settings.PlanetOpacity2.Ring) / 2;
+        return Settings.PlanetOpacity3.Ring;
     }
 
     private static float CalculateBodyOpacityPre128(scrPlanet planet) {
@@ -85,7 +83,7 @@ internal static class PlanetOpacityPatches
             return Settings.PlanetOpacity2.Body;
         }
 
-        return (Settings.PlanetOpacity1.Body + Settings.PlanetOpacity2.Body) / 2;
+        return Settings.PlanetOpacity3.Body;
     }
 
     private static float CalculateTailOpacityPre128(scrPlanet planet) {
@@ -97,21 +95,19 @@ internal static class PlanetOpacityPatches
             return Settings.PlanetOpacity2.Tail;
         }
 
-        return (Settings.PlanetOpacity1.Tail + Settings.PlanetOpacity2.Tail) / 2;
+        return Settings.PlanetOpacity3.Tail;
     }
 
     private static float CalculateRingOpacityPre128(scrPlanet planet) {
-        if (planet.IsRedPlanetLegacy())
-        {
+        if (planet.IsRedPlanetLegacy()) {
             return Settings.PlanetOpacity1.Ring;
         }
 
-        if (planet.IsBluePlanetLegacy())
-        {
+        if (planet.IsBluePlanetLegacy()) {
             return Settings.PlanetOpacity2.Ring;
         }
 
-        return (Settings.PlanetOpacity1.Ring + Settings.PlanetOpacity2.Ring) / 2;
+        return Settings.PlanetOpacity3.Ring;
     }
 
     private static Color ApplyOpacity(Color color, float opacity) {
@@ -139,7 +135,8 @@ internal static class PlanetOpacityPatches
     }
 
     [TweakPatch("PlanetOpacityPatches.ScrPlanetSetPlanetColorPatch", "scrPlanet", "SetPlanetColor", maxVersion: 127)]
-    private static class ScrPlanetSetPlanetColorPatch {
+    private static class ScrPlanetSetPlanetColorPatch
+    {
         private static readonly FieldInfo SparksField = AccessTools.Field(typeof(scrPlanet), "sparks");
 
         public static void Postfix(scrPlanet __instance, Color color) {
@@ -216,8 +213,7 @@ internal static class PlanetOpacityPatches
                 new (opacity, 1f)
             ]);
             gradient.mode = GradientMode.Fixed;
-            main.startColor = new ParticleSystem.MinMaxGradient(gradient)
-            {
+            main.startColor = new ParticleSystem.MinMaxGradient(gradient) {
                 mode = ParticleSystemGradientMode.RandomColor,
             };
         }
@@ -229,7 +225,7 @@ internal static class PlanetOpacityPatches
         private static readonly FieldInfo TailParticlesField = AccessTools.Field(typeof(scrPlanet), "tailParticles");
 
         // private static readonly MethodInfo SetExplosionColorMethod =
-        //     AccessTools.Method(typeof(scrPlanet), "SetExplosionColor");
+        // AccessTools.Method(typeof(scrPlanet), "SetExplosionColor");
 
         private static readonly FieldInfo DeathExplosionField =
             AccessTools.Field(typeof(scrPlanet), "deathExplosion");
@@ -256,12 +252,12 @@ internal static class PlanetOpacityPatches
                 new (opacity, 1f)
             ]);
             gradient.mode = GradientMode.Fixed;
-            main.startColor = new ParticleSystem.MinMaxGradient(gradient)
-            {
+            main.startColor = new ParticleSystem.MinMaxGradient(gradient) {
                 mode = ParticleSystemGradientMode.RandomColor,
             };
 
-            // SetExplosionColorMethod.Invoke(__instance, [ApplyOpacity(color, opacity), default(Color)]);
+            // SetExplosionColorMethod.Invoke(__instance, [ApplyOpacity(color,
+            // opacity), default(Color)]);
         }
     }
 
@@ -391,6 +387,7 @@ internal static class PlanetOpacityPatches
 
         private static readonly MethodInfo PlanetSetTailColorMethod =
             AccessTools.Method(typeof(scrPlanet), "SetTailColor");
+
         private static readonly MethodInfo PlanetSetCoreColorMethod =
             AccessTools.Method(typeof(scrPlanet), "SetCoreColor");
 
@@ -442,7 +439,8 @@ internal static class PlanetOpacityPatches
         "LateUpdate",
         MinVersion = 110,
         MaxVersion = 127)]
-    private static class SetRainbowPatchPost110 {
+    private static class SetRainbowPatchPost110
+    {
         private static readonly FieldInfo PlanetRingField =
             AccessTools.Field(typeof(scrPlanet), "ring");
 
