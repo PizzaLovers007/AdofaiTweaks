@@ -5,8 +5,6 @@
 /// </summary>
 public enum PlanetColorType
 {
-    Plain,
+    Solid,
     Gradient,
-    RandomGradient,
-    Random,
 }

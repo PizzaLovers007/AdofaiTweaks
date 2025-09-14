@@ -451,4 +451,60 @@ public static class MoreGUILayout
             },
         });
     }
+
+    // /// <summary>
+    // /// A selector class for enum values.
+    // /// </summary>
+    // /// <param name="type">Type to get enum names from.</param>
+    // /// <param name="initialValue">Initial value that is shown as selected.</param>
+    // public class EnumSelector(Type type, string initialValue) {
+    //     private string _selectedItem = initialValue;
+    //
+    //     /// <summary>
+    //     /// Whether this selector is open.
+    //     /// </summary>
+    //     [UsedImplicitly]
+    //     public bool IsOpen { get; private set; }
+    //
+    //     private static readonly Dictionary<Type, string[]> EnumValues = new();
+    //     private void EnumSelectorContent(Action<string> onSelected) {
+    //         if (!EnumValues.TryGetValue(type, out var values)) {
+    //             values = Enum.GetNames(type);
+    //             EnumValues[type] = values;
+    //         }
+    //
+    //         foreach (var value in values) {
+    //             GUILayout.BeginVertical();
+    //
+    //             if (GUILayout.Button(value)) {
+    //                 onSelected(_selectedItem = value);
+    //             }
+    //
+    //             GUILayout.EndVertical();
+    //         }
+    //     }
+    //
+    //     /// <summary>
+    //     /// Forcibly closes the selector, if needed.
+    //     /// </summary>
+    //     [UsedImplicitly]
+    //     public void Close() {
+    //         IsOpen = false;
+    //     }
+    //
+    //     /// <summary>
+    //     /// Print GUI Contents.
+    //     /// </summary>
+    //     /// <param name="onSelected">Callback that is called upon user selection.</param>
+    //     public void OnGUI(Action<string> onSelected) {
+    //         if (IsOpen) {
+    //             EnumSelectorContent(onSelected);
+    //             return;
+    //         }
+    //
+    //         if (GUILayout.Button(_selectedItem)) {
+    //             IsOpen = true;
+    //         }
+    //     }
+    // }
 }
