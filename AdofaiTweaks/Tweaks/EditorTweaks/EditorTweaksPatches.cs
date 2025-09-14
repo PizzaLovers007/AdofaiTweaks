@@ -364,12 +364,19 @@ internal static class EditorTweaksPatches
         Rotation,
     }
 
+    private static Vector2 FillNaN(this Vector2 vector, float fillValue) {
+        vector.x.SetIfNaN(fillValue);
+        vector.y.SetIfNaN(fillValue);
+
+        return vector;
+    }
+
     private static Vector2 MutateVector(Vector2 vector, FloorMutationType mutateType, float rotationRadians = 0) {
         return mutateType switch {
             FloorMutationType.HorizontalFlip => vector.WithX(-vector.x),
             FloorMutationType.VerticalFlip => vector.WithY(-vector.y),
             FloorMutationType.BiDirectionFlip => -vector,
-            FloorMutationType.Rotation => vector.GetRotatedVector(rotationRadians),
+            FloorMutationType.Rotation => vector.FillNaN(0).GetRotatedVector(rotationRadians),
             _ => throw new ArgumentOutOfRangeException(nameof(mutateType), mutateType, null)
         };
     }
