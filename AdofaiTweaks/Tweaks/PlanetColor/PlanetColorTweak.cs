@@ -52,9 +52,8 @@ public class PlanetColorTweak : Tweak
         Settings.Migrate();
     }
 
-
     private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
-        planet.planetRenderer.LoadPlanetColor(planet == PlanetGetter.RedPlanet);
+        planet.planetarySystem.ColorPlanets();
     }
 
     private static readonly MethodInfo ScrPlanetLoadPlanetColorMethod =
@@ -72,8 +71,7 @@ public class PlanetColorTweak : Tweak
         if (redPlanet != null) {
             if (AdofaiTweaks.ReleaseNumber >= 128) {
                 LoadPlanetColorWithRenderer(redPlanet);
-            }
-            else {
+            } else {
                 LoadPlanetColor(redPlanet);
             }
         }
@@ -81,8 +79,7 @@ public class PlanetColorTweak : Tweak
         if (bluePlanet != null) {
             if (AdofaiTweaks.ReleaseNumber >= 128) {
                 LoadPlanetColorWithRenderer(bluePlanet);
-            }
-            else {
+            } else {
                 LoadPlanetColor(bluePlanet);
             }
         }
@@ -90,8 +87,7 @@ public class PlanetColorTweak : Tweak
         if (greenPlanet != null) {
             if (AdofaiTweaks.ReleaseNumber >= 128) {
                 LoadPlanetColorWithRenderer(greenPlanet);
-            }
-            else {
+            } else {
                 LoadPlanetColor(greenPlanet);
             }
         }

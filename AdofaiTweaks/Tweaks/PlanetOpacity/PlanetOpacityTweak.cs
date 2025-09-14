@@ -194,11 +194,7 @@ public class PlanetOpacityTweak : Tweak
     }
 
     private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
-        if (planet == PlanetGetter.GreenPlanet) {
-            planet.planetarySystem.ColorPlanets();
-        } else {
-            planet.planetRenderer.LoadPlanetColor(planet == PlanetGetter.RedPlanet);
-        }
+        planet.planetarySystem.ColorPlanets();
     }
 
     private static readonly MethodInfo ScrPlanetLoadPlanetColorMethod =
