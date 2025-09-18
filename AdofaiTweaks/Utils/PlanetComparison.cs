@@ -10,7 +10,7 @@ public static class PlanetComparison {
     /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a red planet.</returns>
     public static bool IsRedPlanet(this PlanetRenderer planet) {
-        return planet == PlanetGetter.RedPlanet.planetRenderer;
+        return planet && planet == PlanetGetter.RedPlanet?.planetRenderer;
     }
 
     /// <summary>
@@ -19,7 +19,7 @@ public static class PlanetComparison {
     /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a blue planet.</returns>
     public static bool IsBluePlanet(this PlanetRenderer planet) {
-        return planet == PlanetGetter.BluePlanet.planetRenderer;
+        return planet && planet == PlanetGetter.BluePlanet?.planetRenderer;
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ public static class PlanetComparison {
     /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a green planet.</returns>
     public static bool IsGreenPlanet(this PlanetRenderer planet) {
-        return planet == PlanetGetter.GreenPlanet.planetRenderer;
+        return planet && planet == PlanetGetter.GreenPlanet?.planetRenderer;
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public static class PlanetComparison {
     /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a red planet.</returns>
     public static bool IsRedPlanetLegacy(this scrPlanet planet) {
-        return planet == PlanetGetter.RedPlanet;
+        return planet && planet == PlanetGetter.RedPlanet;
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public static class PlanetComparison {
     /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a red planet.</returns>
     public static bool IsBluePlanetLegacy(this scrPlanet planet) {
-        return planet == PlanetGetter.BluePlanet;
+        return planet && planet == PlanetGetter.BluePlanet;
     }
 
     /// <summary>
@@ -55,6 +55,6 @@ public static class PlanetComparison {
     /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a green planet.</returns>
     public static bool IsGreenPlanetLegacy(this scrPlanet planet) {
-        return planet == PlanetGetter.GreenPlanet;
+        return planet && planet == PlanetGetter.GreenPlanet;
     }
 }
