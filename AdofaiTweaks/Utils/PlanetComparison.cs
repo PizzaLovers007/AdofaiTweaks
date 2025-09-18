@@ -1,8 +1,11 @@
+using JetBrains.Annotations;
+
 namespace AdofaiTweaks.Utils;
 
 /// <summary>
 /// Extension methods for comparing planets.
 /// </summary>
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class PlanetComparison {
     /// <summary>
     /// Checks if the planet is a red planet. Compares with <see cref="PlanetRenderer"/>.
@@ -56,5 +59,25 @@ public static class PlanetComparison {
     /// <returns><c>true</c> if the planet is a green planet.</returns>
     public static bool IsGreenPlanetLegacy(this scrPlanet planet) {
         return planet && planet == PlanetGetter.GreenPlanet;
+    }
+    
+    /// <summary>
+    /// Checks if the planet is a fake planet (not red, blue, or green). Compares with <see cref="PlanetRenderer"/>.
+    /// </summary>
+    /// <param name="planetRenderer">Planet to check from.</param>
+    /// <returns><c>true</c> if the planet is a fake planet.</returns>
+    public static bool IsFake(PlanetRenderer planetRenderer) {
+        return planetRenderer != PlanetGetter.RedPlanet.planetRenderer && planetRenderer != PlanetGetter.BluePlanet.planetRenderer &&
+               planetRenderer != PlanetGetter.GreenPlanet.planetRenderer;
+    }
+
+    /// <summary>
+    /// Checks if the planet is a fake planet (not red, blue, or green). Compares with <see cref="scrPlanet"/>.
+    /// </summary>
+    /// <param name="planetRenderer">Planet to check from.</param>
+    /// <returns><c>true</c> if the planet is a fake planet.</returns>
+    public static bool IsFakeLegacy(scrPlanet planet) {
+        return planet != PlanetGetter.RedPlanet && planet != PlanetGetter.BluePlanet &&
+               planet != PlanetGetter.GreenPlanet;
     }
 }

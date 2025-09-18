@@ -20,20 +20,11 @@ internal static class PlanetColorPatches
     private static PlanetColor Blue => Settings.ColorProfiles[1];
     private static PlanetColor Green => Settings.ColorProfiles[2];
 
-    private static bool IsFake(PlanetRenderer planetRenderer) {
-        return planetRenderer != PlanetGetter.RedPlanet.planetRenderer && planetRenderer != PlanetGetter.BluePlanet.planetRenderer &&
-               planetRenderer != PlanetGetter.GreenPlanet.planetRenderer;
-    }
-    private static bool IsFake(scrPlanet planet) {
-        return planet != PlanetGetter.RedPlanet && planet != PlanetGetter.BluePlanet &&
-               planet != PlanetGetter.GreenPlanet;
-    }
-
     [TweakPatch("PlanetColorPatches.PlanetRendererSetPlanetColorPatch", "PlanetRenderer", "SetPlanetColor", minVersion: 128)]
     private static class PlanetRendererSetPlanetColorPatch
     {
         public static void Prefix(PlanetRenderer __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFake(__instance))
             {
                 return;
             }
@@ -52,7 +43,7 @@ internal static class PlanetColorPatches
     private static class PlanetRendererSetCoreColorPatch
     {
         public static void Prefix(PlanetRenderer __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFake(__instance))
             {
                 return;
             }
@@ -71,7 +62,7 @@ internal static class PlanetColorPatches
     private static class PlanetRendererSetTailColorPatch
     {
         public static void Prefix(PlanetRenderer __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFake(__instance))
             {
                 return;
             }
@@ -90,7 +81,7 @@ internal static class PlanetColorPatches
     private static class PlanetRendererSetRingColorPatch
     {
         public static void Prefix(PlanetRenderer __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFake(__instance))
             {
                 return;
             }
@@ -109,7 +100,7 @@ internal static class PlanetColorPatches
     private static class PlanetRendererSetFaceColorPatch
     {
         public static void Prefix(PlanetRenderer __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFake(__instance))
             {
                 return;
             }
@@ -128,7 +119,7 @@ internal static class PlanetColorPatches
     private static class PlanetRendererSetColorPatch
     {
         public static void Postfix(PlanetRenderer __instance, AdofaiPlanetColor planetColor) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFake(__instance))
             {
                 return;
             }
@@ -145,7 +136,7 @@ internal static class PlanetColorPatches
     private static class PlanetClassSetPlanetColorPatch
     {
         public static void Prefix(scrPlanet __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFakeLegacy(__instance))
             {
                 return;
             }
@@ -164,7 +155,7 @@ internal static class PlanetColorPatches
     private static class PlanetClassSetCoreColorPatch
     {
         public static void Prefix(scrPlanet __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFakeLegacy(__instance))
             {
                 return;
             }
@@ -183,7 +174,7 @@ internal static class PlanetColorPatches
     private static class PlanetClassSetTailColorPatch
     {
         public static void Prefix(scrPlanet __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFakeLegacy(__instance))
             {
                 return;
             }
@@ -203,7 +194,7 @@ internal static class PlanetColorPatches
     private static class PlanetClassSetRingColorPatch
     {
         public static void Prefix(scrPlanet __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFakeLegacy(__instance))
             {
                 return;
             }
@@ -222,7 +213,7 @@ internal static class PlanetColorPatches
     private static class PlanetClassSetFaceColorPatch
     {
         public static void Prefix(scrPlanet __instance, ref Color color) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFakeLegacy(__instance))
             {
                 return;
             }
@@ -245,7 +236,7 @@ internal static class PlanetColorPatches
         private static readonly MethodInfo SetTailColor = AccessTools.Method(typeof(scrPlanet), "SetTailColor");
 
         public static void Postfix(scrPlanet __instance, AdofaiPlanetColor planetColor) {
-            if (IsFake(__instance))
+            if (PlanetComparison.IsFakeLegacy(__instance))
             {
                 return;
             }
