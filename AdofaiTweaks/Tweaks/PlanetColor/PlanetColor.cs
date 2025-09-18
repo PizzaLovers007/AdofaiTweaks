@@ -12,7 +12,7 @@ public class PlanetColor {
     /// <summary>
     /// Name of planet to color.
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Whether to use this settings value.
