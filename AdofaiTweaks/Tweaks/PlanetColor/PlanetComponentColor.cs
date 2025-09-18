@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using AdofaiTweaks.Core;
@@ -38,6 +38,15 @@ public class PlanetComponentColor {
         ColorType = colorType;
         SolidColor = solidColor ?? Color.white;
         Gradient = gradient;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PlanetComponentColor"/> class with default values for serializers.
+    /// </summary>
+    public PlanetComponentColor() {
+        ColorType = PlanetColorType.Solid;
+        SolidColor = Color.white;
+        Gradient = null;
     }
 
     private bool _openToolbar;
