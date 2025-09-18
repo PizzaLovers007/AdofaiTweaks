@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using AdofaiTweaks.Core;
@@ -24,6 +24,7 @@ public class PlanetComponentColor {
     /// <summary>
     /// Gradient.
     /// </summary>
+    [CanBeNull]
     public Gradient Gradient { get; set; }
 
     /// <summary>
