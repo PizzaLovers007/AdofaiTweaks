@@ -12,7 +12,7 @@ public class PlanetColorSettings : TweakSettings {
     /// <summary>
     /// Color profiles for all planets.
     /// </summary>
-    public PlanetColor[] ColorProfiles { get; private set; }
+    public PlanetColor[] ColorProfiles { get; set; }
 
     /// <summary>
     /// Whether the custom coloring for planet 1 is enabled.
