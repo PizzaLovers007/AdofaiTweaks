@@ -60,24 +60,22 @@ public static class PlanetComparison {
     public static bool IsGreenPlanetLegacy(this scrPlanet planet) {
         return planet && planet == PlanetGetter.GreenPlanet;
     }
-    
+
     /// <summary>
     /// Checks if the planet is a fake planet (not red, blue, or green). Compares with <see cref="PlanetRenderer"/>.
     /// </summary>
-    /// <param name="planetRenderer">Planet to check from.</param>
+    /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a fake planet.</returns>
-    public static bool IsFake(PlanetRenderer planetRenderer) {
-        return planetRenderer != PlanetGetter.RedPlanet.planetRenderer && planetRenderer != PlanetGetter.BluePlanet.planetRenderer &&
-               planetRenderer != PlanetGetter.GreenPlanet.planetRenderer;
+    public static bool IsFake(PlanetRenderer planet) {
+        return !planet || (!planet.IsRedPlanet() && !planet.IsBluePlanet() && !planet.IsGreenPlanet());
     }
 
     /// <summary>
     /// Checks if the planet is a fake planet (not red, blue, or green). Compares with <see cref="scrPlanet"/>.
     /// </summary>
-    /// <param name="planetRenderer">Planet to check from.</param>
+    /// <param name="planet">Planet to check from.</param>
     /// <returns><c>true</c> if the planet is a fake planet.</returns>
     public static bool IsFakeLegacy(scrPlanet planet) {
-        return planet != PlanetGetter.RedPlanet && planet != PlanetGetter.BluePlanet &&
-               planet != PlanetGetter.GreenPlanet;
+        return !planet || (!planet.IsRedPlanetLegacy() && !planet.IsBluePlanetLegacy() && !planet.IsGreenPlanetLegacy());
     }
 }
