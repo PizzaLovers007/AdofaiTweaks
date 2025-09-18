@@ -42,6 +42,15 @@ public class PlanetColor {
     }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="PlanetColor"/> class with default values for serializers.
+    /// </summary>
+    public PlanetColor() {
+        Name = "Unnamed Planet";
+        Body = new PlanetComponentColor(PlanetColorType.Solid);
+        Tail = new PlanetComponentColor(PlanetColorType.Solid);
+    }
+
+    /// <summary>
     /// Display GUI Settings of this instance.
     /// </summary>
     /// <param name="onChanged">Callback that is called when this instance is mutated.</param>
