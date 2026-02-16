@@ -15,14 +15,21 @@ internal static class JudgmentVisualsPatches
     private static class PlanetSwitchChosenPatch
     {
         public static void Prefix(scrPlanet __instance) {
+            var errorMeter = HitErrorMeter.Instance;
+
+            if (!errorMeter)
+            {
+                return;
+            }
+
             float angleDiff = (float)(__instance.angle - __instance.targetExitAngle);
             if (!__instance.controller.isCW) {
                 angleDiff *= -1;
             }
             if (RDC.auto) {
-                HitErrorMeter.Instance.AddHit(0);
+                errorMeter.AddHit(0);
             } else {
-                HitErrorMeter.Instance.AddHit(angleDiff);
+                errorMeter.AddHit(angleDiff);
             }
         }
     }
@@ -31,7 +38,7 @@ internal static class JudgmentVisualsPatches
     private static class ControllerAwakeRewindPatch
     {
         public static void Prefix() {
-            HitErrorMeter.Instance.Reset();
+            HitErrorMeter.Instance?.Reset();
         }
     }
 
