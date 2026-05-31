@@ -76,7 +76,7 @@ internal static class HideUiElementsPatches
             public static void Postfix(scrController __instance) {
                 if (SelectedProfile.HideEverything || SelectedProfile.HideResult) {
                     __instance.txtCongrats.gameObject.SetActive(false);
-                    __instance.txtResults.gameObject.SetActive(false);
+                    __instance.detailedResults.gameObject.SetActive(false);
                     __instance.txtAllStrictClear.gameObject.SetActive(false);
                 }
             }

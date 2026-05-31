@@ -4,7 +4,7 @@ using System.IO;
 public class CreateAssetBundles
 {
     [MenuItem("Assets/Build AssetBundles")]
-    static void BuildAllAssetBundles()
+    public static void BuildAllAssetBundles()
     {
         string assetBundleDirectory = "Assets/AssetBundles";
         if(!Directory.Exists(assetBundleDirectory)) {

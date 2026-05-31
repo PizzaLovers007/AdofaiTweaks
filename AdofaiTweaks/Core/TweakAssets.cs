@@ -1,4 +1,5 @@
-﻿using System.IO;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace AdofaiTweaks.Core;
@@ -44,18 +45,45 @@ public static class TweakAssets
     /// </summary>
     public static Sprite KeyBackgroundSprite { get; private set; }
 
-    private static readonly AssetBundle assets;
+    private static readonly AssetBundle Assets;
 
     static TweakAssets() {
-        assets =
-            AssetBundle.LoadFromFile(
-                Path.Combine("Mods", "AdofaiTweaks", "adofai_tweaks.assets"));
-        SymbolLangNormalFont = assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
-        KoreanBoldFont = assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
-        HandSprite = assets.LoadAsset<Sprite>("Assets/Hand.png");
-        MeterSprite = assets.LoadAsset<Sprite>("Assets/Meter.png");
-        TickSprite = assets.LoadAsset<Sprite>("Assets/Tick.png");
-        KeyOutlineSprite = assets.LoadAsset<Sprite>("Assets/KeyOutline.png");
-        KeyBackgroundSprite = assets.LoadAsset<Sprite>("Assets/KeyBackground.png");
+        Assets = LoadAssetBundle();
+        SymbolLangNormalFont = LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
+        KoreanBoldFont = LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
+        HandSprite = LoadAsset<Sprite>("Assets/Hand.png");
+        MeterSprite = LoadAsset<Sprite>("Assets/Meter.png");
+        TickSprite = LoadAsset<Sprite>("Assets/Tick.png");
+        KeyOutlineSprite = LoadAsset<Sprite>("Assets/KeyOutline.png");
+        KeyBackgroundSprite = LoadAsset<Sprite>("Assets/KeyBackground.png");
+    }
+
+    private static AssetBundle LoadAssetBundle() {
+        string[] paths = new[] {
+            Path.Combine(AdofaiTweaks.ModPath ?? string.Empty, "adofai_tweaks.assets"),
+            Path.Combine("Mods", "AdofaiTweaks", "adofai_tweaks.assets"),
+        };
+
+        foreach (string path in paths.Where(File.Exists).Distinct()) {
+            AssetBundle bundle = AssetBundle.LoadFromFile(path);
+            if (bundle != null) {
+                return bundle;
+            }
+
+            AdofaiTweaks.Logger?.Error($"Failed to load asset bundle: {path}");
+        }
+
+        AdofaiTweaks.Logger?.Error("Failed to find asset bundle: adofai_tweaks.assets");
+        return null;
+    }
+
+    private static T LoadAsset<T>(string name)
+        where T : Object {
+        T asset = Assets?.LoadAsset<T>(name);
+        if (asset == null) {
+            AdofaiTweaks.Logger?.Error($"Failed to load asset: {name}");
+        }
+
+        return asset;
     }
 }

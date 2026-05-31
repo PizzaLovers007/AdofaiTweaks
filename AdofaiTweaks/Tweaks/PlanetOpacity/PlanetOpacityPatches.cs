@@ -203,15 +203,15 @@ internal static class PlanetOpacityPatches
 
             var main = __instance.deathExplosion.main;
             var gradient = new Gradient();
-            gradient.SetKeys(
-            [
-                new (color, 0.0f),
-                new (color, 0.5f),
-                new (color, 1f)
-            ], [
-                new (opacity, 0.0f),
-                new (opacity, 1f)
-            ]);
+            gradient.colorKeys = new GradientColorKey[] {
+                new GradientColorKey(color, 0.0f),
+                new GradientColorKey(color, 0.5f),
+                new GradientColorKey(color, 1f),
+            };
+            gradient.alphaKeys = new GradientAlphaKey[] {
+                new GradientAlphaKey(opacity, 0.0f),
+                new GradientAlphaKey(opacity, 1f),
+            };
             gradient.mode = GradientMode.Fixed;
             main.startColor = new ParticleSystem.MinMaxGradient(gradient) {
                 mode = ParticleSystemGradientMode.RandomColor,
@@ -234,23 +234,23 @@ internal static class PlanetOpacityPatches
             float opacity = CalculateTailOpacityPre128(__instance);
             SetParticleSystemColorMethod.Invoke(
                 __instance,
-                [
+                new object[] {
                     TailParticlesField.GetValue(__instance),
                     ApplyOpacity(color, opacity),
-                    ApplyOpacity(color, opacity) * new Color(0.5f, 0.5f, 0.5f)
-                ]);
+                    ApplyOpacity(color, opacity) * new Color(0.5f, 0.5f, 0.5f),
+                });
 
             var main = ((ParticleSystem)DeathExplosionField.GetValue(__instance)).main;
             var gradient = new Gradient();
-            gradient.SetKeys(
-            [
-                new (color, 0.0f),
-                new (color, 0.5f),
-                new (color, 1f)
-            ], [
-                new (opacity, 0.0f),
-                new (opacity, 1f)
-            ]);
+            gradient.colorKeys = new GradientColorKey[] {
+                new GradientColorKey(color, 0.0f),
+                new GradientColorKey(color, 0.5f),
+                new GradientColorKey(color, 1f),
+            };
+            gradient.alphaKeys = new GradientAlphaKey[] {
+                new GradientAlphaKey(opacity, 0.0f),
+                new GradientAlphaKey(opacity, 1f),
+            };
             gradient.mode = GradientMode.Fixed;
             main.startColor = new ParticleSystem.MinMaxGradient(gradient) {
                 mode = ParticleSystemGradientMode.RandomColor,
@@ -266,7 +266,7 @@ internal static class PlanetOpacityPatches
     {
         public static void Postfix(PlanetRenderer __instance) {
             float opacity = CalculateRingOpacityPost127(__instance);
-            __instance.ring.color = ApplyOpacity(__instance.ring.color, opacity);
+            __instance.ringComp.color = ApplyOpacity(__instance.ringComp.color, opacity);
         }
     }
 
@@ -338,7 +338,7 @@ internal static class PlanetOpacityPatches
             psmain.startColor = psmain.startColor.color.WithAlpha(bodyAlpha);
             psmain = __instance.coreParticles.main;
             psmain.startColor = psmain.startColor.color.WithAlpha(bodyAlpha);
-            __instance.ring.color = __instance.ring.color.WithAlpha(ringAlpha * 0.4f);
+            __instance.ringComp.color = __instance.ringComp.color.WithAlpha(ringAlpha * 0.4f);
             __instance.glow.color = __instance.glow.color.WithAlpha(bodyAlpha * 0.5f);
             SetSpriteColor(__instance, GetSpriteColor(__instance).WithAlpha(bodyAlpha));
         }
@@ -463,8 +463,8 @@ internal static class PlanetOpacityPatches
         MinVersion = 128)]
     private static class SetRainbowPatchPost127
     {
-        public static void Postfix(PlanetRenderer __instance, bool ___rainbow) {
-            if (___rainbow && __instance.ring != null) {
+        public static void Postfix(PlanetRenderer __instance) {
+            if (__instance.rainbow && __instance.ring != null) {
                 Color color = Color.HSVToRGB(PlanetRenderer.rainbowHue, 1f, 1f);
                 float opacity = CalculateBodyOpacityPost127(__instance);
                 SetSpriteColor(__instance, ApplyOpacity(color, opacity));

@@ -125,7 +125,7 @@ internal static class PlanetColorPatches
             }
 
             __instance.SetRainbow(false);
-            Color color = planetColor.GetColor();
+            Color color = planetColor.ToRealColor();
             __instance.EnableCustomColor();
             __instance.SetPlanetColor(color);
             __instance.SetTailColor(color);
@@ -242,7 +242,7 @@ internal static class PlanetColorPatches
             }
 
             SetRainbow.Invoke(__instance, [false]);
-            Color color = planetColor.GetColor();
+            Color color = planetColor.ToRealColor();
             EnableCustomColor.Invoke(__instance, []);
             SetPlanetColor.Invoke(__instance, [color]);
             SetTailColor.Invoke(__instance, [color]);
@@ -255,11 +255,11 @@ internal static class PlanetColorPatches
         "GetPlayerColor")]
     private static class GetTweakedPlayerColorPatch
     {
-        public static void Postfix(bool red, ref Color __result) {
+        public static void Postfix(bool red, ref AdofaiPlanetColor __result) {
             if (red && Red.Enabled) {
-                __result = Red.Body.SolidColor;
+                __result = new AdofaiPlanetColor(Red.Body.SolidColor);
             } else if (!red && Blue.Enabled) {
-                __result = Blue.Body.SolidColor;
+                __result = new AdofaiPlanetColor(Blue.Body.SolidColor);
             }
         }
     }

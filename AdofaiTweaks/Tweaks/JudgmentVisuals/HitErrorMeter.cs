@@ -144,7 +144,7 @@ internal class HitErrorMeter : MonoBehaviour {
         angleDiff *= -Mathf.Rad2Deg;
 
         // Scale with BPM
-        double bpmTimesSpeed = scrConductor.instance.bpm * scrController.instance.speed;
+        double bpmTimesSpeed = scrConductor.instance.bpm * scrController.instance.playerOne.planetarySystem.speed;
         double conductorPitch = scrConductor.instance.song.pitch;
         double counted =
             scrMisc.GetAdjustedAngleBoundaryInDeg(
@@ -190,7 +190,7 @@ internal class HitErrorMeter : MonoBehaviour {
 
     private void DrawTick(float angle) {
         // Determine the color
-        double bpmTimesSpeed = scrConductor.instance.bpm * scrController.instance.speed;
+        double bpmTimesSpeed = scrConductor.instance.bpm * scrController.instance.playerOne.planetarySystem.speed;
         double conductorPitch = scrConductor.instance.song.pitch;
         double counted =
             scrMisc.GetAdjustedAngleBoundaryInDeg(

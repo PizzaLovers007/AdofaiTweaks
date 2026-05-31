@@ -54,14 +54,19 @@ public static class TweakStrings
         string key,
         Dictionary<string, object> parameters = null,
         LangSection section = LangSection.Translations) {
-        if (AdofaiTweaks.ReleaseNumber < 80) {
-            return (string)RD_STRING_GET.Invoke(null, new object[] { key });
-        } else if (AdofaiTweaks.ReleaseNumber < 121) {
-            return (string)RD_STRING_GET.Invoke(null, new object[] { key, parameters });
-        } else {
-            return (string)RD_STRING_GET.Invoke(
-                null,
-                new object[] { key, parameters, section });
+        int parameterCount = RD_STRING_GET.GetParameters().Length;
+        switch (parameterCount) {
+            case 1:
+                return (string)RD_STRING_GET.Invoke(null, new object[] { key });
+            case 2:
+                return (string)RD_STRING_GET.Invoke(null, new object[] { key, parameters });
+            case 3:
+                return (string)RD_STRING_GET.Invoke(
+                    null,
+                    new object[] { key, parameters, section });
+            default:
+                AdofaiTweaks.Logger?.Error($"Unsupported RDString.Get parameter count: {parameterCount}");
+                return key;
         }
     }
 

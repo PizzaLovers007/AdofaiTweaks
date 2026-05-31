@@ -25,7 +25,8 @@ internal class TweakPatch
         Metadata = metadata;
         Harmony = harmony;
         ClassType = (assembly ?? typeof(ADOBase).Assembly).GetType(Metadata.ClassName);
-        PatchTargetMethods = ClassType?.GetMethods(AccessTools.all).Where(m => m.Name.Equals(Metadata.MethodName));
+        PatchTargetMethods = ClassType?.GetMethods(AccessTools.all | BindingFlags.DeclaredOnly)
+            .Where(m => m.Name.Equals(Metadata.MethodName));
     }
 
     private Harmony Harmony { get; }

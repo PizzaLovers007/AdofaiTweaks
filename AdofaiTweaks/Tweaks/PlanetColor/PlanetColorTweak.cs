@@ -53,7 +53,7 @@ public class PlanetColorTweak : Tweak
     }
 
     private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
-        planet.planetarySystem.ColorPlanets();
+        planet.planetarySystem.LoadPlanetColors(planet.player?.playerID ?? 0);
     }
 
     private static readonly MethodInfo ScrPlanetLoadPlanetColorMethod =

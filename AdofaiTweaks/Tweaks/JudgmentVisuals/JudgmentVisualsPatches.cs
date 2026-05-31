@@ -23,7 +23,7 @@ internal static class JudgmentVisualsPatches
             }
 
             float angleDiff = (float)(__instance.angle - __instance.targetExitAngle);
-            if (!__instance.controller.isCW) {
+            if (!__instance.planetarySystem.isCW) {
                 angleDiff *= -1;
             }
             if (RDC.auto) {
@@ -42,8 +42,27 @@ internal static class JudgmentVisualsPatches
         }
     }
 
-    [HarmonyPatch(typeof(scrController), "ShowHitText")]
+    [TweakPatch(
+        "JudgmentVisuals.ControllerShowHitTextPatch",
+        "scrController",
+        "ShowHitText",
+        maxVersion: 140)]
     private static class ControllerShowHitTextPatch
+    {
+        public static bool Prefix(HitMargin hitMargin) {
+            if (!Settings.HidePerfects) {
+                return true;
+            }
+            return hitMargin != HitMargin.Perfect;
+        }
+    }
+
+    [TweakPatch(
+        "JudgmentVisuals.HitTextManagerShowHitTextPatch",
+        "scrHitTextManager",
+        "ShowHitText",
+        minVersion: 141)]
+    private static class HitTextManagerShowHitTextPatch
     {
         public static bool Prefix(HitMargin hitMargin) {
             if (!Settings.HidePerfects) {
