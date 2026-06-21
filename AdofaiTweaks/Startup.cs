@@ -20,17 +20,6 @@ internal static class Startup
         LoadAssembly("Mods/AdofaiTweaks/System.Buffers.dll");
         LoadAssembly("Mods/AdofaiTweaks/IndexRange.dll");
 
-        if (TryLoadAssembly("A Dance of Fire and Ice_Data/Managed/SkyHook.Unity.dll")) {
-            LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Compat.AsyncSkyHook.dll");
-            modEntry.Logger.Log("Async assembly: SkyHook");
-        } else if (TryLoadAssembly("A Dance of Fire and Ice_Data/Managed/SharpHook.dll")) {
-            LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Compat.AsyncSharpHook.dll");
-            modEntry.Logger.Log("Async assembly: SharpHook");
-        } else {
-            LoadAssembly("Mods/AdofaiTweaks/AdofaiTweaks.Compat.AsyncPolyfill.dll");
-            modEntry.Logger.Log("Async assembly: Polyfill");
-        }
-
         AdofaiTweaks.Setup(modEntry);
     }
 
