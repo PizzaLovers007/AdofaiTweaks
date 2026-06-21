@@ -7,6 +7,7 @@ using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
 using AdofaiTweaks.Translation;
+using AdofaiTweaks.Utils;
 using HarmonyLib;
 using UnityEngine;
 using UnityModManagerNet;
@@ -276,6 +277,8 @@ public static class AdofaiTweaks
         foreach (TweakRunner runner in tweakRunners) {
             runner.OnUpdate(deltaTime);
         }
+
+        SkyHookUtils.UpdateAsyncKeyCache();
     }
 
     /// <summary>

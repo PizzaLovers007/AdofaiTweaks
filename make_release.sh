@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-dotnet build -c SharpHook
 dotnet build -c SkyHook
 
 dotnet build -c Release

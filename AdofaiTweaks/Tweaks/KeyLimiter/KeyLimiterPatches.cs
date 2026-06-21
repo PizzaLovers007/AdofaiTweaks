@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
-using AdofaiTweaks.Compat.Async;
 using AdofaiTweaks.Core.Attributes;
+using AdofaiTweaks.Utils;
 using HarmonyLib;
 using UnityEngine;
 using static RDInputType;
@@ -102,7 +102,7 @@ internal static class KeyLimiterPatches
                 (MainStateCount)GetStateCountMethod.Invoke(__instance, new object[] { state });
             __result =
                 stateCount.keys
-                    .Select(AsyncInputManagerCompat.ConvertAnyKeyCodeToRaw)
+                    .Select(SkyHookUtils.ConvertAnyKeyCodeToRaw)
                     .Count(kRaw => Settings.ActiveAsyncKeys.Contains(kRaw));
         }
     }

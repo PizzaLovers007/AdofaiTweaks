@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AdofaiTweaks.Compat.Async;
 using AdofaiTweaks.Core;
 using AdofaiTweaks.Core.Attributes;
 using AdofaiTweaks.Strings;
+using AdofaiTweaks.Utils;
+using SkyHook;
 using UnityEngine;
 
 namespace AdofaiTweaks.Tweaks.KeyLimiter;
@@ -29,7 +30,7 @@ public class KeyLimiterTweak : Tweak
     /// <summary>
     /// A set of keys that will always be counted as input.
     /// </summary>
-    public static readonly ISet<KeyCode> ALWAYS_BOUND_KEYS = new HashSet<KeyCode> {
+    private static readonly ISet<KeyCode> AlwaysBoundKeys = new HashSet<KeyCode> {
         KeyCode.Mouse0,
         KeyCode.Mouse1,
         KeyCode.Mouse2,
@@ -52,8 +53,8 @@ public class KeyLimiterTweak : Tweak
             return;
         }
 
-        if (AsyncInputManagerCompat.IsAsyncInputEnabled) {
-            foreach (var key in AsyncInputManagerCompat.GetKeysDownThisFrame()) {
+        if (SkyHookManager.Instance?.isHookActive ?? false) {
+            foreach (var key in SkyHookUtils.GetKeysDownThisFrame()) {
                 // Register/unregister the key
                 if (Settings.ActiveAsyncKeys.Contains(key)) {
                     Settings.ActiveAsyncKeys.Remove(key);
@@ -64,7 +65,7 @@ public class KeyLimiterTweak : Tweak
         } else {
             foreach (KeyCode code in Enum.GetValues(typeof(KeyCode))) {
                 // Skip key if not pressed or should always be bound
-                if (!Input.GetKeyDown(code) || ALWAYS_BOUND_KEYS.Contains(code)) {
+                if (!Input.GetKeyDown(code) || AlwaysBoundKeys.Contains(code)) {
                     continue;
                 }
 
@@ -85,20 +86,20 @@ public class KeyLimiterTweak : Tweak
 
     /// <inheritdoc/>
     public override void OnSettingsGUI() {
-        AsyncInputManagerCompat.UpdateAsyncKeyCache();
+        SkyHookUtils.UpdateAsyncKeyCache();
         DrawKeyRegisterSettingsGUI();
     }
 
     private void DrawKeyRegisterSettingsGUI() {
+        var hookIsActive = SkyHookManager.Instance?.isHookActive ?? false;
+        
         // Input type header
-        if (AsyncInputManagerCompat.IsAsyncAvailable) {
-            GUILayout.Label(TweakStrings.Get(
-                TranslationKeys.KeyLimiter.SELECTED_INPUT_SYSTEM,
-                AsyncInputManagerCompat.IsAsyncInputEnabled ?
-                    TweakStrings.Get(TranslationKeys.KeyLimiter.ASYNCHRONOUS_INPUT_SYSTEM) :
-                    TweakStrings.Get(TranslationKeys.KeyLimiter.SYNCHRONOUS_INPUT_SYSTEM)));
-            GUILayout.Space(12f);
-        }
+        GUILayout.Label(TweakStrings.Get(
+            TranslationKeys.KeyLimiter.SELECTED_INPUT_SYSTEM,
+            hookIsActive ?
+                TweakStrings.Get(TranslationKeys.KeyLimiter.ASYNCHRONOUS_INPUT_SYSTEM) :
+                TweakStrings.Get(TranslationKeys.KeyLimiter.SYNCHRONOUS_INPUT_SYSTEM)));
+        GUILayout.Space(12f);
 
         // List of registered keys
         GUILayout.Label(TweakStrings.Get(TranslationKeys.KeyLimiter.REGISTERED_KEYS));
@@ -107,13 +108,13 @@ public class KeyLimiterTweak : Tweak
         GUILayout.BeginVertical();
         GUILayout.Space(8f);
         GUILayout.EndVertical();
-        if (AsyncInputManagerCompat.IsAsyncInputEnabled) {
+        if (hookIsActive) {
             foreach (var code in Settings.ActiveAsyncKeys) {
                 var label = new StringBuilder();
 
                 label.Append(code);
                 label.Append('(');
-                label.Append(AsyncInputManagerCompat.GetLabel(code));
+                label.Append(SkyHookUtils.GetLabel(code));
                 label.Append(')');
 
                 GUILayout.Label(label.ToString());
@@ -141,7 +142,7 @@ public class KeyLimiterTweak : Tweak
                 Settings.IsListening = true;
             }
             if (GUILayout.Button(TweakStrings.Get(TranslationKeys.KeyLimiter.CLEAR_ALL_KEYS))) {
-                if (AsyncInputManagerCompat.IsAsyncInputEnabled) {
+                if (hookIsActive) {
                     Settings.ActiveAsyncKeys.Clear();
                 } else {
                     Settings.ActiveKeys.Clear();
