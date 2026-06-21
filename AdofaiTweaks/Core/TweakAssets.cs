@@ -33,7 +33,13 @@ public static class TweakAssets
     private static readonly AssetBundle Assets;
 
     static TweakAssets() {
-        Assets = LoadAssetBundle();
+        Assets = AssetBundle.LoadFromFile(Path.GetFullPath(Path.Combine(
+            "Mods", "AdofaiTweaks", "adofaitweaks.assets")));
+
+        if (Assets == null) {
+            AdofaiTweaks.Logger.Error("Could not open adofaitweaks.assets");
+            return;
+        }
 
         SymbolLangNormalFont = LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
         KoreanBoldFont = LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
@@ -41,35 +47,10 @@ public static class TweakAssets
         KeyBackgroundSprite = LoadAsset<Sprite>("Assets/KeyBackground.png");
     }
 
-    private static AssetBundle LoadAssetBundle() {
-        const string assets = "adofaitweaks.assets";
-
-        string[] paths = [
-            Path.Combine(AdofaiTweaks.ModPath ?? string.Empty, assets),
-            Path.Combine("Mods", "AdofaiTweaks", assets)
-        ];
-
-        foreach (var path in paths.Where(File.Exists).Distinct()) {
-            var bundle = AssetBundle.LoadFromFile(path);
-
-            if (bundle == null) {
-#if DEBUG
-                AdofaiTweaks.Logger.Error($"Could not load asset bundle: {path}");
-#endif
-                continue;
-            }
-
-            return bundle;
-        }
-
-        AdofaiTweaks.Logger.Error($"Could not find asset bundle: {assets}");
-        return null;
-    }
-
     private static T LoadAsset<T>(string name)
         where T : Object
     {
-        var asset = Assets?.LoadAsset<T>(name);
+        var asset = Assets!.LoadAsset<T>(name);
 
         if (asset == null) {
             AdofaiTweaks.Logger.Error($"Asset '{name}' is invalid or unassigned.");

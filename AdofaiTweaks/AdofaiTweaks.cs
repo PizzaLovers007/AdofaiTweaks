@@ -29,11 +29,6 @@ public static class AdofaiTweaks
     public static bool IsEnabled { get; private set; }
 
     /// <summary>
-    /// The installed mod directory path.
-    /// </summary>
-    internal static string ModPath { get; private set; }
-
-    /// <summary>
     /// The game's release number.
     /// </summary>
     public static readonly int ReleaseNumber = (int)AccessTools.Field(typeof(GCNS), "releaseNumber").GetValue(null);
@@ -54,8 +49,6 @@ public static class AdofaiTweaks
     /// </summary>
     /// <param name="modEntry">UMM's mod entry for AdofaiTweaks.</param>
     internal static void Setup(UnityModManager.ModEntry modEntry) {
-        ModPath = modEntry.Path;
-
         allTweakTypes =
             AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())

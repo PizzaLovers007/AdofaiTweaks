@@ -22,7 +22,7 @@ internal class TweakStringsDb
     private readonly Dictionary<LanguageEnum, Dictionary<string, TweakString>> cache;
 
     private void LoadFromDb(LanguageEnum language) {
-        var dbPath = Path.Combine(AdofaiTweaks.ModPath ?? Path.Combine("Mods", "AdofaiTweaks"), "TweakStrings.db");
+        var dbPath = Path.GetFullPath(Path.Combine("Mods", "AdofaiTweaks", "TweakStrings.db"));
         using var db = new LiteDatabase(dbPath);
 
         var collection = db.GetCollection<TweakString>();
