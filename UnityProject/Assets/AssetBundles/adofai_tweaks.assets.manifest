@@ -1,15 +1,16 @@
 ManifestFileVersion: 0
-CRC: 189307075
+UnityVersion: 6000.3.10f1
+CRC: 404554655
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f5b90c4c7fddd8f0968789a31a37e158
+    Hash: c3740d43bb3e528376ff7cc7839ef636
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b1ad5644a043d1357bf6e034c1427b5a
+    Hash: 4656a8d1e0cc7a3862b277031f72cfd9
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f5b90c4c7fddd8f0968789a31a37e158
+    Hash: a94e654340662a95283c5e59d1556b39
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -25,10 +26,7 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/KeyBackground.png
-- Assets/Hand.png
-- Assets/Tick.png
 - Assets/NanumGothic-Bold.ttf
 - Assets/NanumGothic-Regular.ttf
 - Assets/KeyOutline.png
-- Assets/Meter.png
 Dependencies: []

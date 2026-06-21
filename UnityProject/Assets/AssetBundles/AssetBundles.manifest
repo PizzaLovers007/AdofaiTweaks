@@ -1,5 +1,7 @@
 ManifestFileVersion: 0
-CRC: 2058137928
+UnityVersion: 6000.3.10f1
+CRC: 3329837881
+HashAppended: 0
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
