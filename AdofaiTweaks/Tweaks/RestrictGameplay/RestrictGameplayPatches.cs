@@ -165,7 +165,7 @@ internal static class RestrictGameplayPatches
                 Controller.noFail = origNoFail;
             } else {
                 // Fail with an "overload", text is changed later
-                Controller.FailAction(true);
+                Controller.FailAction(hitbox: true);
             }
         }
     }
