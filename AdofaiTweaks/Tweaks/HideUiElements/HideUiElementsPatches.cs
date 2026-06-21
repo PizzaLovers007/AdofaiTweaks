@@ -75,9 +75,9 @@ internal static class HideUiElementsPatches
 
             public static void Postfix(scrController __instance) {
                 if (SelectedProfile.HideEverything || SelectedProfile.HideResult) {
-                    __instance.txtCongrats.gameObject.SetActive(false);
-                    __instance.detailedResults.gameObject.SetActive(false);
-                    __instance.txtAllStrictClear.gameObject.SetActive(false);
+                    __instance?.txtCongrats?.gameObject.SetActive(false);
+                    __instance?.detailedResults?.gameObject.SetActive(false);
+                    __instance?.txtAllStrictClear?.gameObject.SetActive(false);
                 }
             }
         }
@@ -85,8 +85,8 @@ internal static class HideUiElementsPatches
         [HarmonyPatch(typeof(scrFlash), "Flash")]
         private static class HideLastFloorFlashPatch
         {
-            public static bool Prefix(ref Color _colorStart) {
-                if (shouldIgnoreFlashOnce && _colorStart == Color.white.WithAlpha(.4f)) {
+            public static bool Prefix() {
+                if (shouldIgnoreFlashOnce) {
                     return shouldIgnoreFlashOnce = false;
                 }
 
