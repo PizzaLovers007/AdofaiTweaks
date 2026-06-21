@@ -45,46 +45,9 @@ internal static class MiscellaneousPatches
     }
 
     [TweakPatch(
-        "Miscellaneous.RemoveZoomPreTweenPatch",
-        "scnEditor",
-        "Update",
-        maxVersion: 107)]
-    private static class RemoveZoomPreTweenPatch
-    {
-        private static float originalScrollValue;
-
-        public static void Prefix() {
-            if (!Settings.DisableEditorZoom) {
-                return;
-            }
-            if (!scnEditor.instance.playMode) {
-                return;
-            }
-            var mouseScrollDelta = Input.mouseScrollDelta;
-            if (Mathf.Abs(mouseScrollDelta.y) > 0.05f) {
-                originalScrollValue = scrCamera.instance.userSizeMultiplier;
-            }
-        }
-
-        public static void Postfix() {
-            if (!Settings.DisableEditorZoom) {
-                return;
-            }
-            if (!scnEditor.instance.playMode) {
-                return;
-            }
-            var mouseScrollDelta = Input.mouseScrollDelta;
-            if (Mathf.Abs(mouseScrollDelta.y) > 0.05f) {
-                scrCamera.instance.userSizeMultiplier = originalScrollValue;
-            }
-        }
-    }
-
-    [TweakPatch(
         "Miscellaneous.RemoveZoomPostTweenPatch",
         "scnEditor",
-        "Update",
-        minVersion: 108)]
+        "Update")]
     private static class RemoveZoomPostTweenPatch
     {
         public static void Postfix() {
@@ -109,33 +72,9 @@ internal static class MiscellaneousPatches
     }
 
     [TweakPatch(
-        "Miscellaneous.ForceHitsoundVolumePreScnGamePatch",
-        "CustomLevel",
-        "ApplyEvent",
-        maxVersion: 107)]
-    private static class ForceHitsoundVolumePreScnGamePatch
-    {
-        public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors) {
-            if (evnt.eventType == LevelEventType.SetHitsound && Settings.IsEnabled && Settings.SetHitsoundVolume) {
-                int floor = evnt.floor;
-                GameObject gameObject = floors[floor].gameObject;
-
-                ffxSetHitsound[] ffxSetHitsounds = gameObject.GetComponentsInChildren<ffxSetHitsound>();
-
-                if (ffxSetHitsounds != null) {
-                    foreach (ffxSetHitsound ffxSetHitsound in ffxSetHitsounds) {
-                        Settings.UpdateVolume(ffxSetHitsound);
-                    }
-                }
-            }
-        }
-    }
-
-    [TweakPatch(
         "Miscellaneous.ForceHitsoundVolumePostScnGamePatch",
         "scnGame",
-        "ApplyEvent",
-        minVersion: 108)]
+        "ApplyEvent")]
     private static class ForceHitsoundVolumePostScnGamePatch
     {
         public static void Postfix(ref LevelEvent evnt, ref List<scrFloor> floors) {
@@ -157,8 +96,7 @@ internal static class MiscellaneousPatches
     [TweakPatch(
         "Miscellaneous.EnforceAsyncInputStateAtControllerStart",
         "scrController",
-        "Start",
-        minVersion: 97)]
+        "Start")]
     private static class EnforceAsyncInputStateAtControllerStartPatch
     {
         public static void Postfix() {

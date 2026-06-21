@@ -57,8 +57,7 @@ internal static class RestrictGameplayPatches
     [TweakPatch(
         "RestrictGameplay.IsValidHitWithRestrictions",
         "scrMisc",
-        "IsValidHit",
-        MinVersion = 80)]
+        "IsValidHit")]
     private static class IsValidHitWithRestrictionsPatch
     {
         [UsedImplicitly]
@@ -147,8 +146,7 @@ internal static class RestrictGameplayPatches
     [TweakPatch(
         "RestrictGameplay.SwitchChosenInstantRestartTrigger",
         "scrPlanet",
-        "SwitchChosen",
-        MinVersion = 80)]
+        "SwitchChosen")]
     private static class SwitchChosenInstantRestartTriggerPatch
     {
         [UsedImplicitly]
@@ -176,8 +174,7 @@ internal static class RestrictGameplayPatches
     [TweakPatch(
         "RestrictGameplay.Fail2_UpdateFast",
         "scrController",
-        "Fail2_Update",
-        MinVersion = 80)]
+        "Fail2_Update")]
     private static class Fail2_UpdateFastPatch
     {
         [UsedImplicitly]
@@ -207,8 +204,7 @@ internal static class RestrictGameplayPatches
     [TweakPatch(
         "RestrictGameplay.CountdownShowOverload",
         "scrCountdown",
-        "ShowOverload",
-        MinVersion = 80)]
+        "ShowOverload")]
     private static class CountdownShowOverloadPatch
     {
         [UsedImplicitly]
@@ -223,11 +219,10 @@ internal static class RestrictGameplayPatches
 
     [UsedImplicitly]
     [TweakPatch(
-        "RestrictGameplay.ControllerShowHitText",
-        "scrController",
-        "ShowHitText",
-        MinVersion = 80)]
-    private static class ControllerShowHitTextPatch
+        "RestrictGameplay.ShowHitText",
+        "scrHitTextManager",
+        "ShowHitText")]
+    private static class ShowHitTextPatch
     {
         [UsedImplicitly]
         public static bool Prefix() {

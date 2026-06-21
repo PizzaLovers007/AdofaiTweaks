@@ -194,7 +194,7 @@ public class PlanetOpacityTweak : Tweak
     }
 
     private static void LoadPlanetColorWithRenderer(scrPlanet planet) {
-        planet.planetarySystem.ColorPlanets();
+        planet.planetarySystem.LoadPlanetColors(0);
     }
 
     private static readonly MethodInfo ScrPlanetLoadPlanetColorMethod =

@@ -55,7 +55,7 @@
       <HintPath>..\AdofaiTweaks.Generator\AdofaiTweaks.Strings.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>ExternalDependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\A Dance of Fire and Ice\A Dance of Fire and Ice_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
@@ -170,7 +170,6 @@
     <Compile Include="Tweaks\EditorTweaks\EditorTweaksSettings.cs" />
     <Compile Include="Tweaks\EditorTweaks\EditorTweaksTweak.cs" />
     <Compile Include="Tweaks\HideUiElements\HideUiElementsProfile.cs" />
-    <Compile Include="Tweaks\JudgmentVisuals\HitErrorMeter.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsPatches.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsSettings.cs" />
     <Compile Include="Tweaks\JudgmentVisuals\JudgmentVisualsTweak.cs" />
