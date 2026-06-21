@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace AdofaiTweaks.Core;
@@ -20,21 +21,6 @@ public static class TweakAssets
     public static Font KoreanBoldFont { get; private set; }
 
     /// <summary>
-    /// The sprite for the bottom arrow on the hit error meter.
-    /// </summary>
-    public static Sprite HandSprite { get; private set; }
-
-    /// <summary>
-    /// The sprite for the colored part of the hit error meter.
-    /// </summary>
-    public static Sprite MeterSprite { get; private set; }
-
-    /// <summary>
-    /// The sprite for the colored ticks on the hit error meter.
-    /// </summary>
-    public static Sprite TickSprite { get; private set; }
-
-    /// <summary>
     /// The sprite for the key's outline in the key viewer.
     /// </summary>
     public static Sprite KeyOutlineSprite { get; private set; }
@@ -44,18 +30,51 @@ public static class TweakAssets
     /// </summary>
     public static Sprite KeyBackgroundSprite { get; private set; }
 
-    private static readonly AssetBundle assets;
+    private static readonly AssetBundle Assets;
 
     static TweakAssets() {
-        assets =
-            AssetBundle.LoadFromFile(
-                Path.Combine("Mods", "AdofaiTweaks", "adofai_tweaks.assets"));
-        SymbolLangNormalFont = assets.LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
-        KoreanBoldFont = assets.LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
-        HandSprite = assets.LoadAsset<Sprite>("Assets/Hand.png");
-        MeterSprite = assets.LoadAsset<Sprite>("Assets/Meter.png");
-        TickSprite = assets.LoadAsset<Sprite>("Assets/Tick.png");
-        KeyOutlineSprite = assets.LoadAsset<Sprite>("Assets/KeyOutline.png");
-        KeyBackgroundSprite = assets.LoadAsset<Sprite>("Assets/KeyBackground.png");
+        Assets = LoadAssetBundle();
+
+        SymbolLangNormalFont = LoadAsset<Font>("Assets/NanumGothic-Regular.ttf");
+        KoreanBoldFont = LoadAsset<Font>("Assets/NanumGothic-Bold.ttf");
+        KeyOutlineSprite = LoadAsset<Sprite>("Assets/KeyOutline.png");
+        KeyBackgroundSprite = LoadAsset<Sprite>("Assets/KeyBackground.png");
+    }
+
+    private static AssetBundle LoadAssetBundle() {
+        const string assets = "adofaitweaks.assets";
+
+        string[] paths = [
+            Path.Combine(AdofaiTweaks.ModPath ?? string.Empty, assets),
+            Path.Combine("Mods", "AdofaiTweaks", assets)
+        ];
+
+        foreach (var path in paths.Where(File.Exists).Distinct()) {
+            var bundle = AssetBundle.LoadFromFile(path);
+
+            if (bundle == null) {
+#if DEBUG
+                AdofaiTweaks.Logger.Error($"Could not load asset bundle: {path}");
+#endif
+                continue;
+            }
+
+            return bundle;
+        }
+
+        AdofaiTweaks.Logger.Error($"Could not find asset bundle: {assets}");
+        return null;
+    }
+
+    private static T LoadAsset<T>(string name)
+        where T : Object
+    {
+        var asset = Assets?.LoadAsset<T>(name);
+
+        if (asset == null) {
+            AdofaiTweaks.Logger.Error($"Asset '{name}' is invalid or unassigned.");
+        }
+
+        return asset;
     }
 }

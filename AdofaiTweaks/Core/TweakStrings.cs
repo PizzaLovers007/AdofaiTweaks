@@ -54,15 +54,7 @@ public static class TweakStrings
         string key,
         Dictionary<string, object> parameters = null,
         LangSection section = LangSection.Translations) {
-        if (AdofaiTweaks.ReleaseNumber < 80) {
-            return (string)RD_STRING_GET.Invoke(null, new object[] { key });
-        } else if (AdofaiTweaks.ReleaseNumber < 121) {
-            return (string)RD_STRING_GET.Invoke(null, new object[] { key, parameters });
-        } else {
-            return (string)RD_STRING_GET.Invoke(
-                null,
-                new object[] { key, parameters, section });
-        }
+        return (string)RD_STRING_GET.Invoke(null, [key, parameters]);
     }
 
     /// <summary>

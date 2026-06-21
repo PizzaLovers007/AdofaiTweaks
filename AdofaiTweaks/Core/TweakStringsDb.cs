@@ -22,16 +22,20 @@ internal class TweakStringsDb
     private readonly Dictionary<LanguageEnum, Dictionary<string, TweakString>> cache;
 
     private void LoadFromDb(LanguageEnum language) {
-        string dbPath = Path.Combine("Mods", "AdofaiTweaks", "TweakStrings.db");
+        var dbPath = Path.Combine(AdofaiTweaks.ModPath ?? Path.Combine("Mods", "AdofaiTweaks"), "TweakStrings.db");
         using var db = new LiteDatabase(dbPath);
+
         var collection = db.GetCollection<TweakString>();
         var results = collection.Query()
             .Where(ts => ts.Language == language)
             .ToEnumerable();
+
         var dict = new Dictionary<string, TweakString>();
-        foreach (TweakString tweakString in results) {
+
+        foreach (var tweakString in results) {
             dict[tweakString.Key] = tweakString;
         }
+
         cache[language] = dict;
     }
 
@@ -49,12 +53,14 @@ internal class TweakStringsDb
             LoadFromDb(language);
         }
         Dictionary<string, TweakString> dict = cache[language];
-        if (!dict.ContainsKey(key)) {
+        if (!dict.TryGetValue(key, out var value)) {
             return $"no such key {key}";
         }
-        if (string.IsNullOrEmpty(dict[key].Content)) {
+
+        if (string.IsNullOrEmpty(value.Content)) {
             return cache[LanguageEnum.ENGLISH][key].Content;
         }
+
         return dict[key].Content;
     }
 
