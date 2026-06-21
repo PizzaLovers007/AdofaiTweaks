@@ -17,7 +17,7 @@ namespace AdofaiTweaks.Tweaks.RestrictGameplay;
     settingsType: typeof(RestrictGameplaySettings),
     patchesType: typeof(RestrictGameplayPatches))]
 internal class RestrictGameplayTweak : Tweak {
-    private static readonly HitMargin[] JUDGMENTS_TO_RESTRICT = [
+    private static readonly HitMargin[] JudgmentsToRestrict = [
         HitMargin.TooEarly,
         HitMargin.VeryEarly,
         HitMargin.EarlyPerfect,
@@ -27,7 +27,7 @@ internal class RestrictGameplayTweak : Tweak {
         HitMargin.TooLate
     ];
 
-    private static readonly RestrictGameplayAction[] RESTRICT_ACTIONS = [
+    private static readonly RestrictGameplayAction[] RestrictActions = [
         RestrictGameplayAction.KillPlayer,
         RestrictGameplayAction.InstantRestart,
         RestrictGameplayAction.NoRegister
@@ -54,7 +54,7 @@ internal class RestrictGameplayTweak : Tweak {
             // Select judgment to restrict
             GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictGameplay.SELECT_JUDGMENT));
             MoreGUILayout.BeginIndent();
-            foreach (var hitMargin in JUDGMENTS_TO_RESTRICT) {
+            foreach (var hitMargin in JudgmentsToRestrict) {
                 Settings.RestrictedJudgments[(int)hitMargin] = GUILayout.Toggle(
                     Settings.RestrictedJudgments[(int)hitMargin],
                     TweakStrings.Get(
@@ -65,7 +65,7 @@ internal class RestrictGameplayTweak : Tweak {
 
             // Select penalty for this restriction
             GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictGameplay.SELECT_PENALTY));
-            foreach (var action in RESTRICT_ACTIONS) {
+            foreach (var action in RestrictActions) {
                 if (GUILayout.Toggle(
                         Settings.RestrictGameplayActionForJudgment == action,
                         TweakStrings.Get($"RESTRICT_GAMEPLAY_I_RESTRICT_ACTION.{action}"))
@@ -103,7 +103,7 @@ internal class RestrictGameplayTweak : Tweak {
 
             // Select penalty for this restriction
             GUILayout.Label(TweakStrings.Get(TranslationKeys.RestrictGameplay.SELECT_PENALTY));
-            foreach (var action in RESTRICT_ACTIONS) {
+            foreach (var action in RestrictActions) {
                 if (GUILayout.Toggle(
                         Settings.RestrictGameplayActionForAverageAngle == action,
                         TweakStrings.Get($"RESTRICT_GAMEPLAY_I_RESTRICT_ACTION.{action}"))
