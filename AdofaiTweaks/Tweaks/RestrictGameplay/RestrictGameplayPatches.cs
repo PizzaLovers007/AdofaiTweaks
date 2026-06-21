@@ -161,11 +161,13 @@ internal static class RestrictGameplayPatches
                 bool origNoFail = Controller.noFail;
                 Controller.noFail = false;
                 Controller.instantExplode = true;
-                Controller.FailAction();
+                Controller.FailAction(hitbox: true);
+                Controller.planetarySystem.Die(PlanetarySystem.DeathAnimation.Explode, Controller.Fail2Action);
                 Controller.noFail = origNoFail;
             } else {
                 // Fail with an "overload", text is changed later
                 Controller.FailAction(hitbox: true);
+                Controller.planetarySystem.Die(PlanetarySystem.DeathAnimation.CrumbleAndExplode, Controller.Fail2Action);
             }
         }
     }
@@ -187,14 +189,9 @@ internal static class RestrictGameplayPatches
             Controller.instantExplode = false;
 
             if (scnEditor.instance != null) {
-                object[] resetParams = AdofaiTweaks.ReleaseNumber >= 110 ? [true] : [];
-                __instance.StartCoroutine(
-                    (IEnumerator)ResetCustomLevelMethod.Invoke(
-                        __instance,
-                        resetParams));
+                __instance.StartCoroutine(__instance.ResetCustomLevel());
             } else {
-                object[] resetParams = AdofaiTweaks.ReleaseNumber >= 110 ? [false] : [];
-                RestartMethod.Invoke(__instance, resetParams);
+                __instance.Restart();
             }
             return false;
         }
