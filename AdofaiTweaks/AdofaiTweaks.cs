@@ -32,7 +32,7 @@ public static class AdofaiTweaks
     /// <summary>
     /// The game's release number.
     /// </summary>
-    public static readonly int ReleaseNumber = (int)AccessTools.Field(typeof(GCNS), "releaseNumber").GetValue(null);
+    public static readonly int ReleaseNumber = (int)AccessTools.Field(typeof(Releases), "releaseNumber").GetValue(null);
 
     /// <summary>
     /// GlobalSettings instance.
