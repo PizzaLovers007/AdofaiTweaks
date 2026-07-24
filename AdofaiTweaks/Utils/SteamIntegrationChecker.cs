@@ -1,4 +1,5 @@
 using System.Reflection;
+using ADOFAI.SteamIntegration;
 using HarmonyLib;
 
 namespace AdofaiTweaks.Utils;
@@ -12,20 +13,26 @@ public static class SteamIntegrationChecker {
     /// </summary>
     /// <returns><c>true</c> if Steam Integration is available.</returns>
     public static bool Check() {
-        if (AdofaiTweaks.ReleaseNumber < 131) {
+        if (AdofaiTweaks.ReleaseNumber < 147) {
             return OldSteamIntegrationCheck();
         }
 
-        return SteamIntegration.initialized;
+        if (!ADOBase.appIsInSteamLibrary)
+        {
+            return false;
+        }
+
+        return SteamController.initialized;
     }
 
+    private static readonly Assembly ExecutingAssembly = typeof(ADOStartup).Assembly;
     private static readonly FieldInfo SteamIntegrationInstanceField =
-        AccessTools.Field(typeof(SteamIntegration), "Instance");
+        AccessTools.Field(ExecutingAssembly.GetType("SteamIntegration"), "Instance");
     private static readonly FieldInfo SteamIntegrationInitializedField =
-        AccessTools.Field(typeof(SteamIntegration), "initialized");
+        AccessTools.Field(ExecutingAssembly.GetType("SteamIntegration"), "initialized");
 
     private static bool OldSteamIntegrationCheck() {
-        var integration = (SteamIntegration)SteamIntegrationInstanceField.GetValue(null);
+        var integration = SteamIntegrationInstanceField.GetValue(null);
         if (integration == null) {
             return false;
         }
