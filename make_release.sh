@@ -19,9 +19,9 @@ cp ../../AdofaiTweaks/bin/Release/IndexRange.dll .
 cp ../../AdofaiTweaks.Translation/bin/Release/AdofaiTweaks.Translation.dll .
 cp ../../AdofaiTweaks.Generator/bin/Release/TweakStrings.db .
 cp ../../AdofaiTweaks.Generator/bin/Release/AdofaiTweaks.Strings.dll .
-cp ../../AdofaiTweaks.Compat.Async/bin/SkyHook/AdofaiTweaks.Compat.Async.dll AdofaiTweaks.Compat.AsyncSkyHook.dll
-cp ../../AdofaiTweaks.Compat.Async/bin/SharpHook/AdofaiTweaks.Compat.Async.dll AdofaiTweaks.Compat.AsyncSharpHook.dll
-cp ../../AdofaiTweaks.Compat.Async/bin/Release/AdofaiTweaks.Compat.Async.dll AdofaiTweaks.Compat.AsyncPolyfill.dll
+#cp ../../AdofaiTweaks.Compat.Async/bin/SkyHook/AdofaiTweaks.Compat.Async.dll AdofaiTweaks.Compat.AsyncSkyHook.dll
+#cp ../../AdofaiTweaks.Compat.Async/bin/SharpHook/AdofaiTweaks.Compat.Async.dll AdofaiTweaks.Compat.AsyncSharpHook.dll
+#cp ../../AdofaiTweaks.Compat.Async/bin/Release/AdofaiTweaks.Compat.Async.dll AdofaiTweaks.Compat.AsyncPolyfill.dll
 cd ..
 zip -r AdofaiTweaks-$version.zip AdofaiTweaks
 mv AdofaiTweaks-$version.zip ..
