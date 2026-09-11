@@ -21,7 +21,9 @@ internal class RestrictGameplayTweak : Tweak {
         HitMargin.TooEarly,
         HitMargin.VeryEarly,
         HitMargin.EarlyPerfect,
-        HitMargin.Perfect,
+        HitMargin.PerfectMinus,
+        HitMargin.XPerfect,
+        HitMargin.PerfectPlus,
         HitMargin.LatePerfect,
         HitMargin.VeryLate,
         HitMargin.TooLate

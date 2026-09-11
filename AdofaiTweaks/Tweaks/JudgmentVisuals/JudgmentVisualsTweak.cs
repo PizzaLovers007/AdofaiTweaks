@@ -32,6 +32,6 @@ public class JudgmentVisualsTweak : Tweak {
                 Settings.HidePerfects,
                 TweakStrings.Get(
                     TranslationKeys.JudgmentVisuals.HIDE_PERFECTS,
-                    TweakStrings.GetRDString("HitMargin." + HitMargin.Perfect)));
+                    TweakStrings.GetRDString("HitMargin.Perfect")));
     }
 }

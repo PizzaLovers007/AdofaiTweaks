@@ -72,7 +72,7 @@ public class HideUiElementsTweak : Tweak
                 SelectedProfile.HideJudgment,
                 TweakStrings.Get(
                     TranslationKeys.HideUiElements.JUDGE_TEXT,
-                    TweakStrings.GetRDString("HitMargin." + HitMargin.Perfect),
+                    TweakStrings.GetRDString("HitMargin.Perfect"),
                     TweakStrings.GetRDString("HitMargin." + HitMargin.EarlyPerfect)));
 
         SelectedProfile.HideMissIndicators =

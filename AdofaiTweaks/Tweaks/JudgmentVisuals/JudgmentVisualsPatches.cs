@@ -18,7 +18,7 @@ internal static class JudgmentVisualsPatches
             if (!Settings.HidePerfects) {
                 return true;
             }
-            return hitMargin != HitMargin.Perfect;
+            return !hitMargin.IsPerfect();
         }
     }
 }

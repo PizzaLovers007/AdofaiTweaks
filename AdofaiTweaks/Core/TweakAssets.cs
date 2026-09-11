@@ -34,10 +34,10 @@ public static class TweakAssets
 
     static TweakAssets() {
         Assets = AssetBundle.LoadFromFile(Path.GetFullPath(Path.Combine(
-            "Mods", "AdofaiTweaks", "adofaitweaks.assets")));
+            "Mods", "AdofaiTweaks", "adofai_tweaks.assets")));
 
         if (Assets == null) {
-            AdofaiTweaks.Logger.Error("Could not open adofaitweaks.assets");
+            AdofaiTweaks.Logger.Error("Could not open adofai_tweaks.assets");
             return;
         }
 
