@@ -126,4 +126,14 @@ internal static class HideUiElementsPatches
             public static void Postfix() => HideErrorMeter();
         }
     }
+
+    [HarmonyPatch(typeof(scrEnableIfBeta), "Awake")]
+    private static class DeleteBetaConditionalComponent {
+        public static void Prefix(scrEnableIfBeta __instance) {
+            var profile = SelectedProfile;
+            if (profile.HideEverything || profile.HideBeta) {
+                Object.DestroyImmediate(__instance.gameObject);
+            }
+        }
+    }
 }
