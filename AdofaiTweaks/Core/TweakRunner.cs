@@ -93,6 +93,14 @@ internal class TweakRunner
     private void EnableTweak() {
         Tweak.OnEnable();
         foreach (Type type in GetAllNestedTypes(TweakMetadata.PatchesType)) {
+            // Harmony 2.4+ no longer skips classes without Harmony annotations
+            // when they are handed to PatchClassProcessor. Classes that only
+            // carry [TweakPatch] are patched by TweakPatch.Patch() below, so
+            // don't pass them to Harmony's class processor.
+            if (type.GetCustomAttributes(typeof(HarmonyAttribute), true).Length == 0) {
+                continue;
+            }
+
             harmony.CreateClassProcessor(type).Patch();
         }
         foreach (TweakPatch patch in ValidTweakPatches) {
